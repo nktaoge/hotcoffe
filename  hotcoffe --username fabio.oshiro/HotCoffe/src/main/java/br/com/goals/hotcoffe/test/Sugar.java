@@ -41,27 +41,27 @@ public class Sugar extends Action implements Config{
 
 	
 
-	@Override
+	
 	public String getDbDriver() {
 		return "com.mysql.jdbc.Driver";
 	}
 
-	@Override
+	
 	public String getDbPassword() {
 		return "admin1234";
 	}
 
-	@Override
+	
 	public String getDbUrl() {
 		return "jdbc:mysql://localhost:3309/hotcoffe";
 	}
 
-	@Override
+	
 	public String getDbUser() {
 		return "root";
 	}
 
-	@Override
+	
 	public void execute() {
 		// TODO Auto-generated method stub
 		
