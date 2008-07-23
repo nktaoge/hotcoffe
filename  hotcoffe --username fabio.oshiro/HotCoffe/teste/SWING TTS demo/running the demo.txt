@@ -1,0 +1,9 @@
+This much nicer SWING demo uses a second DLL, QuadTkns. 
+QuadTkns duplicates exactly the same method getVoiceToken() method available in QuadTTS.dll
+and is used here to allow non-procedural code and to work around some JNI parameters 
+explained in the source code.
+
+To launch the demo, open a command prompt and change to this directory.
+
+Then, do the command:
+(full physical path)java.exe SwingSapiTTS 
