@@ -1,7 +1,5 @@
 package com.quadmore.tts;
 
-
-
 public class TTSVoiceGetter
 {
 		private static String strVoice = "";
