@@ -1,6 +1,6 @@
-package br.com.goals.tts;
 
-class TokensTTS
+
+public class TokensTTS
 {
     static
     {
