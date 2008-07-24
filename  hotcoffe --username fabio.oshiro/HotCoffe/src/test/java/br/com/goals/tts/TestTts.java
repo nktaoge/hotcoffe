@@ -22,8 +22,8 @@ public class TestTts {
 		QuadmoreTTS ttss = new QuadmoreTTS();
 		String strToken = TTSVoiceGetter.getVoice();
 		ttss.setVoiceToken(strToken);
-		ttss.speakDarling("utilizando a voz "+lastVoice);
-		String conteudo="olá pontuação 12, testando a parada";		
+		//ttss.speakDarling("utilizando a voz "+lastVoice);
+		String conteudo="orantes, , , , ,  de , , , , , , orantes ,,, , , , ,  de orantes olá pontuação 12, testando a parada";		
 		ttss.speakDarling(conteudo);
 	}
 }
