@@ -1,4 +1,5 @@
 import com.quadmore.tts.QuadmoreTTS;
+import com.quadmore.tts.TTSVoiceGetter;
 public class TestTts {
 	public static void main(String args[]) {
 		String strVoiceList = TTSVoiceGetter.getXML();
