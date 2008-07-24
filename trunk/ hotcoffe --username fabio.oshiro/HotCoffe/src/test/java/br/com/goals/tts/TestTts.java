@@ -1,3 +1,4 @@
+package br.com.goals.tts;
 import com.quadmore.tts.QuadmoreTTS;
 import com.quadmore.tts.TTSVoiceGetter;
 public class TestTts {
@@ -21,7 +22,7 @@ public class TestTts {
 		QuadmoreTTS ttss = new QuadmoreTTS();
 		String strToken = TTSVoiceGetter.getVoice();
 		ttss.setVoiceToken(strToken);
-		String conteudo="olá pontuação 12";
+		String conteudo="olá pontuação 12, testando a parada";		
 		ttss.speakDarling(conteudo);
 	}
 }
