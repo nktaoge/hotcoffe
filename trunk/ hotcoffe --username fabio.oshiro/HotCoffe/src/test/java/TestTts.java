@@ -1,4 +1,4 @@
-
+import com.quadmore.tts.QuadmoreTTS;
 public class TestTts {
 	public static void main(String args[]) {
 		String strVoiceList = TTSVoiceGetter.getXML();
@@ -20,7 +20,7 @@ public class TestTts {
 		QuadmoreTTS ttss = new QuadmoreTTS();
 		String strToken = TTSVoiceGetter.getVoice();
 		ttss.setVoiceToken(strToken);
-		//new String()
-		ttss.SpeakDarling("olá pontuação");
+		String conteudo="olá pontuação 12";
+		ttss.speakDarling(conteudo);
 	}
 }
