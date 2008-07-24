@@ -27,7 +27,7 @@ public class TestTts {
 		String strToken = TTSVoiceGetter.getVoice();
 		ttss.setVoiceToken(strToken);
 		//ttss.speakDarling("utilizando a voz "+lastVoice);
-		String conteudo="1 2 3, som, 1 2 3. som, alô som.";		
+		String conteudo="testando ,1 2 3, som! 1 2 3. som! alôoo som.";		
 		ttss.speakDarling(conteudo);
 	}
 }
