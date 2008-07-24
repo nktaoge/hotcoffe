@@ -1,7 +1,10 @@
 package br.com.goals.utils;
-import java.net.*;
-import java.util.ArrayList;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
 
 public class DisplayMail {
 	static boolean delete = true;
@@ -88,7 +91,7 @@ public class DisplayMail {
 		String s = "";
 		String t = "";
 		send(out, "RETR " + i);
-		long count=0;
+		//long count=0;
 		while (((s = in.readLine()) != null) && (!(s.equals(".")))) {
 			t += s + "\n";
 			//System.out.println(i+" "+(count++));
