@@ -1,4 +1,4 @@
-package com.quadmore.tts;
+package quadmore.jaxb;
 
 
 public class TokensTTS
