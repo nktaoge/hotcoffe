@@ -5,19 +5,40 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import br.com.goals.tts.TTS;
 
 public class DisplayMail {
-	static boolean delete = true;
+	static boolean delete = false;
 	static int deletar;
 	BufferedWriter out;
 	BufferedReader in;
+	static Pattern patSubject = Pattern.compile("Subject: (.*)");
+	static Pattern patFrom = Pattern.compile("From: (.*)");
 	
+	public static String getSubject(String msg){
+		Matcher mat = patSubject.matcher(msg);
+		if(mat.find()){
+			return mat.group(1);
+		}
+		return "Sem título";
+	}
+	public static String getFrom(String msg){
+		Matcher mat = patFrom.matcher(msg);
+		if(mat.find()){
+			return mat.group(1);
+		}
+		return "ninguem";
+	}
 	public static void main(String args[]) {
 		DisplayMail mail = new DisplayMail();
 		mail.doWork();
 	}
 	public void doWork(){
 		boolean tryagain;
+		int startIn =17;
 		//deletar=14;
 		do{
 			tryagain=false;
@@ -41,26 +62,39 @@ public class DisplayMail {
 						.getOutputStream()));
 				
 				login(in, out, arg[1], arg[2]);
-				//se algum ficou para apagar
-				if(deletar!=0){
-					for (j = 1; j <= deletar; j++) {
-						delete(j);
-						Thread.sleep(100);
+				if(delete){
+					//se algum ficou para apagar
+					if(deletar!=0){
+						for (j = 1; j <= deletar; j++) {
+							delete(j);
+							Thread.sleep(100);
+						}
+						send(out, "QUIT");
+						tryagain = true;
+						deletar = 0;
+						continue;
 					}
-					send(out, "QUIT");
-					tryagain = true;
-					deletar = 0;
-					continue;
 				}
 				int i = check(in, out);
+				TTS.speak("você possui "+i+" e-mails.");
 				if (i == 0) {
 					System.out.println("No mail waiting.");
 				} else {
-					for (j = 1; j <= i; j++) {
+					for (j = startIn; j <= i; j++) {
 						String msg = get(in, out, j);
 						System.out.println("*****");
 						System.out.println(msg);
-						System.out.println("*****");
+						Thread.sleep(500);
+						TTS.speak("mensagem");
+						Thread.sleep(500);
+						TTS.speak(j);
+						Thread.sleep(500);
+						TTS.speak(getFrom(msg));
+						Thread.sleep(500);
+						TTS.speak("Assunto");
+						Thread.sleep(500);
+						TTS.speak(getSubject(msg));
+						System.out.println("\n\n\n\n\n\n\n");
 					}
 					//
 					// If the mail was removed from the server
@@ -79,11 +113,13 @@ public class DisplayMail {
 		}while(tryagain);
 	}
 	public void delete(int i){
-		try{
-			send(out, "DELE " + i);
-			receive(in);
-		}catch(Exception e){
-			e.printStackTrace();
+		if (delete) {
+			try{
+				send(out, "DELE " + i);
+				receive(in);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 		}
 	}
 	public String get(BufferedReader in, BufferedWriter out, int i)
@@ -98,9 +134,7 @@ public class DisplayMail {
 		}
 		//
 		// To remove the mail on the server :
-		if (delete) {
-			delete(i);
-		}
+		delete(i);
 		//
 		return t;
 	}
