@@ -45,7 +45,7 @@ public class DisplayMail {
 			String arg[] = new String[3];
 			arg[0] = "pop.goals.com.br";
 			arg[1] = "fabio@goals.com.br";
-			arg[2] = "123fabio123";
+			arg[2] = "";
 			//
 			// usage :
 			// DisplayMail [mailServer] [user] [password]
