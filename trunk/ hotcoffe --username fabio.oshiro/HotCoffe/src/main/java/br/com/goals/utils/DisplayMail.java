@@ -7,17 +7,18 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import br.com.goals.tts.TTS;
 
 public class DisplayMail {
 	static boolean delete = false;
 	static int deletar;
-	BufferedWriter out;
-	BufferedReader in;
+	private BufferedWriter out;
+	private BufferedReader in;
 	static Pattern patSubject = Pattern.compile("Subject: (.*)");
 	static Pattern patFrom = Pattern.compile("From: (.*)");
-	
+	private String password;
+	private String login;
+	private String popServer;
 	public static String getSubject(String msg){
 		Matcher mat = patSubject.matcher(msg);
 		if(mat.find()){
@@ -43,9 +44,9 @@ public class DisplayMail {
 		do{
 			tryagain=false;
 			String arg[] = new String[3];
-			arg[0] = "pop.goals.com.br";
-			arg[1] = "fabio@goals.com.br";
-			arg[2] = "";
+			arg[0] = popServer;
+			arg[1] = login;
+			arg[2] = password;
 			//
 			// usage :
 			// DisplayMail [mailServer] [user] [password]
@@ -181,5 +182,14 @@ public class DisplayMail {
 			}
 		}
 		return 0;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public void setLogin(String login) {
+		this.login = login;
+	}
+	public void setPopServer(String popServer) {
+		this.popServer = popServer;
 	}
 }
