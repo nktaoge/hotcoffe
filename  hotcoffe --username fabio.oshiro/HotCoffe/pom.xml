@@ -31,6 +31,11 @@
 			<artifactId>mail</artifactId>
 			<version>1.4</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.commons.httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.0-rc4</version>
+		</dependency>
 	</dependencies>
 	<reporting>
 		<plugins>
