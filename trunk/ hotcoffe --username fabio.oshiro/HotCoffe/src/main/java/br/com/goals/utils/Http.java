@@ -1,18 +1,12 @@
 package br.com.goals.utils;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.ArrayList;
 
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.auth.CredentialsProvider;
 import org.apache.commons.httpclient.contrib.ssl.EasySSLProtocolSocketFactory;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.protocol.Protocol;
@@ -127,7 +121,8 @@ public final class Http {
 		return type;
 	}
 	
-	private static String getContentLength(final HttpMethod metodo){
+	
+	public static String getContentLength(final HttpMethod metodo){
 		String retorno = "";
 		Header header = metodo.getResponseHeader("Content-Length");
 		if (header != null) {
