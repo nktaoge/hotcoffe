@@ -1,13 +1,8 @@
-package br.com.goals.hotcoffe.test;
+package br.com.goals.hotcoffe;
 
 import java.util.Date;
 
-import br.com.goals.hotcoffe.Action;
-import br.com.goals.hotcoffe.Config;
 import br.com.goals.hotcoffe.FakeRequest;
-import br.com.goals.hotcoffe.HotCoffe;
-import br.com.goals.hotcoffe.Model;
-import br.com.goals.hotcoffe.ModelDao;
 
 public class Sugar extends Action implements Config{
 	Model usuario;
