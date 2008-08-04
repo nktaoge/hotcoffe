@@ -51,8 +51,14 @@ public abstract class CommandLineClient {
 
 	public void speak(final String text) {
 		String txt = text.trim();
-		if(!txt.equals(""))
+		if(!txt.equals("")){
 			TTS.speak(txt);
+			try{
+				Thread.sleep(300);
+			}catch(Exception e){
+				
+			}
+		}
 	}
 
 	public synchronized void setLine(String line) {
