@@ -51,7 +51,7 @@ public final class Http {
 	 * @throws HttpException 
 	 */
 	public String getContent(String url) throws HttpException, IOException{
-		metodo = new GetMethod(url);
+		HttpMethod metodo = new GetMethod(url);
 		metodo.setRequestHeader("user-agent", "Mozilla/5.0");
 		metodo.setFollowRedirects(true);
 		int status = httpClient.executeMethod(metodo);
