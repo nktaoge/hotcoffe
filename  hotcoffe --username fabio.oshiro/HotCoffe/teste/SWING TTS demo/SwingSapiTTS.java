@@ -49,7 +49,7 @@ public class SwingSapiTTS extends JPanel
 		JPanel p = new JPanel();
 		p.add(new JLabel("SAPI voices available on your computer: "));
 		add(p);
-
+	
 		ActionListener lst = new ActionListener()
 		{
 			public void actionPerformed(ActionEvent evt)

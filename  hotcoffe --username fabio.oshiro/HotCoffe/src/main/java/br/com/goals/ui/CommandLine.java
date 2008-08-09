@@ -5,9 +5,16 @@ import java.util.Scanner;
 import br.com.goals.tts.TTS;
 import br.com.goals.ui.programas.CommandLineClient;
 
-public class CommandLine { 
-	Scanner scanner = new Scanner(System.in);
-	public CommandLine(){
+public class CommandLine {
+	class FScanner implements KeyboardEventsProvider{
+		Scanner scanner = new Scanner(System.in);
+		public String nextLine(){
+			return scanner.nextLine();
+		}
+	}
+	KeyboardEventsProvider scanner = new FScanner();
+	
+	public void doWork(){
 		while(true){
 			TTS.speak("o que você deseja?");
 			String texto = scanner.nextLine();
@@ -18,7 +25,7 @@ public class CommandLine {
 				cli.start();
 				while(cli.isBusy()){
 					String cmd = getNextLine();
-					System.out.println("cmd="+cmd);
+					//System.out.println("cmd="+cmd);
 					cli.setLine(cmd);
 				}
 			}catch(Exception e){
@@ -31,6 +38,12 @@ public class CommandLine {
 		return scanner.nextLine();
 	}
 	public static void main(String args[]){
-		new CommandLine();		
+		new CommandLine().doWork();		
+	}
+	public KeyboardEventsProvider getScanner() {
+		return scanner;
+	}
+	public void setScanner(KeyboardEventsProvider scanner) {
+		this.scanner = scanner;
 	}
 }
