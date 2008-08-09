@@ -26,7 +26,7 @@ public class TTS {
 		//instance=this;
 	}
 	public static void speak(String texto){
-		System.out.println("Falando: '"+texto+"'");
+		//System.out.println("Falando: '"+texto+"'");
 		instance.ttss.speakDarling(texto);
 	}
 	public static void speak(int j) {
