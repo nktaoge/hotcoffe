@@ -109,7 +109,7 @@ public class Tabela extends JFrame{
 			dtm.setValueAt("P"+P, i, 12);
 			dtm.setValueAt("C"+C, i, 13);
 			dtm.setValueAt("Q"+Q, i, 14);
-			System.out.println("E="+E + " P="+P+" C="+C +" Q="+Q);
+			//System.out.println("E="+E + " P="+P+" C="+C +" Q="+Q);
 		}
 		
 		
