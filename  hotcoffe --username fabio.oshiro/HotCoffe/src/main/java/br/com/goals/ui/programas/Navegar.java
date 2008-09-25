@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import au.id.jericho.lib.html.CharacterReference;
+//import au.id.jericho.lib.html.CharacterReference;
 import br.com.goals.tts.TTS;
 import br.com.goals.utils.Http;
 
@@ -37,7 +37,7 @@ public class Navegar extends CommandLineClient {
 			mat = patLimpaImg.matcher(codHtml);
 		}
 		codHtml = patLimpaComments.matcher(codHtml).replaceAll("");
-		codHtml = CharacterReference.decode(codHtml);
+		//codHtml = CharacterReference.decode(codHtml);
 		return codHtml;
 	}
 	@Override
