@@ -3,6 +3,7 @@
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,6 +15,9 @@ import javax.swing.JTable;
 public class Tabela extends JFrame {
 	private static final long serialVersionUID = -4419216375530458240L;
 	public static final int TOTG = 20;
+	public static final int COL_TOTPROGRAMA = 9;
+	private static boolean areacritica = false;
+	private static final String basePath = "";
 	javax.swing.table.DefaultTableModel dtm;
 
 	public Tabela() {
@@ -38,6 +42,7 @@ public class Tabela extends JFrame {
 		dtm.addRow(new Object[] { "Total Ag", "", "", "", "", "", "", "", "", "", "", "", "", "", "" });
 		dtm.addRow(new Object[] { "Total Fl", "", "", "", "", "", "", "", "", "", "", "", "", "", "" });
 		dtm.addRow(new Object[] { "Total Re", "", "", "", "", "", "", "", "", "", "", "", "", "", "" });
+		TabelaDao.read(dtm);
 		Thread t = new Thread() {
 			public void run() {
 				while (true) {
@@ -65,17 +70,19 @@ public class Tabela extends JFrame {
 	}
 
 	public void gravarVariaveis(){
+		areacritica = true;
 		String opt = JOptionPane.showInputDialog("Digite a jogada");
 		try{
-			G_File file = new G_File("G:/Atitudes/variaveis.txt");
+			G_File file = new G_File(basePath+"variaveis.txt");
 			if (!file.exists()){
-				file = new G_File("C:/Atitudes/variaveis.txt");
+				file = new G_File(basePath+"variaveis.txt");
 			}
 			int jog = Integer.parseInt(opt);
-			int Ri = Integer.parseInt(dtm.getValueAt(TOTG, jog).toString().trim());
-			int Ag = Integer.parseInt(dtm.getValueAt(TOTG+1, jog).toString().trim());
-			int Fl = Integer.parseInt(dtm.getValueAt(TOTG+2, jog).toString().trim());
-			int Re = Integer.parseInt(dtm.getValueAt(TOTG+3, jog).toString().trim());
+			calcularTotalJogada(jog);
+			int Ri = Integer.parseInt(dtm.getValueAt(TOTG, COL_TOTPROGRAMA).toString().trim());
+			int Ag = Integer.parseInt(dtm.getValueAt(TOTG+1, COL_TOTPROGRAMA).toString().trim());
+			int Fl = Integer.parseInt(dtm.getValueAt(TOTG+2, COL_TOTPROGRAMA).toString().trim());
+			int Re = Integer.parseInt(dtm.getValueAt(TOTG+3, COL_TOTPROGRAMA).toString().trim());
 			int nRe = natural(Re - Ag);
 			int nAg = natural(Ag - Re);
 			int nRi = natural(Ri - Fl);
@@ -101,29 +108,38 @@ public class Tabela extends JFrame {
 				if(nRi!=0) E += nRi * 5;
 			}
 			String vars = "agressivo="+Ag+"&reativo="+Re+"&rigido="+Ri+"&flexivel="+Fl+"&escala=10&ajustex=-4&ajustey=-8&vE="+E+"&vP="+P+"&vC="+C+"&vQ="+Q+"&";
-			System.out.println(vars);
+
+			G_File jogada;
+			jogada = new G_File(basePath + "j"+jog+".txt");
+			if(!jogada.exists()){
+				jogada = new G_File("C:/Atitudes/j"+jog+".txt");
+			}
+			jogada.write(vars);
+			//System.out.println(vars);
 			file.write(vars);
 		}catch(Exception e){
 			JOptionPane.showMessageDialog(this, e.getMessage());
 		}		
+		areacritica = false;
 	}
+	public static final int vRe = 1;
 	public static final int vRi = 2;
 	public static final int vAg = 3;
 	public static final int vFl = 4;
-	public static final int vRe = 1;
+	
 
 	public int totRi = 0;
 	public int totAg = 0;
 	public int totFl = 0;
 	public int totRe = 0;
 	protected void recalcular() {
-
+		if(areacritica) return;
 		int E, P, C, Q, Ri, Ag, Fl, Re,j=1;
 		for (int i = 0; i < TOTG; i++) {
 
 			E = P = C = Q = 100;
 			Ri = Ag = Fl = Re = 0;
-			for (j = 1; j <= 7; j++) {
+			for (j = 1; j <= 6; j++) {
 				try {
 					int a = Integer.parseInt(dtm.getValueAt(i, j).toString().trim());
 					switch (a) {
@@ -145,37 +161,41 @@ public class Tabela extends JFrame {
 					break;
 				}
 			}
-			
-			Re = natural(Re - Ag);
-			Ag = natural(Ag - Re);
-			Ri = natural(Ri - Fl);
-			Fl = natural(Fl - Ri);
-			if (Ri > 0 && Ag > 0) {
-				E += Ri * 5;
-				Q -= Ag * 5;
-			}else if (Re > 0 && Ri > 0) {
-				P += Ri * 5;
-				C -= Re * 5;
-			}else if (Fl > 0 && Re > 0) {
-				E -= Re * 5;
-				C += Fl * 5;
-			}else if (Ag > 0 && Fl > 0) {
-				P -= Ag * 5;
-				Q += Fl * 5;
+			int tRe,tAg,tRi,tFl;
+			tRe = natural(Re - Ag);
+			tAg = natural(Ag - Re);
+			tRi = natural(Ri - Fl);
+			tFl = natural(Fl - Ri);
+			if (tRi > 0 && tAg > 0) {
+				E += tRi * 5;
+				Q -= tAg * 5;
+			}else if (tRe > 0 && tRi > 0) {
+				P += tRi * 5;
+				C -= tRe * 5;
+			}else if (tFl > 0 && tRe > 0) {
+				E -= tRe * 5;
+				C += tFl * 5;
+			}else if (tAg > 0 && tFl > 0) {
+				P -= tAg * 5;
+				Q += tFl * 5;
 			}else{
-				if(Ag!=0) P -= Ag * 5; else
-				if(Fl!=0) C += Fl * 5; else
-				if(Re!=0) E -= Re * 5; else
-				if(Ri!=0) E += Ri * 5;
+				if(tAg!=0) P -= tAg * 5; else
+				if(tFl!=0) C += tFl * 5; else
+				if(tRe!=0) E -= tRe * 5; else
+				if(tRi!=0) E += tRi * 5;
 			}
 			dtm.setValueAt("E" + E, i, 11);
 			dtm.setValueAt("P" + P, i, 12);
 			dtm.setValueAt("C" + C, i, 13);
 			dtm.setValueAt("Q" + Q, i, 14);
-			//System.out.println("Ag=" + Ag + " Ri=" + Ri + " Re=" + Re + " Fl=" + Fl);
-			//System.out.println("E=" + E + " P=" + P + " C=" + C + " Q=" + Q);
+			//
+			System.out.println("-->'Equipe "+(i+1)+"' E=" + E + " P=" + P + " C=" + C + " Q=" + Q);
+			System.out.println("--> Ag=" + tAg + " Ri=" + tRi + " Re=" + tRe + " Fl=" + tFl);
 		}
-		for (j = 1; j <= 7; j++) {
+		/*
+		 * Calculando o total da jogada 
+		 */
+		for (j = 1; j <= 6; j++) {
 			Ri = Ag = Fl = Re = 0;
 			for (int i = 0; i < TOTG; i++) {
 				try {
@@ -204,8 +224,35 @@ public class Tabela extends JFrame {
 			dtm.setValueAt(Fl,TOTG+2, j);
 			dtm.setValueAt(Re,TOTG+3, j);
 		}
+		calcularTotalJogada(6);
+		
+		TabelaDao.create(dtm);
 	}
 
+	/**
+	 * Calcula o valor até a jogada
+	 * @param jogada
+	 */
+	public void calcularTotalJogada(int jogada){
+		/*
+		 * Calculando o total daS jogadaS
+		 *  
+		 */
+		for(int i=0;i<4;i++){
+			int tot=0;
+			for (int j = 1; j <= jogada; j++) {
+				try{
+					int a = Integer.parseInt(dtm.getValueAt(TOTG+i, j).toString().trim());
+					//System.out.print(a+" ");
+					tot+=a;
+				}catch(Exception e){
+				
+				}
+			}
+			//System.out.println(" = " + tot);
+			dtm.setValueAt(tot, TOTG+i, COL_TOTPROGRAMA);
+		}
+	}
 	int natural(int i) {
 		return i < 0 ? 0 : i;
 	}
