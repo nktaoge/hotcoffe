@@ -3,13 +3,14 @@ import javax.swing.table.DefaultTableModel;
 
 public class TabelaDao {
 	public static final String path = "tabela.txt";
-	public static void create(DefaultTableModel dtm){
+	public static void create(DefaultTableModel dtm) throws Exception{
 		int m = dtm.getRowCount();
 		int n=dtm.getColumnCount();
 		String val="";
 		for(int i=0;i<m;i++){
 			for(int j=0;j<n;j++){
-				val+=dtm.getValueAt(i,j).toString()+"\t";
+				if(dtm.getValueAt(i,j)!=null)
+					val+=dtm.getValueAt(i,j).toString()+"\t";
 			}
 			val+="\n";
 		}

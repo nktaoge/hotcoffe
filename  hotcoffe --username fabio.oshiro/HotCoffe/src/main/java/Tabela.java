@@ -1,9 +1,10 @@
 
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -11,15 +12,32 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class Tabela extends JFrame {
 	private static final long serialVersionUID = -4419216375530458240L;
 	public static final int TOTG = 20;
 	public static final int COL_TOTPROGRAMA = 9;
+	public static final int INI_COL_EPCQ = 12;
 	private static boolean areacritica = false;
 	private static final String basePath = "";
 	javax.swing.table.DefaultTableModel dtm;
 
+	class FontTeste extends DefaultTableCellRenderer {
+		private static final long serialVersionUID = -8976700576150755645L;
+		private Font fontePadrao = new Font("Arial", 0, 18);
+
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column) {
+
+			Component c = super.getTableCellRendererComponent(table, value,
+					isSelected, hasFocus, row, column);
+			c.setFont(this.fontePadrao);
+			return c;
+		}
+	}
+	
 	public Tabela() {
 		super("Atitudes");
 		JButton btnSalvar = new JButton("Salvar");
@@ -30,18 +48,22 @@ public class Tabela extends JFrame {
 		tabela.setModel(new javax.swing.table.DefaultTableModel(
 				new Object[][] {}, new String[] {
 						// aqui adiciona-se as colunas e seus respectivos nomes
-						" ", "1", "2", "3", "4", "5", "6", "E", "P", "C", "Q",
+						" ", "1", "2", "3", "4", "5", "6", "E", "P", "C", "Q","Equipe",
 						"E", "P", "C", "Q" }));
+		tabela.setDefaultRenderer(Object.class, new FontTeste());
 		dtm = (javax.swing.table.DefaultTableModel) tabela.getModel();
+		
 		// lembre-se um "" para cada coluna na tabela
 		for (int i = 1; i <= TOTG; i++) {
 			dtm.addRow(new Object[] { "E " + i, "", "", "", "", "", "", "", "",
-					"", "", "", "", "", "" });
+					"", ""
+					,"E "+i
+					, "", "", "", "" });
 		}
-		dtm.addRow(new Object[] { "Total Ri", "", "", "", "", "", "", "", "", "", "", "", "", "", "" });
-		dtm.addRow(new Object[] { "Total Ag", "", "", "", "", "", "", "", "", "", "", "", "", "", "" });
-		dtm.addRow(new Object[] { "Total Fl", "", "", "", "", "", "", "", "", "", "", "", "", "", "" });
-		dtm.addRow(new Object[] { "Total Re", "", "", "", "", "", "", "", "", "", "", "", "", "", "" });
+		dtm.addRow(new Object[] { "Total Ri", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" });
+		dtm.addRow(new Object[] { "Total Ag", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" });
+		dtm.addRow(new Object[] { "Total Fl", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" });
+		dtm.addRow(new Object[] { "Total Re", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" });
 		TabelaDao.read(dtm);
 		Thread t = new Thread() {
 			public void run() {
@@ -78,11 +100,19 @@ public class Tabela extends JFrame {
 				file = new G_File(basePath+"variaveis.txt");
 			}
 			int jog = Integer.parseInt(opt);
-			calcularTotalJogada(jog);
-			int Ri = Integer.parseInt(dtm.getValueAt(TOTG, COL_TOTPROGRAMA).toString().trim());
-			int Ag = Integer.parseInt(dtm.getValueAt(TOTG+1, COL_TOTPROGRAMA).toString().trim());
-			int Fl = Integer.parseInt(dtm.getValueAt(TOTG+2, COL_TOTPROGRAMA).toString().trim());
-			int Re = Integer.parseInt(dtm.getValueAt(TOTG+3, COL_TOTPROGRAMA).toString().trim());
+			int Ri,Ag,Fl,Re;
+			if(false){
+				calcularTotalJogada(jog);
+				Ri = Integer.parseInt(dtm.getValueAt(TOTG, COL_TOTPROGRAMA).toString().trim());
+				Ag = Integer.parseInt(dtm.getValueAt(TOTG+1, COL_TOTPROGRAMA).toString().trim());
+				Fl = Integer.parseInt(dtm.getValueAt(TOTG+2, COL_TOTPROGRAMA).toString().trim());
+				Re = Integer.parseInt(dtm.getValueAt(TOTG+3, COL_TOTPROGRAMA).toString().trim());
+			}else{
+				Ri = Integer.parseInt(dtm.getValueAt(TOTG, jog).toString().trim());
+				Ag = Integer.parseInt(dtm.getValueAt(TOTG+1, jog).toString().trim());
+				Fl = Integer.parseInt(dtm.getValueAt(TOTG+2, jog).toString().trim());
+				Re = Integer.parseInt(dtm.getValueAt(TOTG+3, jog).toString().trim());
+			}
 			int nRe = natural(Re - Ag);
 			int nAg = natural(Ag - Re);
 			int nRi = natural(Ri - Fl);
@@ -111,9 +141,6 @@ public class Tabela extends JFrame {
 
 			G_File jogada;
 			jogada = new G_File(basePath + "j"+jog+".txt");
-			if(!jogada.exists()){
-				jogada = new G_File("C:/Atitudes/j"+jog+".txt");
-			}
 			jogada.write(vars);
 			//System.out.println(vars);
 			file.write(vars);
@@ -184,13 +211,13 @@ public class Tabela extends JFrame {
 				if(tRe!=0) E -= tRe * 5; else
 				if(tRi!=0) E += tRi * 5;
 			}
-			dtm.setValueAt("E" + E, i, 11);
-			dtm.setValueAt("P" + P, i, 12);
-			dtm.setValueAt("C" + C, i, 13);
-			dtm.setValueAt("Q" + Q, i, 14);
+			dtm.setValueAt("E" + E, i, INI_COL_EPCQ);
+			dtm.setValueAt("P" + P, i, INI_COL_EPCQ+1);
+			dtm.setValueAt("C" + C, i, INI_COL_EPCQ+2);
+			dtm.setValueAt("Q" + Q, i, INI_COL_EPCQ+3);
 			//
-			System.out.println("-->'Equipe "+(i+1)+"' E=" + E + " P=" + P + " C=" + C + " Q=" + Q);
-			System.out.println("--> Ag=" + tAg + " Ri=" + tRi + " Re=" + tRe + " Fl=" + tFl);
+			//System.out.println("-->'Equipe "+(i+1)+"' E=" + E + " P=" + P + " C=" + C + " Q=" + Q);
+			//System.out.println("--> Ag=" + tAg + " Ri=" + tRi + " Re=" + tRe + " Fl=" + tFl);
 		}
 		/*
 		 * Calculando o total da jogada 
@@ -225,8 +252,12 @@ public class Tabela extends JFrame {
 			dtm.setValueAt(Re,TOTG+3, j);
 		}
 		calcularTotalJogada(6);
-		
-		TabelaDao.create(dtm);
+		try{
+			TabelaDao.create(dtm);
+		}catch(Exception e){
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(this, e.getMessage());
+		}
 	}
 
 	/**
