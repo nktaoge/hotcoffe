@@ -107,7 +107,7 @@ public class G_File {
 	 *            Tipo de extensão permitida
 	 * @return
 	 */
-	public boolean openDialogSaveAs(String conteudo, String filtro[]) {
+	public boolean openDialogSaveAs(String conteudo, String filtro[]) throws Exception {
 		JFileChooser fc = new JFileChooser();
 		G_FileFilter ff = new G_FileFilter(filtro);
 		fc.addChoosableFileFilter(ff);
@@ -142,7 +142,7 @@ public class G_File {
 	 * Abre a caixa de diálogo salvar como
 	 * 
 	 */
-	public boolean openDialogSaveAs(String filtro[]) {
+	public boolean openDialogSaveAs(String filtro[]) throws Exception {
 		JFileChooser fc = new JFileChooser();
 		G_FileFilter ff = new G_FileFilter(filtro);
 		fc.addChoosableFileFilter(ff);
@@ -328,16 +328,17 @@ public class G_File {
 	 * @param String
 	 *            contendo o novo conteudo do arquivo
 	 */
-	public void write(String texto) {
+	public void write(String texto) throws Exception{
 		if (this.path == null)
 			return;
 		File file = new File(this.path);
 		if(!file.exists()){
-			file.getParentFile().mkdirs();
+			if(file.getParentFile()!=null){
+				file.getParentFile().mkdirs();
+			}
 		}
 		texto +="";
 		FileWriter arq;
-		try {
 			arq = new FileWriter(this.path);
 			arq.write(texto);
 			arq.flush();
@@ -347,9 +348,7 @@ public class G_File {
 				conteudo = new StringBuilder();
 				conteudo.append(texto);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
 	}
 	
 	/**
