@@ -2,10 +2,12 @@ package br.com.goals.ui;
 
 import java.util.Scanner;
 
+import br.com.goals.grafo.CAL;
 import br.com.goals.tts.TTS;
 import br.com.goals.ui.programas.CommandLineClient;
 
 public class CommandLine {
+	CAL cal = new CAL();
 	class FScanner implements KeyboardEventsProvider{
 		Scanner scanner = new Scanner(System.in);
 		public String nextLine(){
@@ -15,8 +17,9 @@ public class CommandLine {
 	KeyboardEventsProvider scanner = new FScanner();
 	
 	public void doWork(){
+		
 		while(true){
-			TTS.speak("o que você deseja?");
+			TTS.speak("");
 			String texto = scanner.nextLine();
 			try{
 				String classe = Interpretador.acharNomeClasse(texto);
@@ -27,6 +30,13 @@ public class CommandLine {
 					String cmd = getNextLine();
 					//System.out.println("cmd="+cmd);
 					cli.setLine(cmd);
+				}
+			}catch(ClassNotFoundException e){
+				String resposta = cal.processar(texto);
+				if(resposta==null){
+					TTS.speak("Sem resposta");
+				}else{
+					TTS.speak(resposta);
 				}
 			}catch(Exception e){
 				TTS.speak("erro: "+e.getMessage());
