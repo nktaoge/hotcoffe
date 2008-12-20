@@ -285,7 +285,8 @@ public class PontoDao {
 		ArrayList<Ponto> res=new ArrayList<Ponto>();
 		try{
 			con = getConnection();
-			PreparedStatement ps = con.prepareStatement("Select * From hot_ponto where nome=?");
+			PreparedStatement ps = con.prepareStatement("Select * From hot_ponto p inner join hot_ligacao l" +
+					" on l.ponto_id_a=p.ponto_id where l.ponto_id_b=?");
 			ps.setObject(1, ponto.getPontoId());
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){

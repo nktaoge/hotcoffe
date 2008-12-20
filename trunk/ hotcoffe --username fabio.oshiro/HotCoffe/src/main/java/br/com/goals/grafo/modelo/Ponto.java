@@ -49,7 +49,13 @@ public class Ponto {
 		this.descricao = descricao;
 	}
 	public String toString(){
-		return "nome='"+nome+"'\nclasse='"+classe + "'\ndataHora='"+dataHora+"'\ndescricao='"+descricao+"'";
+		String retorno = "nome='"+nome+"'\nclasse='"+classe + "'\ndataHora='"+dataHora+"'\ndescricao='"+descricao+"'";
+		if(ligacaoA==null) return retorno;
+		retorno+="\nligacaoA.size()=" + ligacaoA.size()+"\n";
+		for(Ponto ponto:ligacaoA){
+			retorno+=ponto.toString().replace("\n","\n\t");
+		}
+		return retorno;
 	}
 	@Override
 	public boolean equals(Object obj) {
