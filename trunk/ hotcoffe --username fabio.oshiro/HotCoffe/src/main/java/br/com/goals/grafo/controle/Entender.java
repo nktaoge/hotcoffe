@@ -5,27 +5,41 @@ import java.util.List;
 
 import br.com.goals.grafo.modelo.Duvida;
 import br.com.goals.grafo.modelo.Ponto;
+import br.com.goals.grafo.persistencia.PontoDao;
 
 public class Entender {
-
+	private PontoDao pontoDao = PontoDao.getInstance();
 	/**
 	 * Tenta resolver o significado de cada coisa
 	 * @param listListPontos
-	 * @return
+	 * @return lista de pontos "significados"
 	 */
-	public List<Ponto> entender(List<List<Ponto>> listListPontos) throws Duvida {
+	public List<Ponto> entender(List<Ponto> listPontos) throws Duvida {
 		ArrayList<Ponto> duvidas = new ArrayList<Ponto>();
+		// pontos com significados unicos
 		ArrayList<Ponto> significados = new ArrayList<Ponto>();
-		for(List<Ponto> listPontos:listListPontos){
-			Ponto pontoUnico = null;
-			for(Ponto ponto:listPontos){
-				if(ponto.getPontoId()==null){
-					duvidas.add(ponto);
-				}else{
-					pontoUnico = ponto;
-				}
+		for(Ponto ponto:listPontos){
+			//carregar o primeiro level de conexao A
+			List<Ponto> ligacaoA = pontoDao.getLigacaoA(ponto);
+			ponto.setLigacaoA(ligacaoA);
+
+			//se for um conceito basico, já basta :-)
+			if(Conceitos.ehConceitoBasico(ponto)){
+				significados.add(ponto);
+				continue;
 			}
-			significados.add(pontoUnico);
+			
+			//nao eh um conceito basico
+			if(ponto.getLigacaoA().size()==1){
+				//TODO DFS?
+				significados.add(ponto);
+			}else if(ponto.getLigacaoA().size()==0){
+				duvidas.add(ponto);
+			}else{
+				//ambiguidade?
+				duvidas.add(ponto);
+			}
+			
 		}
 		if(duvidas.size()>0){
 			System.out.println("duvida " + duvidas.toArray());
@@ -33,5 +47,5 @@ public class Entender {
 		}
 		return significados;
 	}
-
+	
 }

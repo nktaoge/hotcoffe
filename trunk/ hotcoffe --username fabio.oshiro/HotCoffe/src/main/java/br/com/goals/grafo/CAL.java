@@ -1,6 +1,7 @@
 package br.com.goals.grafo;
 
 import java.util.List;
+import java.util.Scanner;
 
 import br.com.goals.grafo.controle.Conceitos;
 import br.com.goals.grafo.controle.Entender;
@@ -29,11 +30,20 @@ public class CAL {
 		Conceitos.carregarConceitos();
 		escutar = new Escutar(this);
 	}
+	public static void main(String[] args) {
+		CAL cal = new CAL();
+		Scanner sc = new Scanner(System.in);
+		while(true){
+			String s = sc.nextLine();
+			System.out.println(cal.processar(s));
+		}
+	}
 	public String processar(String texto){
-		List<List<Ponto>> listListPontos = escutar.escutar(texto,emissor);
+		System.out.println("Processando \""+texto+"\"...");
+		List<Ponto> listListPontos = escutar.escutar(texto,emissor);
 		try{
-			List<Ponto> listPontos = entender.entender(listListPontos);
-			List<Ponto> listPontosPensados = pensar.pensar(listPontos);
+			List<Ponto> listPontosComSentido = entender.entender(listListPontos);
+			List<Ponto> listPontosPensados = pensar.pensar(listPontosComSentido);
 			return responder.responder(listPontosPensados);
 		}catch(Duvida e){
 			return perguntar.perguntar(e.getPontos());

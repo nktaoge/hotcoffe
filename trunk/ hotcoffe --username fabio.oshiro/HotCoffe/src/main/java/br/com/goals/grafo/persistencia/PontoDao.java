@@ -50,17 +50,16 @@ public class PontoDao {
 		}
 		return null;
 	}
-	public List<Ponto> acharPorNome(String nome){
+	public Ponto acharPorNome(String nome){
 		Connection con = null;
-		ArrayList<Ponto> res=null;
+		Ponto res=null;
 		try{
-			res = new ArrayList<Ponto>();
 			con = getConnection();
 			PreparedStatement ps = con.prepareStatement("Select * From hot_ponto where nome=?");
 			ps.setString(1, nome);
 			ResultSet rs = ps.executeQuery();
-			while(rs.next()){
-				res.add(parseResultSet(rs));
+			if(rs.next()){
+				return parseResultSet(rs);
 			}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -72,12 +71,6 @@ public class PontoDao {
 			}catch(Exception e){
 				
 			}
-		}
-		if(res==null || res.size()==0){
-			Ponto ponto = new Ponto();
-			ponto.setNome(nome);
-			res = new ArrayList<Ponto>();
-			res.add(ponto);
 		}
 		return res;
 	}
@@ -166,6 +159,7 @@ public class PontoDao {
 			}
 			return ponto;
 		}catch(Exception e){
+			System.err.println(ponto);
 			e.printStackTrace();
 		}finally{
 			try{
@@ -179,13 +173,22 @@ public class PontoDao {
 		return null;
 	}
 	public synchronized Ponto acharOuCriarPorNome(String nome) {
-		Ponto ponto = acharPorDescricaoExata(nome);
+		Ponto ponto = acharPorNome(nome);
 		if (ponto==null){
 			ponto = new Ponto();
 			ponto.setNome(nome);
 			criar(ponto);
 		}
 		return ponto;
+	}
+	public Ponto acharOuCriarPorNome(Ponto ponto) {
+		Ponto pontoDB = acharPorNome(ponto.getNome());
+		if (pontoDB==null){
+			criar(ponto);
+			return ponto;
+		}else{
+			return pontoDB;
+		}
 	}
 	public synchronized Ponto acharOuCriarPorDescricao(String descricao) {
 		Ponto ponto = acharPorDescricaoExata(descricao);
@@ -228,5 +231,77 @@ public class PontoDao {
 			}
 		}
 		return null;
+	}
+	public synchronized Ponto acharOuCriarPorDescricao(Ponto ponto) {
+		Ponto pontoDB = acharPorDescricaoExata(ponto.getDescricao());
+		if (pontoDB==null){
+			criar(ponto);
+			return ponto;
+		}else{
+			return pontoDB;
+		}
+	}
+	/**
+	 * Liga A para B se nao estiver ligado  
+	 * @param importante conceito mais importante ou abstrato
+	 * @param ponto conceito mais concreto ou menos importante
+	 * @return Ligacao
+	 */
+	public synchronized Ligacao ligarSeDesligado(Ponto importante, Ponto ponto) {
+		Connection con = null;
+		try{
+			Ligacao ligacao = new Ligacao();
+			Date dataHora = new Date();
+			con = getConnection();
+			PreparedStatement ps = con.prepareStatement("select * from hot_ligacao where ponto_id_a=? and ponto_id_b=?");
+			ps.setObject(1, importante.getPontoId());
+			ps.setObject(2, ponto.getPontoId());
+			
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()){
+				ligacao.setLigacaoId(rs.getLong(1));
+				ligacao.setPontoIdA(ponto.getPontoId());
+				ligacao.setPontoIdB(importante.getPontoId());
+				ligacao.setDataHora(dataHora);
+				return ligacao;
+			}else{
+				return ligar(importante,ponto);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			try{
+				if(con!=null){
+					con.close();
+				}
+			}catch(Exception e){
+				
+			}
+		}
+		return null;
+	}
+	public List<Ponto> getLigacaoA(Ponto ponto) {
+		Connection con = null;
+		ArrayList<Ponto> res=new ArrayList<Ponto>();
+		try{
+			con = getConnection();
+			PreparedStatement ps = con.prepareStatement("Select * From hot_ponto where nome=?");
+			ps.setObject(1, ponto.getPontoId());
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				res.add(parseResultSet(rs));
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			try{
+				if(con!=null){
+					con.close();
+				}
+			}catch(Exception e){
+				
+			}
+		}
+		return res;
 	}
 }

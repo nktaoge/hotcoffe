@@ -8,6 +8,7 @@ public class SerPresente extends SuperVerbo{
 
 	@Override
 	public List<Ponto> executar(Ponto sujeito, Ponto predicado) {
+		System.out.println("sujeito " + sujeito.getNome() + " é " + predicado);
 		return null;
 	}
 
