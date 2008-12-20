@@ -1,6 +1,8 @@
 package br.com.goals.grafo.modelo;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Ponto {
 	private Long pontoId = null;
@@ -8,6 +10,7 @@ public class Ponto {
 	private String classe;
 	private String descricao;
 	private Date dataHora;
+	private List<Ponto> ligacaoA;
 	public Ponto(){
 		dataHora = new Date();
 	}
@@ -45,5 +48,28 @@ public class Ponto {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	
+	public String toString(){
+		return "nome='"+nome+"'\nclasse='"+classe + "'\ndataHora='"+dataHora+"'\ndescricao='"+descricao+"'";
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Ponto){
+			Ponto ponto = (Ponto) obj;
+			if(ponto.getPontoId().equals(this.pontoId)){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		return super.equals(obj);
+	}
+	public List<Ponto> getLigacaoA() {
+		if(ligacaoA==null){
+			ligacaoA = new ArrayList<Ponto>();
+		}
+		return ligacaoA;
+	}
+	public void setLigacaoA(List<Ponto> ligacaoA) {
+		this.ligacaoA = ligacaoA;
+	}
 }

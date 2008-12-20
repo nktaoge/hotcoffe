@@ -10,6 +10,7 @@ import quadmore.jaxb.TTSVoiceGetter;
 public class TTS {
 	private static TTS instance;
 	private QuadmoreTTS ttss;
+	private static boolean dontSpeak;
 	static{
 		instance=new TTS();
 	}
@@ -26,10 +27,16 @@ public class TTS {
 		//instance=this;
 	}
 	public static void speak(String texto){
-		//System.out.println("Falando: '"+texto+"'");
+		if(dontSpeak) return;
 		instance.ttss.speakDarling(texto);
 	}
 	public static void speak(int j) {
 		speak(j+"");
+	}
+	public static boolean isDontSpeak() {
+		return dontSpeak;
+	}
+	public static void setDontSpeak(boolean dontSpeak) {
+		TTS.dontSpeak = dontSpeak;
 	}
 }
