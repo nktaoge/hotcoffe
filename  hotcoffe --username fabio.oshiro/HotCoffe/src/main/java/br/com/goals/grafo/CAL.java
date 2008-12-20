@@ -22,7 +22,7 @@ import br.com.goals.grafo.modelo.Ponto;
 public class CAL {
 	private Emissor emissor = new Emissor();
 	private Escutar escutar;
-	private Entender entender = new Entender();
+	private Entender entender = new Entender(this);
 	private Pensar pensar = new Pensar();
 	private Responder responder = new Responder();
 	private Perguntar perguntar = new Perguntar();
@@ -57,5 +57,11 @@ public class CAL {
 	}
 	public void setEmissor(Emissor emissor) {
 		this.emissor = emissor;
+	}
+	public Pensar getPensar() {
+		return pensar;
+	}
+	public void setPensar(Pensar pensar) {
+		this.pensar = pensar;
 	}
 }

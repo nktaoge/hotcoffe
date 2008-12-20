@@ -16,7 +16,7 @@ public class Responder {
 		if(listPontos==null) return "";
 		for(Ponto ponto : listPontos){
 			if(ponto!=null){
-				resposta +=ponto.getNome();
+				resposta +=ponto.getNome()+" ";
 			}
 		}
 		return resposta;

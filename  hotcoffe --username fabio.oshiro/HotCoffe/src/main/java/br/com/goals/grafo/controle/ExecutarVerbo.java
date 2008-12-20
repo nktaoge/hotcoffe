@@ -6,16 +6,36 @@ import br.com.goals.grafo.controle.verbo.SuperVerbo;
 import br.com.goals.grafo.modelo.Ponto;
 
 public class ExecutarVerbo {
+	private Ponto sujeito=null;
+	private Ponto predicado=null;
 	public void executar(Ponto pontoVerbo,List<Ponto> pontos){
 		if(pontoVerbo.getClasse()!=null && !pontoVerbo.getClasse().equals("")){
 			try{
 				SuperVerbo superVerbo =(SuperVerbo)Class.forName("br.com.goals.grafo.controle.verbo."+pontoVerbo.getClasse()).newInstance();
-				Ponto sujeito = acharSujeito(pontoVerbo,pontos);
-				superVerbo.executar(sujeito,null);
+				sujeito = acharSujeito(pontoVerbo,pontos);
+				predicado = acharPredicado(pontoVerbo,pontos);
+				superVerbo.executar(sujeito,predicado);
 			}catch(Exception e){
 				e.printStackTrace();
 			}
 		}
+	}
+	private Ponto acharPredicado(Ponto verb, List<Ponto> pontos) {
+		int t = pontos.size();
+		int r=0;
+		for(int i=0;i<t;i++){
+			Ponto ponto = pontos.get(i);
+			System.out.print("'"+ponto.getNome()+"'");
+			for(Ponto pontoA:ponto.getLigacaoA()){
+				if(pontoA.equals(verb)){
+					System.out.println(" é o verbo");
+					r=++i;
+					break;
+				}
+			}
+			System.out.println(" não é verbo");
+		}
+		return pontos.get(r);
 	}
 	/**
 	 * Muitas vezes entre o artigo e o verbo
@@ -24,10 +44,17 @@ public class ExecutarVerbo {
 	 * @return
 	 */
 	private Ponto acharSujeito(Ponto verb, List<Ponto> pontos){
+		Ponto lastPonto = null;
 		for(Ponto ponto:pontos){
-			if(ponto.equals(Conceitos.verbo)){
-				return ponto;
+			System.out.print(ponto.getNome());
+			for(Ponto pontoA:ponto.getLigacaoA()){
+				if(pontoA.equals(verb)){
+					System.out.println(" é o verbo");
+					return lastPonto;
+				}
 			}
+			System.out.println(" não é verbo");
+			lastPonto=ponto;
 		}
 		return null;
 	}
