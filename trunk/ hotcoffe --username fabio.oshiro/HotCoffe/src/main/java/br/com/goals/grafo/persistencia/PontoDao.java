@@ -143,6 +143,11 @@ public class PontoDao {
 		}
 		return res;
 	}
+	/**
+	 * Cria o ponto no banco de dados
+	 * @param ponto a ser criado
+	 * @return ponto com o id
+	 */
 	public Ponto criar(Ponto ponto){
 		Connection con = null;
 		try{

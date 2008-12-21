@@ -1,6 +1,5 @@
 package br.com.goals.grafo.controle;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 import br.com.goals.grafo.modelo.Ponto;

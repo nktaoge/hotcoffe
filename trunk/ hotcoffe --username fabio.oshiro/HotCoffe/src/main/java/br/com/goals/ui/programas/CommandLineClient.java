@@ -48,9 +48,7 @@ public abstract class CommandLineClient {
 	}
 
 	public abstract void execute() throws Exception;
-	private static boolean stopSpeak=false;
 	public void speak(final String text) {
-		stopSpeak=true;
 		String txt = text.trim();
 		if(!txt.equals("")){
 			TTS.speak(text);
