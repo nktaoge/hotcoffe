@@ -8,12 +8,17 @@ import br.com.goals.grafo.modelo.Ponto;
 public class ExecutarVerbo {
 	private Ponto sujeito=null;
 	private Ponto predicado=null;
+	private Pensar pensar;
+	public ExecutarVerbo(Pensar pensar){
+		this.pensar = pensar;
+	}
 	public void executar(Ponto pontoVerbo,List<Ponto> pontos){
 		if(pontoVerbo.getClasse()!=null && !pontoVerbo.getClasse().equals("")){
 			try{
 				SuperVerbo superVerbo =(SuperVerbo)Class.forName("br.com.goals.grafo.controle.verbo."+pontoVerbo.getClasse()).newInstance();
 				sujeito = acharSujeito(pontoVerbo,pontos);
 				predicado = acharPredicado(pontoVerbo,pontos);
+				superVerbo.setCal(pensar.getCal());
 				superVerbo.executar(sujeito,predicado);
 			}catch(Exception e){
 				e.printStackTrace();
@@ -35,6 +40,7 @@ public class ExecutarVerbo {
 			}
 			System.out.println(" não é verbo");
 		}
+		//achar grupo x
 		return pontos.get(r);
 	}
 	/**

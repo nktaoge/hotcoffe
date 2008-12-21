@@ -23,12 +23,13 @@ public class CAL {
 	private Emissor emissor = new Emissor();
 	private Escutar escutar;
 	private Entender entender = new Entender(this);
-	private Pensar pensar = new Pensar();
+	private Pensar pensar;
 	private Responder responder = new Responder();
 	private Perguntar perguntar = new Perguntar();
 	public CAL(){
 		Conceitos.carregarConceitos();
 		escutar = new Escutar(this);
+		pensar = new Pensar(this);
 	}
 	public static void main(String[] args) {
 		CAL cal = new CAL();

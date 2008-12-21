@@ -2,10 +2,17 @@ package br.com.goals.grafo.controle;
 
 import java.util.List;
 
+import br.com.goals.grafo.CAL;
 import br.com.goals.grafo.modelo.Ponto;
 
 public class Pensar {
-	private ExecutarVerbo executarVerbo = new ExecutarVerbo();
+	private CAL cal;
+	private ExecutarVerbo executarVerbo;
+	public Pensar(CAL cal){
+		this.cal = cal;
+		executarVerbo = new ExecutarVerbo(this);		
+	}
+	
 	public List<Ponto> pensar(List<Ponto> listPontos) {
 		Ponto verbo = acharVerbo(listPontos);
 		executarVerbo.executar(verbo,listPontos);
@@ -37,5 +44,13 @@ public class Pensar {
 			System.out.println();
 		}
 		return null;
+	}
+
+	public CAL getCal() {
+		return cal;
+	}
+
+	public void setCal(CAL cal) {
+		this.cal = cal;
 	}
 }
