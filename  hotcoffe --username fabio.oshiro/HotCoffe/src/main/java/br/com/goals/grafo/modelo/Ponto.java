@@ -11,6 +11,7 @@ public class Ponto {
 	private String descricao;
 	private Date dataHora;
 	private List<Ponto> ligacaoA;
+	private List<Ponto> ligacaoB;
 	public Ponto(){
 		dataHora = new Date();
 	}
@@ -77,5 +78,14 @@ public class Ponto {
 	}
 	public void setLigacaoA(List<Ponto> ligacaoA) {
 		this.ligacaoA = ligacaoA;
+	}
+	public List<Ponto> getLigacaoB() {
+		if(ligacaoB==null){
+			ligacaoB = new ArrayList<Ponto>();
+		}
+		return ligacaoB;
+	}
+	public void setLigacaoB(List<Ponto> ligacaoB) {
+		this.ligacaoB = ligacaoB;
 	}
 }

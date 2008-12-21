@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -291,7 +293,7 @@ public class PontoDao {
 		try{
 			con = getConnection();
 			PreparedStatement ps = con.prepareStatement("Select * From hot_ponto p inner join hot_ligacao l" +
-					" on l.ponto_id_a=p.ponto_id where l.ponto_id_b=?");
+					" on l.ponto_id_a=p.ponto_id where l.ponto_id_b=? order by p.ponto_id");
 			ps.setObject(1, ponto.getPontoId());
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
@@ -309,5 +311,149 @@ public class PontoDao {
 			}
 		}
 		return res;
+	}
+	public List<Ponto> getLigacaoB(Ponto ponto) {
+		Connection con = null;
+		ArrayList<Ponto> res=new ArrayList<Ponto>();
+		try{
+			con = getConnection();
+			PreparedStatement ps = con.prepareStatement("Select * From hot_ponto p inner join hot_ligacao l" +
+					" on l.ponto_id_b=p.ponto_id where l.ponto_id_a=? order by p.ponto_id");
+			ps.setObject(1, ponto.getPontoId());
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				res.add(parseResultSet(rs));
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			try{
+				if(con!=null){
+					con.close();
+				}
+			}catch(Exception e){
+				
+			}
+		}
+		return res;
+	}
+	public List<Ponto> acharPontoAComum(Ponto ponto1,Ponto ponto2){
+		//TODO fazer funcionar
+		ArrayList<Ponto> res=new ArrayList<Ponto>();
+		
+		Connection con = null;
+		String sql = "select ponto_id_a from hot_ligacao l where l.ponto_id_b=?" 
+				+ "and l.ponto_id_a in (select ponto_id_a from hot_ligacao where ponto_id_b=?)";
+		try{
+			con = getConnection();
+			PreparedStatement ps = con.prepareStatement(
+					sql);
+			ps.setObject(1, ponto1.getPontoId());
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				res.add(parseResultSet(rs));
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			try{
+				if(con!=null){
+					con.close();
+				}
+			}catch(Exception e){
+				
+			}
+		}
+		return res;
+	}
+	private Comparator<Ponto> comparatorBuIdAsc = new Comparator<Ponto>(){
+		public int compare(Ponto o1, Ponto o2) {
+			if(o1.getPontoId()<o2.getPontoId())
+				return 1;
+			if(o1.getPontoId()>o2.getPontoId())
+				return -1;
+			return 0;
+		}
+	};
+	/**
+	 * Encontra o ponto que representa este grupo
+	 * @param listGrupo
+	 * @return ponto que representa este grupo
+	 */
+	public List<Ponto> acharGrupo(List<Ponto> listGrupo) {
+		ArrayList<Ponto> res=new ArrayList<Ponto>();
+		
+		//acha todos os pontos em comum
+		List<Ponto> resA = acharPontoAComum(listGrupo);
+		//verificar para cada res se é exatamente o listGrupo
+		Collections.sort(listGrupo,comparatorBuIdAsc);
+		for(Ponto pA:resA){
+			if(pA.getLigacaoB().size()==0){
+				pA.setLigacaoB(this.getLigacaoB(pA));
+			}
+			//ver
+			if(pA.getLigacaoB().size()!=listGrupo.size()){
+				//já não é igual
+				continue;
+			}
+			
+			//comparar todos os pontos
+			for(Ponto pB:pA.getLigacaoB()){
+				for(Ponto pG:listGrupo){
+					if(!pB.equals(pG)){
+						continue;
+					}
+				}
+			}
+			
+			res.add(pA);
+		}
+		return res;
+	}
+	
+	/**
+	 * Acha o ponto A comum a todos os pontos
+	 * @param listGrupo
+	 * @return ponto A que tem como B todos da lista
+	 */
+	public List<Ponto> acharPontoAComum(List<Ponto> listGrupo) {
+		Ponto pontoMenosA = null;
+		//carregar a ligacao A
+		for(Ponto ponto:listGrupo){
+			if(ponto.getLigacaoA().size()==0){
+				ponto.setLigacaoA(this.getLigacaoA(ponto));
+				if(ponto.getLigacaoA().size()==0){
+					return null;
+				}
+			}
+			if(pontoMenosA==null || pontoMenosA.getLigacaoA().size()<pontoMenosA.getLigacaoA().size()){
+				pontoMenosA = ponto;
+			}
+		}
+		//resposta
+		ArrayList<Ponto> res=new ArrayList<Ponto>();
+		for(Ponto pontoA:pontoMenosA.getLigacaoA()){
+			boolean contidoEmTodos = true;
+			for(Ponto ponto:listGrupo){
+				if(!ponto.getLigacaoA().contains(pontoA)){
+					contidoEmTodos = false;
+					break;
+				}
+			}
+			if(contidoEmTodos){
+				res.add(pontoA);
+			}
+		}
+		return res;
+	}
+	public Ponto criarGrupo(Ponto pontoA, ArrayList<Ponto> listGrupo) {
+		//Persiste o ponto caso nao esteja
+		if(pontoA.getPontoId()==null || pontoA.getPontoId().equals(0l)){
+			pontoA = criar(pontoA);
+		}
+		for(Ponto pontoB:listGrupo){
+			ligar(pontoA, pontoB);
+		}
+		return pontoA;
 	}
 }
