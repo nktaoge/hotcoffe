@@ -4,7 +4,7 @@ import java.util.List;
 
 import br.com.goals.grafo.modelo.Ponto;
 
-public class Responder {
+public class ArticularPalavras {
 
 	/**
 	 * 

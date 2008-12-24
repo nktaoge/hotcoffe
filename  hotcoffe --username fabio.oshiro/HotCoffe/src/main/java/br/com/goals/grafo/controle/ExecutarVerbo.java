@@ -53,7 +53,7 @@ public class ExecutarVerbo {
 		if(ponto==null || ponto.size()==0){
 			//criar o grupo
 			System.out.println("Criado o grupo");
-			Ponto pontoA = new Ponto("Grupo predicado");
+			Ponto pontoA = new Ponto(Conceitos.INSTANCIA_PREDICADO);
 			return pontoDao.criarGrupo(pontoA,listGrupo);
 		}
 		return ponto.get(0);

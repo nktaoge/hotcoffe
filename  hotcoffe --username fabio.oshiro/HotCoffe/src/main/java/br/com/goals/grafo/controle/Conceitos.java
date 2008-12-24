@@ -25,11 +25,15 @@ public class Conceitos {
 	public static final String VERBO = "Verbo";
 	public static final String VERBO_SER_PRESENTE = "Verbo 'ser' no presente (é)";
 	public static final String ARTIGO = "Artigo o, a, the, etc";
+	public static final String QUEM = "Para articular questões";
+	public static final String PONTO_INTERROGACAO = "Simples ponto de interrogação";
+	public static final String INSTANCIA_PREDICADO = "Grupo predicado";
 	public static Ponto duvida;
 	public static Ponto verbo;
 	public static Ponto artigo;
 	public static Ponto artigo_o;
 	public static Ponto verboSerPresente;
+	public static Ponto quem; 
 	private static HashSet<Long> conceitosBasicosID = new HashSet<Long>();
 	/**
 	 * Carrega no banco alguns conceitos iniciais
@@ -38,6 +42,7 @@ public class Conceitos {
 		duvida = criar(DUVIDA);
 		verbo = criar(VERBO);
 		artigo = criar(ARTIGO);
+		
 		criar(MENSAGEM_AO_CAL);
 		criar(ALGO_MENSAGEIRO);
 		criar(ATRIBUTO);
@@ -54,6 +59,14 @@ public class Conceitos {
 		artigo_o.setNome("o");
 		artigo_o=criarOuAcharPorNome(artigo_o);
 		pontoDao.ligarSeDesligado(artigo, artigo_o);
+		
+		Ponto pontoInterrogacao = new Ponto(PONTO_INTERROGACAO);
+		pontoInterrogacao.setNome("?");
+		criarOuAcharPorNome(pontoInterrogacao);
+		
+		quem = new Ponto(QUEM);
+		quem.setNome("quem");
+		quem = criarOuAcharPorNome(quem);
 	}
 	private static void criarVerboSer(){
 		verboSerPresente = new Ponto(VERBO_SER_PRESENTE);

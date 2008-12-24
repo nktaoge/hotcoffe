@@ -8,7 +8,7 @@ import br.com.goals.grafo.controle.Entender;
 import br.com.goals.grafo.controle.Escutar;
 import br.com.goals.grafo.controle.Pensar;
 import br.com.goals.grafo.controle.Perguntar;
-import br.com.goals.grafo.controle.Responder;
+import br.com.goals.grafo.controle.ArticularPalavras;
 import br.com.goals.grafo.modelo.Duvida;
 import br.com.goals.grafo.modelo.Emissor;
 import br.com.goals.grafo.modelo.Ponto;
@@ -24,8 +24,9 @@ public class CAL {
 	private Escutar escutar;
 	private Entender entender = new Entender(this);
 	private Pensar pensar;
-	private Responder responder = new Responder();
+	private ArticularPalavras responder = new ArticularPalavras();
 	private Perguntar perguntar = new Perguntar();
+	private List<Ponto> listPontosComA;
 	public CAL(){
 		Conceitos.carregarConceitos();
 		escutar = new Escutar(this);
@@ -41,10 +42,13 @@ public class CAL {
 	}
 	public String processar(String texto){
 		System.out.println("Processando \""+texto+"\"...");
-		List<Ponto> listListPontos = escutar.escutar(texto,emissor);
+		listPontosComA = escutar.escutar(texto,emissor);
 		try{
-			List<Ponto> listPontosComSentido = entender.entender(listListPontos);
+			List<Ponto> listPontosComSentido = entender.entender(listPontosComA);
+			
 			List<Ponto> listPontosPensados = pensar.pensar(listPontosComSentido);
+			
+			//Articular palavras
 			return responder.responder(listPontosPensados);
 		}catch(Duvida e){
 			return perguntar.perguntar(e.getPontos());
@@ -64,5 +68,8 @@ public class CAL {
 	}
 	public void setPensar(Pensar pensar) {
 		this.pensar = pensar;
+	}
+	public List<Ponto> getListPontosComA() {
+		return listPontosComA;
 	}
 }

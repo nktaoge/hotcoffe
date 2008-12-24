@@ -41,16 +41,34 @@ public class Escutar {
 		
 		pontoDao.ligar(instanciaDeUmaMensagem, emissor.getPonto());
 		for (int i = 0; i < token.length; i++) {
-			Ponto pToken = pontoDao.acharPorNome(token[i]);
-			if(pToken==null){
-				pToken = new Ponto();
-				pToken.setNome(token[i]);
-				pontoDao.criar(pToken);
-				pontoDao.ligar(Conceitos.duvida,pToken);
+			String strToken = token[i];
+			if(strToken.contains("?")){
+				String subToken[] = strToken.split("\\?");
+				for(int j=0;j<subToken.length;j++){
+					Ponto pToken = retornarToken(subToken[j]);
+					pontoDao.ligar(instanciaDeUmaMensagem, pToken);			
+					listTexto.add(pToken);
+					
+					Ponto pTokenInterrogacao = retornarToken("?");
+					pontoDao.ligar(instanciaDeUmaMensagem, pTokenInterrogacao);			
+					listTexto.add(pTokenInterrogacao);
+				}
+			}else{
+				Ponto pToken = retornarToken(strToken);
+				pontoDao.ligar(instanciaDeUmaMensagem, pToken);			
+				listTexto.add(pToken);
 			}
-			pontoDao.ligar(instanciaDeUmaMensagem, pToken);			
-			listTexto.add(pontoDao.acharPorNome(token[i]));
 		}
 		return listTexto;
+	}
+	private Ponto retornarToken(String strToken){
+		Ponto pToken = pontoDao.acharPorNome(strToken);
+		if(pToken==null){
+			pToken = new Ponto();
+			pToken.setNome(strToken);
+			pToken = pontoDao.criar(pToken);
+			pontoDao.ligar(Conceitos.duvida,pToken);
+		}
+		return pToken;
 	}
 }
