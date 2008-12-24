@@ -81,6 +81,7 @@ public class PontoDao {
 		ponto.setNome(rs.getString("nome"));
 		ponto.setPontoId(rs.getLong("ponto_id"));
 		ponto.setClasse(rs.getString("classe"));
+		ponto.setDescricao(rs.getString("descricao"));
 		return ponto;
 	}
 	public static PontoDao getInstance() {
@@ -343,7 +344,7 @@ public class PontoDao {
 		
 		Connection con = null;
 		String sql = "select ponto_id_a from hot_ligacao l where l.ponto_id_b=?" 
-				+ "and l.ponto_id_a in (select ponto_id_a from hot_ligacao where ponto_id_b=?)";
+				+ " and l.ponto_id_a in (select ponto_id_a from hot_ligacao where ponto_id_b=?)";
 		try{
 			con = getConnection();
 			PreparedStatement ps = con.prepareStatement(
@@ -366,13 +367,10 @@ public class PontoDao {
 		}
 		return res;
 	}
-	private Comparator<Ponto> comparatorBuIdAsc = new Comparator<Ponto>(){
+	private Comparator<Ponto> comparatorByIdAsc = new Comparator<Ponto>(){
 		public int compare(Ponto o1, Ponto o2) {
-			if(o1.getPontoId()<o2.getPontoId())
-				return 1;
-			if(o1.getPontoId()>o2.getPontoId())
-				return -1;
-			return 0;
+			System.out.println("?");
+			return o1.getPontoId().compareTo(o2.getPontoId());
 		}
 	};
 	/**
@@ -384,9 +382,9 @@ public class PontoDao {
 		ArrayList<Ponto> res=new ArrayList<Ponto>();
 		
 		//acha todos os pontos em comum
-		List<Ponto> resA = acharPontoAComum(listGrupo);
+		List<Ponto> resA = acharPontosAComum(listGrupo);
 		//verificar para cada res se é exatamente o listGrupo
-		Collections.sort(listGrupo,comparatorBuIdAsc);
+		Collections.sort(listGrupo,comparatorByIdAsc);
 		for(Ponto pA:resA){
 			if(pA.getLigacaoB().size()==0){
 				pA.setLigacaoB(this.getLigacaoB(pA));
@@ -410,28 +408,81 @@ public class PontoDao {
 		}
 		return res;
 	}
-	
+	private List<Ponto> retornarQuery(String sql) throws Exception{
+		Connection con = null;
+		ArrayList<Ponto> res=new ArrayList<Ponto>();
+		try{
+			con = getConnection();
+			PreparedStatement ps = con.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				res.add(parseResultSet(rs));
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			throw e;
+		}finally{
+			try{
+				if(con!=null){
+					con.close();
+				}
+			}catch(Exception e){
+				
+			}
+		}
+		return res;
+	}
 	/**
 	 * Acha o ponto A comum a todos os pontos
 	 * @param listGrupo
-	 * @return ponto A que tem como B todos da lista
+	 * @return pontos A que tem como B todos da lista
 	 */
-	public List<Ponto> acharPontoAComum(List<Ponto> listGrupo) {
+	public List<Ponto> acharPontosAComum(List<Ponto> listGrupo) {
+		/*
+		 * select * from proc p 
+		 * inner join lig l1 on l1.idA = p.id
+		 * inner join lig l2 on l2.idA = p.id
+		 * inner join lig l3 on l3.idA = p.id
+		 * where l1.idB = :idB1
+		 * and l2.idB = :idB2
+		 * and l3.idB = :idB3
+		 */
+		String sql = "Select p.ponto_id,p.nome,p.descricao,p.classe,p.data_hora from hot_ponto p ";
+		String where = " where 1=1 ";
+		int t = listGrupo.size();
+		for(int i=0;i<t;i++){
+			sql+=" inner join hot_ligacao l"+i+" on l"+i+".ponto_id_a=p.ponto_id ";
+			where +=" and l"+i+".ponto_id_b="+listGrupo.get(i).getPontoId();
+		}
+		List<Ponto> res1 = null;
+		try{
+			res1 = retornarQuery(sql+where);
+			return res1;
+		}catch(Exception e){
+			//erro, fazer do modo antigo
+			System.out.println("Erro ao executar query, fazendo do modo antigo.");
+		}
+		//resposta
+		ArrayList<Ponto> res=new ArrayList<Ponto>();
+		
 		Ponto pontoMenosA = null;
 		//carregar a ligacao A
 		for(Ponto ponto:listGrupo){
 			if(ponto.getLigacaoA().size()==0){
 				ponto.setLigacaoA(this.getLigacaoA(ponto));
 				if(ponto.getLigacaoA().size()==0){
-					return null;
+					//lista vazia
+					return res;
 				}
 			}
 			if(pontoMenosA==null || pontoMenosA.getLigacaoA().size()<pontoMenosA.getLigacaoA().size()){
 				pontoMenosA = ponto;
 			}
 		}
-		//resposta
-		ArrayList<Ponto> res=new ArrayList<Ponto>();
+		
+		if(pontoMenosA==null){
+			return res;
+		}
 		for(Ponto pontoA:pontoMenosA.getLigacaoA()){
 			boolean contidoEmTodos = true;
 			for(Ponto ponto:listGrupo){
@@ -442,6 +493,30 @@ public class PontoDao {
 			}
 			if(contidoEmTodos){
 				res.add(pontoA);
+			}
+		}
+		
+		//comparar respostas
+		if(res1!=null){
+			Collections.sort(res1,comparatorByIdAsc);
+			Collections.sort(res,comparatorByIdAsc);
+			boolean igual=true;
+			if(res1.size()==res.size()){
+				int tot=res1.size();
+				for(int i=0;i<tot;i++){
+					Ponto ponto1=res1.get(i);
+					Ponto ponto = res.get(i);
+					if(!ponto1.equals(ponto)){
+						System.out.println(ponto1.getPontoId() + " é diferente de " + ponto.getPontoId());
+						igual=false;
+					}
+				}
+			}else{
+				System.out.println("res 1 é diferente de res " + res.size() + " " + res1.size());
+				igual = false;
+			}
+			if(igual){
+				System.out.println("res 1 é igual a res");
 			}
 		}
 		return res;

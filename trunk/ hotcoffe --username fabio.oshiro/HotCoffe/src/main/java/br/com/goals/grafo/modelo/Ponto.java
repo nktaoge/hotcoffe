@@ -50,14 +50,17 @@ public class Ponto {
 		this.descricao = descricao;
 	}
 	public String toString(){
-		String retorno = "nome='"+nome+"'\nclasse='"+classe + "'\ndataHora='"+dataHora+"'\ndescricao='"+descricao+"'";
+		String retorno = "-->id="+pontoId+"\nnome='"+nome+"'\nclasse='"+classe + "'\ndataHora='"+dataHora+"'\ndescricao='"+descricao+"'";
 		if(ligacaoA==null) return retorno;
-		retorno+="\nligacaoA.size()=" + ligacaoA.size()+"\n";
+		retorno+="\nligacaoA.size()=" + ligacaoA.size();
 		for(Ponto ponto:ligacaoA){
-			retorno+=ponto.toString().replace("\n","\n\t");
+			retorno+="\n\t"+ponto.toString().replace("\n","\n\t");
 		}
 		return retorno;
 	}
+	/**
+	 * Sobreescrito, compara por ponto_id
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if(obj instanceof Ponto){

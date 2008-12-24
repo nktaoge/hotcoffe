@@ -13,10 +13,11 @@ public class SerPresente extends SuperVerbo{
 		
 		//System.out.println(" é '" + predicado.getNome()+"'");
 		
-		Ponto ponto = new Ponto("Instancia de 'é'");
-		pontoDao.ligar(Conceitos.verboSerPresente,ponto);
-		pontoDao.ligar(ponto,sujeito);
-		pontoDao.ligar(ponto,predicado);
+		Ponto instanciaDeSerPresente = new Ponto("Instancia de 'é'");
+		pontoDao.criar(instanciaDeSerPresente);
+		pontoDao.ligar(instanciaDeSerPresente,Conceitos.verboSerPresente);
+		pontoDao.ligar(instanciaDeSerPresente,sujeito);
+		pontoDao.ligar(instanciaDeSerPresente,predicado);
 		
 		return null;
 	}
