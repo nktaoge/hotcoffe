@@ -28,6 +28,7 @@ public class Conceitos {
 	public static final String QUEM = "Para articular questões";
 	public static final String PONTO_INTERROGACAO = "Simples ponto de interrogação";
 	public static final String INSTANCIA_PREDICADO = "Grupo predicado";
+	public static final String THE_CAL = "Ele mesmo, o EU, ego, etc.";
 	public static Ponto duvida;
 	public static Ponto verbo;
 	public static Ponto artigo;
@@ -67,6 +68,8 @@ public class Conceitos {
 		quem = new Ponto(QUEM);
 		quem.setNome("quem");
 		quem = criarOuAcharPorNome(quem);
+		
+		criar(THE_CAL);
 	}
 	private static void criarVerboSer(){
 		verboSerPresente = new Ponto(VERBO_SER_PRESENTE);

@@ -48,7 +48,6 @@ public class Escutar {
 					Ponto pToken = retornarToken(subToken[j]);
 					pontoDao.ligar(instanciaDeUmaMensagem, pToken);			
 					listTexto.add(pToken);
-					
 					Ponto pTokenInterrogacao = retornarToken("?");
 					pontoDao.ligar(instanciaDeUmaMensagem, pTokenInterrogacao);			
 					listTexto.add(pTokenInterrogacao);

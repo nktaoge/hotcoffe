@@ -3,6 +3,7 @@ package br.com.goals.grafo;
 import java.util.List;
 import java.util.Scanner;
 
+import br.com.goals.debug.Sysou;
 import br.com.goals.grafo.controle.Conceitos;
 import br.com.goals.grafo.controle.Entender;
 import br.com.goals.grafo.controle.Escutar;
@@ -27,6 +28,7 @@ public class CAL {
 	private ArticularPalavras responder = new ArticularPalavras();
 	private Perguntar perguntar = new Perguntar();
 	private List<Ponto> listPontosComA;
+	private Sysou sysou = new Sysou(this,1);
 	public CAL(){
 		Conceitos.carregarConceitos();
 		escutar = new Escutar(this);
@@ -41,7 +43,9 @@ public class CAL {
 		}
 	}
 	public String processar(String texto){
-		System.out.println("Processando \""+texto+"\"...");
+		sysou.onEnterFunction(1,"processar");
+		sysou.println(1,"Processando \""+texto+"\"...");
+		String retorno = "";
 		listPontosComA = escutar.escutar(texto,emissor);
 		try{
 			List<Ponto> listPontosComSentido = entender.entender(listPontosComA);
@@ -49,13 +53,15 @@ public class CAL {
 			List<Ponto> listPontosPensados = pensar.pensar(listPontosComSentido);
 			
 			//Articular palavras
-			return responder.responder(listPontosPensados);
+			String res =responder.responder(listPontosPensados);
+			retorno = res;
 		}catch(Duvida e){
-			return perguntar.perguntar(e.getPontos());
+			retorno = perguntar.perguntar(e.getPontos());
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		return "";
+		sysou.onExitFunction(1,"processar");
+		return retorno;
 	}
 	public Emissor getEmissor() {
 		return emissor;
