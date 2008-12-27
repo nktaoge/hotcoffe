@@ -15,14 +15,6 @@ CREATE TABLE  `hotcoffe`.`hot_ligacao` (
   `ponto_id_a` int(10) unsigned NOT NULL,
   `ponto_id_b` int(10) unsigned NOT NULL,
   `data_hora` datetime NOT NULL,
+  `ponto_id_tipo` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`ligacao_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
-
-DROP TABLE IF EXISTS `hotcoffe`.`hot_svp`;
-CREATE TABLE  `hotcoffe`.`hot_svp` (
-  `id_svp` int(10) unsigned NOT NULL auto_increment,
-  `ponto_id_s` int(10) unsigned NOT NULL,
-  `ponto_id_v` int(10) unsigned NOT NULL,
-  `ponto_id_p` int(10) unsigned NOT NULL,
-  PRIMARY KEY  (`id_svp`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
