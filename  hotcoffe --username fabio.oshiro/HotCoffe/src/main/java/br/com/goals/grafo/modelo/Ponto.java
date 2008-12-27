@@ -4,7 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import br.com.goals.grafo.persistencia.PontoDao;
+
 public class Ponto {
+	/**
+	 * quebrando os padroes
+	 */
+	private PontoDao pontoDao = PontoDao.getInstance();
+	
 	private Long pontoId = null;
 	private String nome;
 	private String classe;
@@ -72,6 +79,14 @@ public class Ponto {
 			}
 		}
 		return super.equals(obj);
+	}
+	/**
+	 * 
+	 * @param pontoTipo tipo de ligacao
+	 * @return lista de pontos com ligacao do tipo
+	 */
+	public List<Ponto> getLigacao(Ponto pontoTipo){
+		return pontoDao.getLigacao(this,pontoTipo);
 	}
 	public List<Ponto> getLigacaoA() {
 		if(ligacaoA==null){

@@ -25,7 +25,7 @@ public class Entender {
 		ArrayList<Ponto> significados = new ArrayList<Ponto>();
 		for(Ponto ponto:listPontos){
 			//carregar o primeiro level de conexao A
-			List<Ponto> ligacaoA = pontoDao.getLigacaoA(ponto);
+			List<Ponto> ligacaoA = pontoDao.getLigacaoA(ponto,Conceitos.significa);
 			ponto.setLigacaoA(ligacaoA);
 			significados.add(ponto);
 			

@@ -36,13 +36,11 @@ public class Pensar {
 	private List<Ponto> responderPergunta(List<Ponto> listPontos) {
 		sysou.onEnterFunction(1,"responderPergunta");
 		ArrayList<Ponto> resposta = new ArrayList<Ponto>(); 
-		
 		for(Ponto ponto:listPontos){
 			sysou.println(1,"-->" + ponto.getNome());
 			if(ponto.equals(Conceitos.quem)){
 				resposta = acharQuem(listPontos);
-				sysou.onExitFunction(1,"responderPergunta");
-				return resposta;
+				break;
 			}
 		}
 		sysou.onExitFunction(1,"responderPergunta");
@@ -51,52 +49,44 @@ public class Pensar {
 
 	private ArrayList<Ponto> acharQuem(List<Ponto> listPontos) {
 		sysou.onEnterFunction(1,"acharQuem");
-		Ponto verbo = acharVerbo(listPontos);
-		ArrayList<Ponto> semQuem = new ArrayList<Ponto>();
-		semQuem.add(verbo);
-		sysou.println(1,"verbo:\n" + verbo.toString());
-		for(Ponto ponto:listPontos){
-			if(!ponto.equals(Conceitos.quem)
-					&& !ponto.getNome().equals("?")
-					){
-				boolean inserido = false;
-				//tenta achar um predicado
-				for(Ponto pontoA : ponto.getLigacaoA()){
-					if(pontoA.getDescricao()!=null && pontoA.getDescricao().equals(Conceitos.INSTANCIA_PREDICADO)){
-						semQuem.add(pontoA);
-						sysou.println(1,"-->"+pontoA.toString());
-						inserido = true;
-						break;
-					}
-				}
-				//se nao for inserido
-				if(!inserido){
-					//verificar a
-				}
-				if(!inserido){
-					sysou.println(1,"-->não é predicado:"+ponto.toString());
-					//semQuem.add(ponto);
-				}
-			}
-		}
-		//
-		ArrayList<Ponto> resposta = new ArrayList<Ponto>();
 		
-		List<Ponto> pontosA = pontoDao.acharPontosAComum(semQuem);
-		sysou.println(1,"tratando grupos:");
-		for(Ponto pontoA:pontosA){
-			sysou.println(1,pontoA.getPontoId() + " " + pontoA.getNome());
-			//achar o item que nao está no grupo semQuem
-			List<Ponto> ligacaoB = pontoDao.getLigacaoB(pontoA);
-			for(Ponto pontoB:ligacaoB){
-				if(!semQuem.contains(pontoB)){
-					resposta.add(pontoB);
+			
+		Ponto pDado = null;
+		ArrayList<Ponto> resposta = new ArrayList<Ponto>();
+		//retirar o quem
+		listPontos.remove(Conceitos.quem);
+		//encontrar o verbo
+		Ponto verbo = acharVerbo(listPontos);
+		terminarLoop:
+		//remover o verbo
+		for(Ponto ponto:listPontos){
+			List<Ponto> siginificados =ponto.getLigacao(Conceitos.significa); 
+			for(Ponto sig:siginificados){
+				if(sig.equals(verbo)){
+					listPontos.remove(ponto);
+					break terminarLoop;
 				}
-			}
+			}			
 		}
-		sysou.println(1,"respostas:");
-		for(Ponto pontoA:resposta){
-			sysou.println(1,pontoA.getPontoId() + " " + pontoA.getNome());
+		listPontos.remove(verbo);
+		//remover o ponto de interrogacao
+		listPontos.remove(Conceitos.ponto_interrogacao);
+		
+		if(listPontos.size()==1){
+			pDado = listPontos.get(0).getLigacaoA().get(0);
+		}
+		sysou.println(1,"verbo = " + verbo);
+		sysou.println(1,"listPontos.size() = " + listPontos.size());
+		for(Ponto ponto:listPontos){
+			sysou.println(1,ponto);
+		}
+		List<Ponto> rA = pontoDao.getLigacaoA(pDado, verbo);
+		List<Ponto> rB = pontoDao.getLigacaoB(pDado, verbo);
+		resposta.addAll(rA);
+		resposta.addAll(rB);
+		sysou.println(1,"resposta.size() = " + resposta.size());
+		for(Ponto ponto:resposta){
+			sysou.println(1,ponto);
 		}
 		sysou.onExitFunction(1,"acharQuem");
 		return resposta;
