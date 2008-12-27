@@ -44,21 +44,23 @@ public class CAL {
 	}
 	public String processar(String texto){
 		sysou.onEnterFunction(1,"processar");
-		sysou.println(1,"Processando \""+texto+"\"...");
 		String retorno = "";
-		listPontosComA = escutar.escutar(texto,emissor);
-		try{
-			List<Ponto> listPontosComSentido = entender.entender(listPontosComA);
-			
-			List<Ponto> listPontosPensados = pensar.pensar(listPontosComSentido);
-			
-			//Articular palavras
-			String res =responder.responder(listPontosPensados);
-			retorno = res;
-		}catch(Duvida e){
-			retorno = perguntar.perguntar(e.getPontos());
-		}catch(Exception e){
-			e.printStackTrace();
+		if(texto!=null && !texto.trim().equals("")){
+			sysou.println(1,"Processando \""+texto+"\"...");
+			listPontosComA = escutar.escutar(texto,emissor);
+			try{
+				List<Ponto> listPontosComSentido = entender.entender(listPontosComA);
+				
+				List<Ponto> listPontosPensados = pensar.pensar(listPontosComSentido);
+				
+				//Articular palavras
+				String res =responder.responder(listPontosPensados);
+				retorno = res;
+			}catch(Duvida e){
+				retorno = perguntar.perguntar(e.getPontos());
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 		}
 		sysou.onExitFunction(1,"processar");
 		return retorno;

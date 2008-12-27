@@ -18,6 +18,14 @@ import br.com.goals.hotcoffe.Config;
 public class PontoDao {
 	private Config config;
 	private static PontoDao instance=new PontoDao();
+	/**
+	 * Comparador para ordenar por id em ordem asc
+	 */
+	private Comparator<Ponto> comparatorByIdAsc = new Comparator<Ponto>(){
+		public int compare(Ponto o1, Ponto o2) {
+			return o1.getPontoId().compareTo(o2.getPontoId());
+		}
+	};
 	private PontoDao(){
 		config = new Config(){
 			public String getDbDriver() {
@@ -38,6 +46,21 @@ public class PontoDao {
 		};
 	}
 	/**
+	 * Single
+	 * @return instancia
+	 */
+	public static PontoDao getInstance() {
+		return instance;
+	}
+	private Ponto parseResultSet(ResultSet rs) throws SQLException{
+		Ponto ponto = new Ponto();
+		ponto.setNome(rs.getString("nome"));
+		ponto.setPontoId(rs.getLong("ponto_id"));
+		ponto.setClasse(rs.getString("classe"));
+		ponto.setDescricao(rs.getString("descricao"));
+		return ponto;
+	}
+	/**
 	 * Algum connection pool
 	 * 
 	 * @return
@@ -52,6 +75,11 @@ public class PontoDao {
 		}
 		return null;
 	}
+	/**
+	 * 
+	 * @param nome
+	 * @return null caso nao encontre
+	 */
 	public Ponto acharPorNome(String nome){
 		Connection con = null;
 		Ponto res=null;
@@ -76,20 +104,11 @@ public class PontoDao {
 		}
 		return res;
 	}
-	private Ponto parseResultSet(ResultSet rs) throws SQLException{
-		Ponto ponto = new Ponto();
-		ponto.setNome(rs.getString("nome"));
-		ponto.setPontoId(rs.getLong("ponto_id"));
-		ponto.setClasse(rs.getString("classe"));
-		ponto.setDescricao(rs.getString("descricao"));
-		return ponto;
-	}
-	public static PontoDao getInstance() {
-		return instance;
-	}
+	
+	
 	/**
 	 * 
-	 * @param classe
+	 * @param classe nome da classe
 	 * @return pontos que tenham a classe x
 	 */
 	public List<Ponto> acharClasse(String classe) {
@@ -180,6 +199,11 @@ public class PontoDao {
 		}
 		return null;
 	}
+	/**
+	 * 
+	 * @param nome do ponto
+	 * @return ponto criado ou encontrado
+	 */
 	public synchronized Ponto acharOuCriarPorNome(String nome) {
 		Ponto ponto = acharPorNome(nome);
 		if (ponto==null){
@@ -189,6 +213,11 @@ public class PontoDao {
 		}
 		return ponto;
 	}
+	/**
+	 * 
+	 * @param ponto
+	 * @return ponto criado ou encontrado
+	 */
 	public Ponto acharOuCriarPorNome(Ponto ponto) {
 		Ponto pontoDB = acharPorNome(ponto.getNome());
 		if (pontoDB==null){
@@ -198,6 +227,11 @@ public class PontoDao {
 			return pontoDB;
 		}
 	}
+	/**
+	 * 
+	 * @param descricao
+	 * @return ponto criado ou encontrado
+	 */
 	public synchronized Ponto acharOuCriarPorDescricao(String descricao) {
 		Ponto ponto = acharPorDescricaoExata(descricao);
 		if (ponto==null){
@@ -206,16 +240,24 @@ public class PontoDao {
 		}
 		return ponto;
 	}
-	public Ligacao ligar(Ponto importante,Ponto ponto) {
+	/**
+	 * 
+	 * @param importante ponto A
+	 * @param ponto ponto B
+	 * @param pontoTipo tipo da ligacao
+	 * @return null ou a ligacao
+	 */
+	public Ligacao ligar(Ponto importante,Ponto ponto,Ponto pontoTipo) {
 		Connection con = null;
 		try{
 			Ligacao ligacao = new Ligacao();
 			Date dataHora = new Date();
 			con = getConnection();
-			PreparedStatement ps = con.prepareStatement("insert into hot_ligacao (ponto_id_a,ponto_id_b,data_hora) values (?,?,?)");
+			PreparedStatement ps = con.prepareStatement("insert into hot_ligacao (ponto_id_a,ponto_id_b,ponto_id_tipo,data_hora) values (?,?,?,?)");
 			ps.setObject(1, importante.getPontoId());
 			ps.setObject(2, ponto.getPontoId());
-			ps.setObject(3, dataHora);
+			ps.setObject(3, pontoTipo.getPontoId());
+			ps.setObject(4, dataHora);
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
 			if(rs.next()){
@@ -240,6 +282,11 @@ public class PontoDao {
 		}
 		return null;
 	}
+	/**
+	 * 
+	 * @param ponto ponto a ser criado
+	 * @return ponto achado ou criado
+	 */
 	public synchronized Ponto acharOuCriarPorDescricao(Ponto ponto) {
 		Ponto pontoDB = acharPorDescricaoExata(ponto.getDescricao());
 		if (pontoDB==null){
@@ -253,17 +300,19 @@ public class PontoDao {
 	 * Liga A para B se nao estiver ligado  
 	 * @param importante conceito mais importante ou abstrato
 	 * @param ponto conceito mais concreto ou menos importante
+	 * @param pontoTipo tipo do ponto
 	 * @return Ligacao
 	 */
-	public synchronized Ligacao ligarSeDesligado(Ponto importante, Ponto ponto) {
+	public synchronized Ligacao ligarSeDesligado(Ponto importante, Ponto ponto,Ponto pontoTipo) {
 		Connection con = null;
 		try{
 			Ligacao ligacao = new Ligacao();
 			Date dataHora = new Date();
 			con = getConnection();
-			PreparedStatement ps = con.prepareStatement("select * from hot_ligacao where ponto_id_a=? and ponto_id_b=?");
+			PreparedStatement ps = con.prepareStatement("select * from hot_ligacao where ponto_id_a=? and ponto_id_b=? and ponto_id_tipo=?");
 			ps.setObject(1, importante.getPontoId());
 			ps.setObject(2, ponto.getPontoId());
+			ps.setObject(3, pontoTipo.getPontoId());
 			
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()){
@@ -273,7 +322,7 @@ public class PontoDao {
 				ligacao.setDataHora(dataHora);
 				return ligacao;
 			}else{
-				return ligar(importante,ponto);
+				return ligar(importante,ponto,pontoTipo);
 			}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -288,14 +337,21 @@ public class PontoDao {
 		}
 		return null;
 	}
-	public List<Ponto> getLigacaoA(Ponto ponto) {
+	/**
+	 * 
+	 * @param ponto
+	 * @param ligacaoTipo tipo de ligacao
+	 * @return lista com os pontos, nunca será null
+	 */
+	public List<Ponto> getLigacaoA(Ponto ponto, Ponto ligacaoTipo) {
 		Connection con = null;
 		ArrayList<Ponto> res=new ArrayList<Ponto>();
 		try{
 			con = getConnection();
 			PreparedStatement ps = con.prepareStatement("Select * From hot_ponto p inner join hot_ligacao l" +
-					" on l.ponto_id_a=p.ponto_id where l.ponto_id_b=? order by p.ponto_id");
+					" on l.ponto_id_a=p.ponto_id where l.ponto_id_b=? and l.ponto_id_tipo=? order by p.ponto_id");
 			ps.setObject(1, ponto.getPontoId());
+			ps.setObject(2, ligacaoTipo.getPontoId());
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
 				res.add(parseResultSet(rs));
@@ -313,14 +369,21 @@ public class PontoDao {
 		}
 		return res;
 	}
-	public List<Ponto> getLigacaoB(Ponto ponto) {
+	/**
+	 * 
+	 * @param ponto
+	 * @param ligacaoTipo tipo de ligacao
+	 * @return lista com os pontos, nunca será null
+	 */
+	public List<Ponto> getLigacaoB(Ponto ponto,Ponto ligacaoTipo) {
 		Connection con = null;
 		ArrayList<Ponto> res=new ArrayList<Ponto>();
 		try{
 			con = getConnection();
 			PreparedStatement ps = con.prepareStatement("Select * From hot_ponto p inner join hot_ligacao l" +
-					" on l.ponto_id_b=p.ponto_id where l.ponto_id_a=? order by p.ponto_id");
+					" on l.ponto_id_b=p.ponto_id where l.ponto_id_a=? and l.ponto_id_tipo=? order by p.ponto_id");
 			ps.setObject(1, ponto.getPontoId());
+			ps.setObject(2, ligacaoTipo.getPontoId());
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
 				res.add(parseResultSet(rs));
@@ -338,56 +401,24 @@ public class PontoDao {
 		}
 		return res;
 	}
-	public List<Ponto> acharPontoAComum(Ponto ponto1,Ponto ponto2){
-		//TODO fazer funcionar
-		ArrayList<Ponto> res=new ArrayList<Ponto>();
-		
-		Connection con = null;
-		String sql = "select ponto_id_a from hot_ligacao l where l.ponto_id_b=?" 
-				+ " and l.ponto_id_a in (select ponto_id_a from hot_ligacao where ponto_id_b=?)";
-		try{
-			con = getConnection();
-			PreparedStatement ps = con.prepareStatement(
-					sql);
-			ps.setObject(1, ponto1.getPontoId());
-			ResultSet rs = ps.executeQuery();
-			while(rs.next()){
-				res.add(parseResultSet(rs));
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}finally{
-			try{
-				if(con!=null){
-					con.close();
-				}
-			}catch(Exception e){
-				
-			}
-		}
-		return res;
-	}
-	private Comparator<Ponto> comparatorByIdAsc = new Comparator<Ponto>(){
-		public int compare(Ponto o1, Ponto o2) {
-			System.out.println("?");
-			return o1.getPontoId().compareTo(o2.getPontoId());
-		}
-	};
+	
+	
 	/**
 	 * Encontra o ponto que representa este grupo
 	 * @param listGrupo
+	 * @param ligacaoTipo
 	 * @return ponto que representa este grupo
 	 */
-	public List<Ponto> acharGrupo(List<Ponto> listGrupo) {
+	public List<Ponto> acharGrupo(List<Ponto> listGrupo,Ponto ligacaoTipo) {
 		ArrayList<Ponto> res=new ArrayList<Ponto>();
 		
 		//acha todos os pontos em comum
-		List<Ponto> resA = acharPontosAComum(listGrupo);
+		List<Ponto> resA = acharPontosAComum(listGrupo,ligacaoTipo);
 		//verificar para cada res se é exatamente o listGrupo
 		Collections.sort(listGrupo,comparatorByIdAsc);
 		for(Ponto pA:resA){
 			if(pA.getLigacaoB().size()==0){
-				pA.setLigacaoB(this.getLigacaoB(pA));
+				pA.setLigacaoB(this.getLigacaoB(pA,ligacaoTipo));
 			}
 			//ver
 			if(pA.getLigacaoB().size()!=listGrupo.size()){
@@ -435,17 +466,21 @@ public class PontoDao {
 	/**
 	 * Acha o ponto A comum a todos os pontos
 	 * @param listGrupo
+	 * @param ligacaoTipo 
 	 * @return pontos A que tem como B todos da lista
 	 */
-	public List<Ponto> acharPontosAComum(List<Ponto> listGrupo) {
+	public List<Ponto> acharPontosAComum(List<Ponto> listGrupo, Ponto ligacaoTipo) {
 		/*
 		 * select * from proc p 
 		 * inner join lig l1 on l1.idA = p.id
 		 * inner join lig l2 on l2.idA = p.id
 		 * inner join lig l3 on l3.idA = p.id
 		 * where l1.idB = :idB1
+		 * and l1.idTipo = :idTipo
 		 * and l2.idB = :idB2
+		 * and l2.idTipo = :idTipo
 		 * and l3.idB = :idB3
+		 * and l3.idTipo = :idTipo
 		 */
 		String sql = "Select p.ponto_id,p.nome,p.descricao,p.classe,p.data_hora from hot_ponto p ";
 		String where = " where 1=1 ";
@@ -453,6 +488,7 @@ public class PontoDao {
 		for(int i=0;i<t;i++){
 			sql+=" inner join hot_ligacao l"+i+" on l"+i+".ponto_id_a=p.ponto_id ";
 			where +=" and l"+i+".ponto_id_b="+listGrupo.get(i).getPontoId();
+			where +=" and l"+i+".ponto_id_tipo="+ligacaoTipo.getPontoId();
 		}
 		List<Ponto> res1 = null;
 		try{
@@ -469,7 +505,7 @@ public class PontoDao {
 		//carregar a ligacao A
 		for(Ponto ponto:listGrupo){
 			if(ponto.getLigacaoA().size()==0){
-				ponto.setLigacaoA(this.getLigacaoA(ponto));
+				ponto.setLigacaoA(this.getLigacaoA(ponto,ligacaoTipo));
 				if(ponto.getLigacaoA().size()==0){
 					//lista vazia
 					return res;
@@ -521,14 +557,26 @@ public class PontoDao {
 		}
 		return res;
 	}
-	public Ponto criarGrupo(Ponto pontoA, ArrayList<Ponto> listGrupo) {
+	public Ponto criarGrupo(Ponto pontoA, ArrayList<Ponto> listGrupo,Ponto ligacaoTipo) {
 		//Persiste o ponto caso nao esteja
 		if(pontoA.getPontoId()==null || pontoA.getPontoId().equals(0l)){
 			pontoA = criar(pontoA);
 		}
 		for(Ponto pontoB:listGrupo){
-			ligar(pontoA, pontoB);
+			ligar(pontoA, pontoB,ligacaoTipo);
 		}
 		return pontoA;
+	}
+	/**
+	 * 
+	 * @param ponto ponto
+	 * @param ligacaoTipo tipo de ligacao
+	 * @return todos os pontos que possuem ligacao A ou B do tipo
+	 */
+	public List<Ponto> getLigacao(Ponto ponto,Ponto ligacaoTipo) {
+		List<Ponto> res = getLigacaoA(ponto, ligacaoTipo);
+		List<Ponto> resB = getLigacaoB(ponto, ligacaoTipo);
+		res.addAll(resB);
+		return res;
 	}
 }

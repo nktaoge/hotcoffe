@@ -26,35 +26,35 @@ public class Escutar {
 		Ponto umaMensagemDeAlgo = pontoDao.acharOuCriarPorDescricao(Conceitos.MENSAGEM_AO_CAL);
 		Ponto instanciaDeUmaMensagem = new Ponto(Conceitos.INSTANCIA_MENSAGEM);
 		pontoDao.criar(instanciaDeUmaMensagem);
-		pontoDao.ligar(umaMensagemDeAlgo,instanciaDeUmaMensagem);
+		pontoDao.ligar(umaMensagemDeAlgo,instanciaDeUmaMensagem,Conceitos.p_instancia);
 		if(emissor.getPonto()==null){
 			Ponto algoMensageiro = new Ponto(Conceitos.INSTANCIA_ALGO);
 			Ponto algo = pontoDao.acharOuCriarPorDescricao(Conceitos.ALGO_MENSAGEIRO);
 			emissor.setPonto(algoMensageiro);
 			algoMensageiro = pontoDao.criar(algoMensageiro);
 			//ligar o algo com o ponto
-			pontoDao.ligar(algo,algoMensageiro);
+			pontoDao.ligar(algo,algoMensageiro,Conceitos.p_instancia);
 			parent.setEmissor(emissor);
 		}
 		ArrayList<Ponto> listTexto = new ArrayList<Ponto>();  
 		String token[] = texto.split("\\s+");
 		
-		pontoDao.ligar(instanciaDeUmaMensagem, emissor.getPonto());
+		pontoDao.ligar(instanciaDeUmaMensagem, emissor.getPonto(),Conceitos.algo_mensageiro);
 		for (int i = 0; i < token.length; i++) {
 			String strToken = token[i];
 			if(strToken.contains("?")){
 				String subToken[] = strToken.split("\\?");
 				for(int j=0;j<subToken.length;j++){
 					Ponto pToken = retornarToken(subToken[j]);
-					pontoDao.ligar(instanciaDeUmaMensagem, pToken);			
+					pontoDao.ligar(instanciaDeUmaMensagem, pToken,Conceitos.grupo);			
 					listTexto.add(pToken);
 					Ponto pTokenInterrogacao = retornarToken("?");
-					pontoDao.ligar(instanciaDeUmaMensagem, pTokenInterrogacao);			
+					pontoDao.ligar(instanciaDeUmaMensagem, pTokenInterrogacao,Conceitos.grupo);			
 					listTexto.add(pTokenInterrogacao);
 				}
 			}else{
 				Ponto pToken = retornarToken(strToken);
-				pontoDao.ligar(instanciaDeUmaMensagem, pToken);			
+				pontoDao.ligar(instanciaDeUmaMensagem, pToken,Conceitos.grupo);			
 				listTexto.add(pToken);
 			}
 		}
@@ -66,7 +66,7 @@ public class Escutar {
 			pToken = new Ponto();
 			pToken.setNome(strToken);
 			pToken = pontoDao.criar(pToken);
-			pontoDao.ligar(Conceitos.duvida,pToken);
+			pontoDao.ligar(Conceitos.duvida,pToken,Conceitos.p_instancia);
 		}
 		return pToken;
 	}

@@ -50,4 +50,18 @@ public class Sysou {
 			printString("}//"+simpleName+"."+mensagem);
 		}
 	}
+	public void print(int level, String mensagem) {
+		String idents = "";
+		for(int i=0;i<ident;i++){
+			idents+="\t";
+		}
+		if(!simpleName.equals(lastPrintSimpleName)){
+			System.out.println(idents+simpleName+":");
+			lastPrintSimpleName = simpleName;
+		}
+		int v=mapVerbose.get(nome);
+		if(level<=v){
+			System.out.print(mensagem);
+		}
+	}
 }

@@ -29,15 +29,21 @@ public class Conceitos {
 	public static final String PONTO_INTERROGACAO = "Simples ponto de interrogação";
 	public static final String INSTANCIA_PREDICADO = "Grupo predicado";
 	public static final String THE_CAL = "Ele mesmo, o EU, ego, etc.";
-		
+	public static final String SIGNIFICA =	"Siginifica";
+	public static final String GRUPO = "Simples agrupamento";
+	
+	public static Ponto ponto_interrogacao;
 	public static Ponto duvida;
 	public static Ponto verbo;
+	public static Ponto grupo;
 	public static Ponto artigo;
 	public static Ponto artigo_o;
 	public static Ponto verboSerPresente;
 	public static Ponto quem; 
 	private static HashSet<Long> conceitosBasicosID = new HashSet<Long>();
-	
+	public static Ponto p_extends;
+	public static Ponto significa;
+	public static Ponto algo_mensageiro;
 	/*
 	 * Programacao e Orientacao a Objetos
 	 * P para significar Programacao
@@ -46,12 +52,12 @@ public class Conceitos {
 	 * é um tipo de, é como uma "MAS" não exatamente
 	 */
 	public static final String P_EXTENDS = "p Extends";
-	
+	public static final String P_INSTANCIA = "instancia, ocorrencia";
 	/**
 	 * é um, é uma
 	 */
 	public static final String P_CLASS = "p Class";
-	
+	public static Ponto p_instancia;
 	/**
 	 * Carrega no banco alguns conceitos iniciais
 	 */
@@ -61,10 +67,13 @@ public class Conceitos {
 		artigo = criar(ARTIGO);
 		
 		criar(MENSAGEM_AO_CAL);
-		criar(ALGO_MENSAGEIRO);
+		algo_mensageiro = criar(ALGO_MENSAGEIRO);
 		criar(ATRIBUTO);
 		criar(VALOR_ATRIBUTO);
-		
+		p_extends = criar(P_EXTENDS);
+		significa = criar(SIGNIFICA);
+		grupo = criar(GRUPO);
+		p_instancia = criar(P_INSTANCIA);
 		Ponto pararSom = new Ponto("Comando para parar som");
 		pararSom.setNome("silêncio");
 		pararSom.setClasse("PararSom");
@@ -75,11 +84,11 @@ public class Conceitos {
 		artigo_o = new Ponto("Primeiramente como artigo do sistema, mas pode ter outro sentido.");
 		artigo_o.setNome("o");
 		artigo_o=criarOuAcharPorNome(artigo_o);
-		pontoDao.ligarSeDesligado(artigo, artigo_o);
+		pontoDao.ligarSeDesligado(artigo, artigo_o,p_extends);
 		
-		Ponto pontoInterrogacao = new Ponto(PONTO_INTERROGACAO);
-		pontoInterrogacao.setNome("?");
-		criarOuAcharPorNome(pontoInterrogacao);
+		ponto_interrogacao = new Ponto(PONTO_INTERROGACAO);
+		ponto_interrogacao.setNome("?");
+		ponto_interrogacao = criarOuAcharPorNome(ponto_interrogacao);
 		
 		quem = new Ponto(QUEM);
 		quem.setNome("quem");
@@ -91,12 +100,12 @@ public class Conceitos {
 		verboSerPresente = new Ponto(VERBO_SER_PRESENTE);
 		verboSerPresente.setClasse("SerPresente");
 		verboSerPresente = criarOuAcharPorDescricao(verboSerPresente);
-		pontoDao.ligarSeDesligado(verbo, verboSerPresente);
+		pontoDao.ligarSeDesligado(verbo, verboSerPresente,p_extends);
 		
 		Ponto palavraEh = new Ponto();
 		palavraEh.setNome("é");
 		palavraEh = criarOuAcharPorNome(palavraEh);
-		pontoDao.ligarSeDesligado(verboSerPresente, palavraEh);
+		pontoDao.ligarSeDesligado(verboSerPresente, palavraEh,significa);
 	}
 	/**
 	 * Facilitador
