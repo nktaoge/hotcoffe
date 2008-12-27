@@ -29,6 +29,7 @@ public class Conceitos {
 	public static final String PONTO_INTERROGACAO = "Simples ponto de interrogação";
 	public static final String INSTANCIA_PREDICADO = "Grupo predicado";
 	public static final String THE_CAL = "Ele mesmo, o EU, ego, etc.";
+		
 	public static Ponto duvida;
 	public static Ponto verbo;
 	public static Ponto artigo;
@@ -36,6 +37,21 @@ public class Conceitos {
 	public static Ponto verboSerPresente;
 	public static Ponto quem; 
 	private static HashSet<Long> conceitosBasicosID = new HashSet<Long>();
+	
+	/*
+	 * Programacao e Orientacao a Objetos
+	 * P para significar Programacao
+	 */
+	/**
+	 * é um tipo de, é como uma "MAS" não exatamente
+	 */
+	public static final String P_EXTENDS = "p Extends";
+	
+	/**
+	 * é um, é uma
+	 */
+	public static final String P_CLASS = "p Class";
+	
 	/**
 	 * Carrega no banco alguns conceitos iniciais
 	 */
@@ -104,5 +120,9 @@ public class Conceitos {
 	}
 	public static boolean ehConceitoBasico(Ponto ponto){
 		return conceitosBasicosID.contains(ponto.getPontoId());
+	}
+	
+	public static void programming(){
+		//quem.getClass().
 	}
 }
