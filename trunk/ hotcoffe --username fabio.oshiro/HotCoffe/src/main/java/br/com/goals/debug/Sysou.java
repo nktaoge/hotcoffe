@@ -1,7 +1,11 @@
 package br.com.goals.debug;
 
 import java.util.HashMap;
-
+/**
+ * Classe para debug e println "estruturado"
+ * @author Fabio Issamu Oshiro
+ *
+ */
 public class Sysou {
 	private static int ident=0;
 	private static HashMap<String,Integer> mapVerbose = new HashMap<String,Integer>();
