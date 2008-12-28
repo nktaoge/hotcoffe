@@ -54,11 +54,16 @@ public class ExecutarVerbo {
 		}
 		if(listGrupo.size()==1){
 			//não precisa criar o grupo
-			Ponto pontoGrupo = listGrupo.get(0);
-			Ponto pSig = new Ponto();
-			pSig = pontoDao.criar(pSig);
-			pontoDao.ligar(pSig, pontoGrupo, Conceitos.significa);
-			retorno = pSig;
+			//achar o significado
+			Ponto pontoSingle = listGrupo.get(0);
+			if(pontoSingle.getLigacaoA().size()>0){
+				retorno = pontoSingle.getLigacaoA().get(0);
+			}else{
+				Ponto pSig = new Ponto();
+				pSig = pontoDao.criar(pSig);
+				pontoDao.ligar(pSig, pontoSingle, Conceitos.significa);
+				retorno = pSig;
+			}
 		}else{
 			//TODO deveria achar uma lista?
 			List<Ponto> ponto = pontoDao.acharGrupo(listGrupo,Conceitos.grupo);
@@ -98,11 +103,11 @@ public class ExecutarVerbo {
 			sysou.print(1,ponto.getNome());
 			for(Ponto pontoA:ponto.getLigacaoA()){
 				if(pontoA.equals(verb)){
-					sysou.print(1," é o verbo");
+					sysou.println(1," é o verbo");
 					return lastPonto;
 				}
 			}
-			sysou.print(1," não é verbo");
+			sysou.println(1," não é verbo");
 			lastPonto=ponto;
 		}
 		return null;
