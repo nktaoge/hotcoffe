@@ -23,6 +23,13 @@ public class Escutar {
 			emissor=new Emissor();
 			parent.setEmissor(emissor);
 		}
+		try{
+			throw new Exception();
+		}catch(Exception e){
+			StackTraceElement[] st = e.getStackTrace();
+			st[0].getMethodName();
+			//st[0].
+		}
 		Ponto umaMensagemDeAlgo = pontoDao.acharOuCriarPorDescricao(Conceitos.MENSAGEM_AO_CAL);
 		Ponto instanciaDeUmaMensagem = new Ponto(Conceitos.INSTANCIA_MENSAGEM);
 		pontoDao.criar(instanciaDeUmaMensagem);

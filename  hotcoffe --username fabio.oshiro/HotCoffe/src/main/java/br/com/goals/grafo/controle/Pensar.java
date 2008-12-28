@@ -73,7 +73,13 @@ public class Pensar {
 		listPontos.remove(Conceitos.ponto_interrogacao);
 		
 		if(listPontos.size()==1){
-			pDado = listPontos.get(0).getLigacaoA().get(0);
+			Ponto pTemp = listPontos.get(0);
+			if(pTemp.getLigacaoA().size()>0){
+				//TODO escolher o melhor significado
+				pDado = pTemp.getLigacaoA().get(0);
+			}else{
+				pDado = pTemp;
+			}
 		}
 		sysou.println(1,"verbo = " + verbo);
 		sysou.println(1,"listPontos.size() = " + listPontos.size());
