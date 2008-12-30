@@ -10,7 +10,7 @@ import br.com.goals.grafo.controle.Escutar;
 import br.com.goals.grafo.controle.Pensar;
 import br.com.goals.grafo.controle.Perguntar;
 import br.com.goals.grafo.controle.ArticularPalavras;
-import br.com.goals.grafo.modelo.Duvida;
+import br.com.goals.grafo.modelo.DuvidaException;
 import br.com.goals.grafo.modelo.Emissor;
 import br.com.goals.grafo.modelo.Ponto;
 
@@ -28,7 +28,7 @@ public class CAL {
 	private ArticularPalavras responder = new ArticularPalavras();
 	private Perguntar perguntar = new Perguntar();
 	private List<Ponto> listPontosComA;
-	private Sysou sysou = new Sysou(this,1);
+	private Sysou sysou = new Sysou(this,0);
 	public CAL(){
 		Conceitos.carregarConceitos();
 		escutar = new Escutar(this);
@@ -56,7 +56,7 @@ public class CAL {
 				//Articular palavras
 				String res =responder.responder(listPontosPensados);
 				retorno = res;
-			}catch(Duvida e){
+			}catch(DuvidaException e){
 				retorno = perguntar.perguntar(e.getPontos());
 			}catch(Exception e){
 				e.printStackTrace();

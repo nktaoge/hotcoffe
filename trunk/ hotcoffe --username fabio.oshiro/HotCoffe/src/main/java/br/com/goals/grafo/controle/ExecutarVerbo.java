@@ -13,7 +13,7 @@ public class ExecutarVerbo {
 	private Ponto predicado=null;
 	private Pensar pensar;
 	private PontoDao pontoDao = PontoDao.getInstance();
-	private Sysou sysou = new Sysou(this,1);
+	private Sysou sysou = new Sysou(this,0);
 	public ExecutarVerbo(Pensar pensar){
 		this.pensar = pensar;
 	}

@@ -1,7 +1,7 @@
 package br.com.goals.grafo.modelo;
 /**
- * Quem esta falando com o programa
- * @author fabio
+ * Quem ou o que esta interagindo com o programa
+ * @author Fabio Issamu Oshiro
  *
  */
 public class Emissor {

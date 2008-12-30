@@ -12,7 +12,7 @@ public class Pensar {
 	private CAL cal;
 	private ExecutarVerbo executarVerbo;
 	private PontoDao pontoDao = PontoDao.getInstance();
-	private Sysou sysou = new Sysou(this,2);
+	private Sysou sysou = new Sysou(this,0);
 	public Pensar(CAL cal){
 		this.cal = cal;
 		executarVerbo = new ExecutarVerbo(this);		

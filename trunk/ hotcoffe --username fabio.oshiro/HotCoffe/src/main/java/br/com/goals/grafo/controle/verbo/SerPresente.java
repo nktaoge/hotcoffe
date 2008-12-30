@@ -9,8 +9,8 @@ public class SerPresente extends SuperVerbo{
 	@Override
 	public List<Ponto> executar(Ponto sujeito, Ponto predicado) {
 		sysou.onEnterFunction(1,"executar");
-		sysou.println(1,"sujeito '" + sujeito.getNome()+"'");
-		//System.out.println(" é '" + predicado.getNome()+"'");		
+		sysou.print(1,"sujeito '" + sujeito.getPontoId()+"'");
+		sysou.print(1," é '" + predicado.getPontoId()+"'");		
 		pontoDao.ligar(sujeito,predicado,Conceitos.verboSerPresente);
 		sysou.onExitFunction(1,"executar");
 		return null;

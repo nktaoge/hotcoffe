@@ -31,6 +31,7 @@ public class Conceitos {
 	public static final String THE_CAL = "Ele mesmo, o EU, ego, etc.";
 	public static final String SIGNIFICA =	"Siginifica";
 	public static final String GRUPO = "Simples agrupamento";
+	public static final String A_OPOSTO_B = "Oposicao de algo, A é oposto a B e o tipo é 'nao'";
 	
 	public static Ponto ponto_interrogacao;
 	public static Ponto duvida;
@@ -39,7 +40,10 @@ public class Conceitos {
 	public static Ponto artigo;
 	public static Ponto artigo_o;
 	public static Ponto verboSerPresente;
-	public static Ponto quem; 
+	public static Ponto quem;
+	public static Ponto a_oposto_b;
+	public static Ponto nao;
+	public static Ponto sim;
 	private static HashSet<Long> conceitosBasicosID = new HashSet<Long>();
 	public static Ponto p_extends;
 	public static Ponto significa;
@@ -58,6 +62,12 @@ public class Conceitos {
 	 */
 	public static final String P_CLASS = "p Class";
 	public static Ponto p_instancia;
+	/*
+	 * Programacao estruturada
+	 */
+	public static Ponto p_if;
+	public static Ponto p_else;
+	
 	/**
 	 * Carrega no banco alguns conceitos iniciais
 	 */
@@ -65,6 +75,17 @@ public class Conceitos {
 		duvida = criar(DUVIDA);
 		verbo = criar(VERBO);
 		artigo = criar(ARTIGO);
+		
+		/*
+		 * Parte de sim e nao
+		 */
+		a_oposto_b = criar(A_OPOSTO_B);
+		nao = new Ponto("Palavra nao");
+		nao.setNome("não");
+		nao = criarOuAcharPorNome(nao);
+		sim = new Ponto("Palavra sim");
+		sim.setNome("sim");
+		sim = criarOuAcharPorNome(sim);
 		
 		criar(MENSAGEM_AO_CAL);
 		algo_mensageiro = criar(ALGO_MENSAGEIRO);
