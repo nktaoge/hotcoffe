@@ -11,7 +11,7 @@ public abstract class SuperVerbo {
 	protected CAL cal;
 	protected PontoDao pontoDao = PontoDao.getInstance();
 	public abstract List<Ponto> executar(Ponto sujeito,Ponto predicado);
-	protected Sysou sysou = new Sysou(this,2);
+	protected Sysou sysou = new Sysou(this,0);
 	public CAL getCal() {
 		return cal;
 	}

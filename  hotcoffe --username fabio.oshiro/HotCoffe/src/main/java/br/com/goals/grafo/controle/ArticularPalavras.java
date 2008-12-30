@@ -24,8 +24,18 @@ public class ArticularPalavras {
 		String retorno="";
 		if(ponto.getNome()==null){
 			List<Ponto> rB = pontoDao.getLigacaoB(ponto,Conceitos.significa);
-			
-			retorno = rB.get(0).getNome();
+			if(rB.size()>0){
+				if(rB.get(0).getNome()==null){
+					retorno = buscaNome(rB.get(0));
+				}else{
+					retorno = rB.get(0).getNome();
+				}
+			}else{
+				rB = pontoDao.getLigacaoB(ponto,Conceitos.grupo);
+				for(Ponto pB:rB){
+					retorno+= pB.getNome()+" ";
+				}
+			}
 		}else{
 			retorno = ponto.getNome();
 		}

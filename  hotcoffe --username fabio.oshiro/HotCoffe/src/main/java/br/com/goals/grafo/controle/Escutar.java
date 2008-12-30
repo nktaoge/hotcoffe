@@ -8,7 +8,9 @@ import br.com.goals.grafo.modelo.Emissor;
 import br.com.goals.grafo.modelo.Ponto;
 import br.com.goals.grafo.persistencia.PontoDao;
 /**
- * Processa a escuta das palavras
+ * Processa a escuta das palavras,
+ * guarda o que foi escrito
+ * em forma de mensagem
  * @author Fabio Issamu Oshiro
  *
  */
@@ -23,13 +25,7 @@ public class Escutar {
 			emissor=new Emissor();
 			parent.setEmissor(emissor);
 		}
-		try{
-			throw new Exception();
-		}catch(Exception e){
-			StackTraceElement[] st = e.getStackTrace();
-			st[0].getMethodName();
-			//st[0].
-		}
+		
 		Ponto umaMensagemDeAlgo = pontoDao.acharOuCriarPorDescricao(Conceitos.MENSAGEM_AO_CAL);
 		Ponto instanciaDeUmaMensagem = new Ponto(Conceitos.INSTANCIA_MENSAGEM);
 		pontoDao.criar(instanciaDeUmaMensagem);
@@ -67,6 +63,11 @@ public class Escutar {
 		}
 		return listTexto;
 	}
+	/**
+	 * Liga o ponto criado ao ponto de dúvida
+	 * @param strToken
+	 * @return Ponto achado ou criado
+	 */
 	private Ponto retornarToken(String strToken){
 		Ponto pToken = pontoDao.acharPorNome(strToken);
 		if(pToken==null){

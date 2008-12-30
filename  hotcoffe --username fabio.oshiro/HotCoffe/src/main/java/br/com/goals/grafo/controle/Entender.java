@@ -4,10 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.goals.grafo.CAL;
-import br.com.goals.grafo.modelo.Duvida;
+import br.com.goals.grafo.modelo.DuvidaException;
 import br.com.goals.grafo.modelo.Ponto;
 import br.com.goals.grafo.persistencia.PontoDao;
-
+/**
+ * Tentar colocar o conceito de expressoes<br>
+ * Achar grupos dos maiores para os menores.
+ * @author Fabio Issamu Oshiro
+ *
+ */
 public class Entender {
 	private PontoDao pontoDao = PontoDao.getInstance();
 	private CAL cal;
@@ -19,7 +24,7 @@ public class Entender {
 	 * @param listListPontos
 	 * @return lista de pontos "significados"
 	 */
-	public List<Ponto> entender(List<Ponto> listPontos) throws Duvida {
+	public List<Ponto> entender(List<Ponto> listPontos) throws DuvidaException {
 		ArrayList<Ponto> duvidas = new ArrayList<Ponto>();
 		// pontos com significados unicos
 		ArrayList<Ponto> significados = new ArrayList<Ponto>();
@@ -39,7 +44,7 @@ public class Entender {
 			}else if(ponto.getLigacaoA().size()==0){
 				duvidas.add(ponto);
 			}else{
-				//ambiguidade?
+				//TODO ambiguidade?
 				duvidas.add(ponto);
 			}
 			
@@ -52,7 +57,7 @@ public class Entender {
 				return significados;
 			}
 			System.out.println("duvida verbo "+verbo);
-			throw new Duvida(duvidas);
+			throw new DuvidaException(duvidas);
 		}
 		return significados;
 	}
