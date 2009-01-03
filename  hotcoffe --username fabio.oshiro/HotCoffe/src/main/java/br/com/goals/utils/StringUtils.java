@@ -19,6 +19,11 @@ public class StringUtils {
 		}
 		return buf.toString();
 	}
+	public static String stringEntre(String source,String a,String b) throws Exception{
+		int ini = source.indexOf(a)+a.length();
+		int fim = source.indexOf(b,ini);
+		return source.substring(ini,fim);
+	}
 	public static String removeAcentos(String pStrTexto) {
 		return pStrTexto.replace("á", "a").replace("ã", "a").replace("à", "a").replace("ä", "a").replace("â", "a").replace("Á", "A").replace("Ã", "A").replace("À", "A").replace("Ä", "A").replace("Â", "A").replace("é", "e").replace("è", "e").replace("ë", "e").replace("ê", "e")
 				.replace("É", "E").replace("È", "E").replace("Ë", "E").replace("Ê", "E").replace("í", "i").replace("ì", "i").replace("ï", "i").replace("î", "i").replace("Í", "I").replace("Ì", "I").replace("Ï", "I").replace("Î", "I").replace("ó", "o").replace("ò", "o").replace(
