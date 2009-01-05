@@ -48,15 +48,15 @@ public class Escutar {
 			if(strToken.contains("?")){
 				String subToken[] = strToken.split("\\?");
 				for(int j=0;j<subToken.length;j++){
-					Ponto pToken = retornarToken(subToken[j]);
+					Ponto pToken = recuperarPonto(subToken[j]);
 					pontoDao.ligar(instanciaDeUmaMensagem, pToken,Conceitos.grupo);			
 					listTexto.add(pToken);
-					Ponto pTokenInterrogacao = retornarToken("?");
+					Ponto pTokenInterrogacao = recuperarPonto("?");
 					pontoDao.ligar(instanciaDeUmaMensagem, pTokenInterrogacao,Conceitos.grupo);			
 					listTexto.add(pTokenInterrogacao);
 				}
 			}else{
-				Ponto pToken = retornarToken(strToken);
+				Ponto pToken = recuperarPonto(strToken);
 				pontoDao.ligar(instanciaDeUmaMensagem, pToken,Conceitos.grupo);			
 				listTexto.add(pToken);
 			}
@@ -64,11 +64,11 @@ public class Escutar {
 		return listTexto;
 	}
 	/**
-	 * Liga o ponto criado ao ponto de dúvida
+	 * Caso seja criado, liga o ponto criado ao ponto de dúvida
 	 * @param strToken
 	 * @return Ponto achado ou criado
 	 */
-	private Ponto retornarToken(String strToken){
+	private Ponto recuperarPonto(String strToken){
 		Ponto pToken = pontoDao.acharPorNome(strToken);
 		if(pToken==null){
 			pToken = new Ponto();

@@ -45,7 +45,7 @@ public class Conceitos {
 	public static Ponto nao;
 	public static Ponto sim;
 	private static HashSet<Long> conceitosBasicosID = new HashSet<Long>();
-	public static Ponto p_extends;
+	
 	public static Ponto significa;
 	public static Ponto algo_mensageiro;
 	/*
@@ -56,12 +56,14 @@ public class Conceitos {
 	 * é um tipo de, é como uma "MAS" não exatamente
 	 */
 	public static final String P_EXTENDS = "p Extends";
+	public static Ponto p_extends;
 	public static final String P_INSTANCIA = "instancia, ocorrencia";
+	public static Ponto p_instancia;
 	/**
 	 * é um, é uma
 	 */
 	public static final String P_CLASS = "p Class";
-	public static Ponto p_instancia;
+	
 	/*
 	 * Programacao estruturada
 	 */
