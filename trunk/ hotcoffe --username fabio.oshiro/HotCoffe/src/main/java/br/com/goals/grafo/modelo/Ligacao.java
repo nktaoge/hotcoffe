@@ -1,7 +1,11 @@
 package br.com.goals.grafo.modelo;
 
 import java.util.Date;
-
+/**
+ * Sem utilidade por enquanto
+ * @author Fabio Issamu Oshiro
+ *
+ */
 public class Ligacao {
 	private Long ligacaoId;
 	private long pontoIdA;
