@@ -19,12 +19,58 @@ public class Entender {
 	public Entender(CAL cal) {
 		this.cal = cal;
 	}
+	private List<Ponto> tryAll(List<Ponto> listPontos){
+		ArrayList<Ponto> significados = new ArrayList<Ponto>();
+		List<Ponto> temp = pontoDao.acharGrupo(listPontos,Conceitos.grupo);
+		if(temp!=null && temp.size()>0){
+			return temp;
+		}
+		int t=listPontos.size();
+		int ini;
+		boolean achou;
+		//loop de ini até t
+		for(ini=0;ini<t;ini++){
+			achou = false;
+			//de t até ini
+			for(int j=t;j>ini;j--){
+				List<Ponto> listGrupo = sublist(listPontos,ini,j);
+				temp = pontoDao.acharGrupo(listGrupo,Conceitos.grupo);
+				if(temp!=null && temp.size()>0){
+					significados.add(temp.get(0));
+					achou = true;
+					ini=--j;
+					break;
+				}
+			}
+			if(!achou){
+				significados.add(listPontos.get(ini));
+			}
+		}
+		return significados;
+	}
+	
+	/**
+	 * for(int i=ini;i<fim;i++)
+	 * @param original
+	 * @param ini
+	 * @param fim
+	 * @return nova lista
+	 */
+	private List<Ponto> sublist(List<Ponto> original,int ini,int fim){
+		List<Ponto> listGrupo = new ArrayList<Ponto>();
+		for(int i=ini;i<fim;i++){
+			listGrupo.add(original.get(i));
+		}
+		return listGrupo;
+	}
 	/**
 	 * Tenta resolver o significado de cada coisa
 	 * @param listListPontos
 	 * @return lista de pontos "significados"
 	 */
 	public List<Ponto> entender(List<Ponto> listPontos) throws DuvidaException {
+		//TODO testar!!
+		listPontos = tryAll(listPontos);
 		ArrayList<Ponto> duvidas = new ArrayList<Ponto>();
 		// pontos com significados unicos
 		ArrayList<Ponto> significados = new ArrayList<Ponto>();

@@ -50,7 +50,7 @@ public class Conceitos {
 	public static Ponto algo_mensageiro;
 	/*
 	 * Programacao e Orientacao a Objetos
-	 * P para significar Programacao
+	 * P como prefixo para significar Programacao
 	 */
 	/**
 	 * é um tipo de, é como uma "MAS" não exatamente
