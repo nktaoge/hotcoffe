@@ -9,7 +9,12 @@ public class TestarCAL {
 	public static void ligarOuts(){
 		try {
 			Sysou.setVerboseLevelBySimpleName("CAL", 1);
+			Sysou.setVerboseLevelBySimpleName("Escutar", 0);
 			Sysou.setVerboseLevelBySimpleName("Pensar", 1);
+			Sysou.setVerboseLevelBySimpleName("SerPresente", 0);
+			Sysou.setVerboseLevelBySimpleName("ExecutarVerbo", 0);
+			Sysou.setVerboseLevelBySimpleName("Entender", 1);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
