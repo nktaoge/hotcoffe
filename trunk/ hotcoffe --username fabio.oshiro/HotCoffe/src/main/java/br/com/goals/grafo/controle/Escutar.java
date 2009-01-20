@@ -3,6 +3,7 @@ package br.com.goals.grafo.controle;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.goals.debug.Sysou;
 import br.com.goals.grafo.CAL;
 import br.com.goals.grafo.modelo.Emissor;
 import br.com.goals.grafo.modelo.Ponto;
@@ -17,10 +18,12 @@ import br.com.goals.grafo.persistencia.PontoDao;
 public class Escutar {
 	private static PontoDao pontoDao = PontoDao.getInstance();
 	private CAL parent;
+	private Sysou sysou = new Sysou(this,0);
 	public Escutar(CAL parent){
 		this.parent = parent;
 	}
 	public List<Ponto> escutar(String texto, Emissor emissor){
+		sysou.onEnterFunction(1,"escutar");
 		if(emissor==null){
 			emissor=new Emissor();
 			parent.setEmissor(emissor);
@@ -49,18 +52,21 @@ public class Escutar {
 				String subToken[] = strToken.split("\\?");
 				for(int j=0;j<subToken.length;j++){
 					Ponto pToken = recuperarPonto(subToken[j]);
-					pontoDao.ligar(instanciaDeUmaMensagem, pToken,Conceitos.grupo);			
+					pontoDao.ligar(instanciaDeUmaMensagem, pToken,Conceitos.grupo_mensagem);			
 					listTexto.add(pToken);
 					Ponto pTokenInterrogacao = recuperarPonto("?");
-					pontoDao.ligar(instanciaDeUmaMensagem, pTokenInterrogacao,Conceitos.grupo);			
+					pontoDao.ligar(instanciaDeUmaMensagem, pTokenInterrogacao,Conceitos.grupo_mensagem);
+					sysou.println(1,"add pTokenInterrogacao " + pTokenInterrogacao);
 					listTexto.add(pTokenInterrogacao);
 				}
 			}else{
 				Ponto pToken = recuperarPonto(strToken);
-				pontoDao.ligar(instanciaDeUmaMensagem, pToken,Conceitos.grupo);			
+				pontoDao.ligar(instanciaDeUmaMensagem, pToken,Conceitos.grupo_mensagem);
+				sysou.println(1,"add pToken " + pToken);
 				listTexto.add(pToken);
 			}
 		}
+		sysou.onExitFunction(1,"escutar");
 		return listTexto;
 	}
 	/**

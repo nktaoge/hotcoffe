@@ -34,9 +34,14 @@ public class Conceitos {
 	public static final String A_OPOSTO_B = "Oposicao de algo, A é oposto a B e o tipo é 'nao'";
 	
 	public static Ponto ponto_interrogacao;
+	
 	public static Ponto duvida;
 	public static Ponto verbo;
 	public static Ponto grupo;
+	/**
+	 * Grupo de mensagem
+	 */
+	public static Ponto grupo_mensagem;
 	public static Ponto artigo;
 	public static Ponto artigo_o;
 	public static Ponto verboSerPresente;
@@ -96,6 +101,7 @@ public class Conceitos {
 		p_extends = criar(P_EXTENDS);
 		significa = criar(SIGNIFICA);
 		grupo = criar(GRUPO);
+		grupo_mensagem = criar("Grupo de palavras da mensagem");
 		p_instancia = criar(P_INSTANCIA);
 		Ponto pararSom = new Ponto("Comando para parar som");
 		pararSom.setNome("silêncio");

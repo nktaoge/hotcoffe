@@ -105,7 +105,7 @@ public class Pensar {
 	 */
 	private boolean verificarPergunta(List<Ponto> listPontos) {
 		for(Ponto ponto:listPontos){
-			if(ponto.getNome().equals("?")){
+			if(ponto.getNome()!=null && ponto.getNome().equals("?")){
 				return true;
 			}
 		}

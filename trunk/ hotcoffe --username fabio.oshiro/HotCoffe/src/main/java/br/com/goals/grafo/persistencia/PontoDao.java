@@ -404,14 +404,15 @@ public class PontoDao {
 	
 	
 	/**
-	 * Encontra o ponto que representa este grupo
+	 * Encontra o ponto que representa EXATAMENTE este grupo
 	 * @param listGrupo
 	 * @param ligacaoTipo
 	 * @return ponto que representa este grupo
 	 */
-	public List<Ponto> acharGrupo(List<Ponto> listGrupo,Ponto ligacaoTipo) {
+	public List<Ponto> acharGrupo(List<Ponto> listGrupoOriginal,Ponto ligacaoTipo) {
 		ArrayList<Ponto> res=new ArrayList<Ponto>();
-		
+		List<Ponto> listGrupo = new ArrayList<Ponto>();
+		listGrupo.addAll(listGrupoOriginal);
 		//acha todos os pontos em comum
 		List<Ponto> resA = acharPontosAComum(listGrupo,ligacaoTipo);
 		//verificar para cada res se é exatamente o listGrupo
