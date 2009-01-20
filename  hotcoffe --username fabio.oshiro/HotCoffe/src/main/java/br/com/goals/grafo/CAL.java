@@ -48,6 +48,9 @@ public class CAL {
 		if(texto!=null && !texto.trim().equals("")){
 			sysou.println(1,"Processando \""+texto+"\"...");
 			listPontosComA = escutar.escutar(texto,emissor);
+			for(int i=0;i<listPontosComA.size();i++){
+				sysou.println(2,"listPontosComA " + listPontosComA.get(i));
+			}
 			try{
 				List<Ponto> listPontosComSentido = entender.entender(listPontosComA);
 				

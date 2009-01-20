@@ -3,6 +3,7 @@ package br.com.goals.grafo.controle;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.goals.debug.Sysou;
 import br.com.goals.grafo.CAL;
 import br.com.goals.grafo.modelo.DuvidaException;
 import br.com.goals.grafo.modelo.Ponto;
@@ -16,10 +17,17 @@ import br.com.goals.grafo.persistencia.PontoDao;
 public class Entender {
 	private PontoDao pontoDao = PontoDao.getInstance();
 	private CAL cal;
+	private Sysou sysou = new Sysou(this,0);
 	public Entender(CAL cal) {
 		this.cal = cal;
 	}
+	/**
+	 * Tenta achar o maior grupo
+	 * @param listPontos
+	 * @return
+	 */
 	private List<Ponto> tryAll(List<Ponto> listPontos){
+		sysou.onEnterFunction(1,"tryAll");
 		ArrayList<Ponto> significados = new ArrayList<Ponto>();
 		List<Ponto> temp = pontoDao.acharGrupo(listPontos,Conceitos.grupo);
 		if(temp!=null && temp.size()>0){
@@ -36,6 +44,7 @@ public class Entender {
 				List<Ponto> listGrupo = sublist(listPontos,ini,j);
 				temp = pontoDao.acharGrupo(listGrupo,Conceitos.grupo);
 				if(temp!=null && temp.size()>0){
+					sysou.println(1,"temp adicionado " + temp.get(0));
 					significados.add(temp.get(0));
 					achou = true;
 					ini=--j;
@@ -43,9 +52,11 @@ public class Entender {
 				}
 			}
 			if(!achou){
+				sysou.println(1,"listPontos adicionado "+ini+" " + listPontos.get(ini));
 				significados.add(listPontos.get(ini));
 			}
 		}
+		sysou.onExitFunction(1,"tryAll");
 		return significados;
 	}
 	
@@ -69,12 +80,19 @@ public class Entender {
 	 * @return lista de pontos "significados"
 	 */
 	public List<Ponto> entender(List<Ponto> listPontos) throws DuvidaException {
+		sysou.onEnterFunction(1,"entender");
+		for(int i=0;i<listPontos.size();i++){
+			sysou.println(2,"listPontos " + listPontos.get(i));
+		}
 		//TODO testar!!
 		listPontos = tryAll(listPontos);
 		ArrayList<Ponto> duvidas = new ArrayList<Ponto>();
 		// pontos com significados unicos
 		ArrayList<Ponto> significados = new ArrayList<Ponto>();
-		for(Ponto ponto:listPontos){
+		int t=listPontos.size();
+		for(int i=0;i<t;i++){
+			Ponto ponto = listPontos.get(i);
+			sysou.println(1, ponto);
 			//carregar o primeiro level de conexao A
 			List<Ponto> ligacaoA = pontoDao.getLigacaoA(ponto,Conceitos.significa);
 			ponto.setLigacaoA(ligacaoA);
@@ -98,13 +116,12 @@ public class Entender {
 		
 		if(duvidas.size()>0){
 			Ponto verbo = cal.getPensar().acharVerbo(listPontos);
-			if(verbo!=null && verbo.equals(Conceitos.verboSerPresente)){
-				//cancelar a duvida
-				return significados;
+			if(!(verbo!=null && verbo.equals(Conceitos.verboSerPresente))){
+				System.out.println("duvida verbo "+verbo);
+				throw new DuvidaException(duvidas);
 			}
-			System.out.println("duvida verbo "+verbo);
-			throw new DuvidaException(duvidas);
 		}
+		sysou.onExitFunction(1,"entender");
 		return significados;
 	}
 	

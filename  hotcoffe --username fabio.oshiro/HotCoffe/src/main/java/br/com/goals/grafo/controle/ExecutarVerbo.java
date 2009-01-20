@@ -18,9 +18,11 @@ public class ExecutarVerbo {
 		this.pensar = pensar;
 	}
 	public void executar(Ponto pontoVerbo,List<Ponto> pontos){
+		sysou.onEnterFunction(1,"executar");
 		if(pontoVerbo.getClasse()!=null && !pontoVerbo.getClasse().equals("")){
 			try{
 				SuperVerbo superVerbo =(SuperVerbo)Class.forName("br.com.goals.grafo.controle.verbo."+pontoVerbo.getClasse()).newInstance();
+				
 				sujeito = acharSujeito(pontoVerbo,pontos);
 				predicado = acharPredicado(pontoVerbo,pontos);
 				superVerbo.setCal(pensar.getCal());
@@ -29,8 +31,10 @@ public class ExecutarVerbo {
 				e.printStackTrace();
 			}
 		}
+		sysou.onExitFunction(1,"executar");
 	}
 	private Ponto acharPredicado(Ponto verb, List<Ponto> pontos) {
+		sysou.onEnterFunction(1,"acharPredicado");
 		Ponto retorno = null;
 		int t = pontos.size();
 		int r=0;
@@ -88,6 +92,7 @@ public class ExecutarVerbo {
 				}
 			}
 		}
+		sysou.onExitFunction(1,"acharPredicado");
 		return retorno;
 	}
 	/**
@@ -98,18 +103,26 @@ public class ExecutarVerbo {
 	 */
 	private Ponto acharSujeito(Ponto verb, List<Ponto> pontos){
 		//TODO melhorar este algoritimo
+		/*
+		 * fazer um grupo antes e depois do verbo
+		 */
+		sysou.onEnterFunction(1,"acharSujeito");
+		Ponto retorno = null;
 		Ponto lastPonto = null;
 		for(Ponto ponto:pontos){
 			sysou.print(1,ponto.getNome());
 			for(Ponto pontoA:ponto.getLigacaoA()){
 				if(pontoA.equals(verb)){
 					sysou.println(1," é o verbo");
-					return lastPonto;
+					retorno = lastPonto;
 				}
 			}
+			if(retorno!=null) break;
 			sysou.println(1," não é verbo");
 			lastPonto=ponto;
 		}
-		return null;
+		sysou.print(1,"sujeito = " + retorno);
+		sysou.onExitFunction(1,"acharSujeito");
+		return retorno;
 	}
 }
