@@ -36,7 +36,6 @@ public class Ator {
 			printWriter.write(form);
 			umCasoDeUso.aguardar=true;
 			System.out.println("Caso de uso aguardando");
-			umCasoDeUso.request.setAttribute("liberar","true");
 			Controlador controlador = (Controlador)request.getAttribute(Controlador.IOC_KEY);
 			synchronized (controlador) {
 				controlador.notify();
