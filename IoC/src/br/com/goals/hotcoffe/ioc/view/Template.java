@@ -19,7 +19,7 @@ public class Template {
 		for (int i = 0; i < metodos.length; i++) {
 			String nome = metodos[i].getName();
 			if(nome.startsWith("set")){
-				form+=metodos[i].getName() + "<input name=\""+metodos[i].getName()+"\" />";
+				form+="<div><label for=\"idField"+i+"\">" + metodos[i].getName() + "</label><input id=\"idField"+i+"\" name=\""+metodos[i].getName()+"\" /></div>";
 			}
 		}
 		form+="<input type=\"submit\"/></form>";		
