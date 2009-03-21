@@ -59,7 +59,6 @@ public abstract class UmCasoDeUso{
 	public final void finalizar(){
 		casosDeUso.remove(key);
 		Template.finalizar(this);
-		request.setAttribute("liberar","true");
 		Controlador controlador = (Controlador)request.getAttribute(Controlador.IOC_KEY);
 		synchronized (controlador) {
 			controlador.notify();
