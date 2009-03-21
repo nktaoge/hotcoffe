@@ -48,6 +48,10 @@ public class Controlador extends HttpServlet {
 						umCasoDeUso=UmCasoDeUso.getCasoDeUso(request.getParameter(IOC_KEY));
 						if(umCasoDeUso==null){
 							request.setAttribute("liberar","true");
+							Controlador controlador = (Controlador)request.getAttribute(IOC_KEY);
+							synchronized (controlador) {
+								controlador.notify();
+							}
 						}else{
 							umCasoDeUso.setRequestResponse(request, response);
 							UmCasoDeUso.acordar(umCasoDeUso);
@@ -61,12 +65,20 @@ public class Controlador extends HttpServlet {
 						} catch (Exception e) {
 							e.printStackTrace();
 							request.setAttribute("liberar","true");
+							Controlador controlador = (Controlador)request.getAttribute(IOC_KEY);
+							synchronized (controlador) {
+								controlador.notify();
+							}
 						}
 					}
 				}
 			};
-			t33.start();
-			System.out.println("Aguardando chamar interface usuario");
+			request.setAttribute(IOC_KEY,this);
+			synchronized (this) {
+				t33.start();
+				System.out.println("Aguardando chamar interface usuario");
+				wait();	
+			}
 			while(request.getAttribute("liberar")==null){
 				Thread.sleep(1000);
 				System.out.print(". ");
