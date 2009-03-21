@@ -36,7 +36,7 @@ public abstract class UmCasoDeUso{
 	 * Inicio do caso de uso
 	 * @throws IOException
 	 */
-	protected abstract void iniciar() throws IOException;
+	protected abstract void iniciar() throws Exception;
 	
 	private void init(){
 		aguardar=false;
