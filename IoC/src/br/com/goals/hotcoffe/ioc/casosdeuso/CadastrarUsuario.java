@@ -11,6 +11,13 @@ public class CadastrarUsuario extends UmCasoDeUso{
 		System.out.println("Caso de uso Cadastrar Usuario Aguardando");
 		Usuario usuario = new Usuario();
 		ator.preencher(usuario);
+		
 		System.out.println("Respondido " + usuario.getNome());
+		//UsuarioBo valida
+
+		//ator preenche endereco
+		//verificamos
+		
+		//UsuarioDao salva
 	}
 }
