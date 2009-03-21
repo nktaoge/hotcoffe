@@ -58,7 +58,6 @@ public abstract class UmCasoDeUso{
 	 */
 	public final void finalizar(){
 		casosDeUso.remove(key);
-		Template.finalizar(this);
 		Controlador controlador = (Controlador)request.getAttribute(Controlador.IOC_KEY);
 		synchronized (controlador) {
 			controlador.notify();
@@ -78,5 +77,8 @@ public abstract class UmCasoDeUso{
 	}
 	static HashMap<String,UmCasoDeUso> getCasosDeUso() {
 		return casosDeUso;
+	}
+	public HttpServletResponse getResponse() {
+		 return response;
 	}
 }

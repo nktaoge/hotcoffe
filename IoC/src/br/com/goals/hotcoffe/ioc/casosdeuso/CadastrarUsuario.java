@@ -1,7 +1,5 @@
 package br.com.goals.hotcoffe.ioc.casosdeuso;
 
-import java.io.IOException;
-
 import br.com.goals.hotcoffe.ioc.entidade.Usuario;
 
 public class CadastrarUsuario extends UmCasoDeUso{

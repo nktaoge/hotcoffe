@@ -1,6 +1,5 @@
 package br.com.goals.hotcoffe.ioc.casosdeuso;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
 
@@ -8,10 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.goals.hotcoffe.ioc.Controlador;
+import br.com.goals.hotcoffe.ioc.view.Template;
 
 public class Ator {
 	private UmCasoDeUso umCasoDeUso;
-	private Object obj;
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	public Ator(UmCasoDeUso umCasoDeUso) {
@@ -19,20 +18,15 @@ public class Ator {
 		request = umCasoDeUso.request;
 		response = umCasoDeUso.response;
 	}
+	/**
+	 * Super abstracao, invoca o Template para cuidar disso
+	 * @param obj
+	 */
 	public synchronized void preencher(Object obj){
-		this.obj = obj;
 		UmCasoDeUso.getCasosDeUso().put(umCasoDeUso.getKey(),umCasoDeUso);
 		try {
-			String form="<form action=\"?"+ Controlador.IOC_KEY +"="+umCasoDeUso.getKey()+"\" method=\"post\">";
-			PrintWriter printWriter = umCasoDeUso.response.getWriter();
-			Method[] metodos = obj.getClass().getMethods();
-			for (int i = 0; i < metodos.length; i++) {
-				String nome = metodos[i].getName();
-				if(nome.startsWith("set")){
-					form+=metodos[i].getName() + "<input name=\""+metodos[i].getName()+"\" />";
-				}
-			}
-			form+="<input type=\"submit\"/></form>";
+			PrintWriter printWriter = umCasoDeUso.getResponse().getWriter();
+			String form = Template.criarFormulario(obj, umCasoDeUso);
 			printWriter.write(form);
 			umCasoDeUso.aguardar=true;
 			System.out.println("Caso de uso aguardando");
@@ -43,6 +37,7 @@ public class Ator {
 			wait();
 			System.out.println("acordou...");
 			//popular
+			Method[] metodos = obj.getClass().getMethods();
 			for (int i = 0; i < metodos.length; i++) {
 				String nome = metodos[i].getName();
 				if(nome.startsWith("set")){
@@ -58,6 +53,5 @@ public class Ator {
 			HttpServletResponse response) {
 		this.request = request;
 		this.response = response;
-		
 	}
 }
