@@ -21,9 +21,9 @@ public class Ator {
 	}
 	public synchronized void preencher(Object obj){
 		this.obj = obj;
-		UmCasoDeUso.getCasosDeUso().put("asdf",umCasoDeUso);
+		UmCasoDeUso.getCasosDeUso().put(umCasoDeUso.getKey(),umCasoDeUso);
 		try {
-			String form="<form action=\"?"+ Controlador.IOC_KEY +"=asdf\" method=\"post\">";
+			String form="<form action=\"?"+ Controlador.IOC_KEY +"="+umCasoDeUso.getKey()+"\" method=\"post\">";
 			PrintWriter printWriter = umCasoDeUso.response.getWriter();
 			Method[] metodos = obj.getClass().getMethods();
 			for (int i = 0; i < metodos.length; i++) {
@@ -37,6 +37,10 @@ public class Ator {
 			umCasoDeUso.aguardar=true;
 			System.out.println("Caso de uso aguardando");
 			umCasoDeUso.request.setAttribute("liberar","true");
+			Controlador controlador = (Controlador)request.getAttribute(Controlador.IOC_KEY);
+			synchronized (controlador) {
+				controlador.notify();
+			}
 			wait();
 			System.out.println("acordou...");
 			//popular
