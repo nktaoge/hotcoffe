@@ -7,20 +7,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import br.com.goals.hotcoffe.ioc.casosdeuso.UmCasoDeUso;
 
 /**
  * Servlet implementation class OlaMundo
  */
 public class Controlador extends HttpServlet {
+	private static Logger logger = Logger.getLogger(Controlador.class);
 	private static final long serialVersionUID = 123L;
 	public static final String IOC_KEY = "IoC";
 	int contador=0;
-    /**
-     * Default constructor. 
-     */
     public Controlador() {
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -38,48 +37,34 @@ public class Controlador extends HttpServlet {
 	}
 	
 	private void chamarCasoDeUso(final HttpServletRequest request,final HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("contador = " + ++contador);
+		logger.debug("contador = " + ++contador);
 		try{
-			Thread t33 = new Thread(){
-				@Override
-				public void run() {
-					UmCasoDeUso umCasoDeUso = null;
-					if(request.getParameter(IOC_KEY)!=null){
-						umCasoDeUso=UmCasoDeUso.getCasoDeUso(request.getParameter(IOC_KEY));
-						if(umCasoDeUso==null){
-							Controlador controlador = (Controlador)request.getAttribute(IOC_KEY);
-							synchronized (controlador) {
-								controlador.notify();
-							}
-						}else{
-							umCasoDeUso.setRequestResponse(request, response);
-							UmCasoDeUso.acordar(umCasoDeUso);
-						}
-					}else{
-						try {
-							umCasoDeUso = (UmCasoDeUso) Class.forName("br.com.goals.hotcoffe.ioc.casosdeuso.CadastrarUsuario").newInstance();
-							umCasoDeUso.aguardar=false;
-							umCasoDeUso.setRequestResponse(request,response);
-							umCasoDeUso.executar();
-						} catch (Exception e) {
-							e.printStackTrace();
-							Controlador controlador = (Controlador)request.getAttribute(IOC_KEY);
-							synchronized (controlador) {
-								controlador.notify();
-							}
-						}
-					}
-				}
-			};
-			request.setAttribute(IOC_KEY,this);
-			synchronized (this) {
-				t33.start();
-				System.out.println("Aguardando chamar interface usuario");
-				wait();	
+			UmCasoDeUso umCasoDeUso = null;
+			if(request.getParameter(IOC_KEY)!=null){
+				umCasoDeUso=UmCasoDeUso.getCasoDeUso(request.getParameter(IOC_KEY));
 			}
-			System.out.println("fim = " + contador);
+			if(umCasoDeUso!=null){
+				umCasoDeUso.setControlador(this);
+				umCasoDeUso.setRequestResponse(request, response);
+				synchronized (this) {
+					UmCasoDeUso.acordar(umCasoDeUso);
+					logger.debug("Controlador aguardando chamar interface usuario");
+					wait();
+				}
+			}else{
+				umCasoDeUso = (UmCasoDeUso) Class.forName("br.com.goals.hotcoffe.ioc.casosdeuso.CadastrarUsuario").newInstance();
+				umCasoDeUso.setControlador(this);
+				umCasoDeUso.setRequestResponse(request,response);
+				Thread t33 = new Thread(umCasoDeUso);
+				synchronized (this) {
+					t33.start();
+					logger.debug("Controlador aguardando chamar interface usuario");
+					wait();
+				}
+			}
+			logger.debug("fim = " + contador);
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error("Erro ao tentar executar",e);
 		}
 	}
 }

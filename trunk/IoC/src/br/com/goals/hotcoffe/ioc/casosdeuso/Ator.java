@@ -6,13 +6,17 @@ import java.lang.reflect.Method;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import br.com.goals.hotcoffe.ioc.Controlador;
 import br.com.goals.hotcoffe.ioc.view.Template;
 
 public class Ator {
+	private static Logger logger = Logger.getLogger(Ator.class);
 	private UmCasoDeUso umCasoDeUso;
 	private HttpServletRequest request;
 	private HttpServletResponse response;
+	
 	public Ator(UmCasoDeUso umCasoDeUso) {
 		this.umCasoDeUso = umCasoDeUso;
 		request = umCasoDeUso.request;
@@ -28,14 +32,13 @@ public class Ator {
 			PrintWriter printWriter = umCasoDeUso.getResponse().getWriter();
 			String form = Template.criarFormulario(obj, umCasoDeUso);
 			printWriter.write(form);
-			umCasoDeUso.aguardar=true;
-			System.out.println("Caso de uso aguardando");
-			Controlador controlador = (Controlador)request.getAttribute(Controlador.IOC_KEY);
+			logger.debug("Caso de uso " + umCasoDeUso.getKey() + " aguardando...");
+			Controlador controlador = umCasoDeUso.getControlador();
 			synchronized (controlador) {
 				controlador.notify();
 			}
 			wait();
-			System.out.println("acordou...");
+			logger.debug(umCasoDeUso.getKey() + " acordou...");
 			//popular
 			Method[] metodos = obj.getClass().getMethods();
 			for (int i = 0; i < metodos.length; i++) {
@@ -46,7 +49,7 @@ public class Ator {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Erro ao mandar preencher " +obj,e);
 		}
 	}
 	public void setRequestResponse(HttpServletRequest request,
