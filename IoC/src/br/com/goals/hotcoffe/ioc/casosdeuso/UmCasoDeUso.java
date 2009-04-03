@@ -6,14 +6,24 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import br.com.goals.hotcoffe.ioc.Controlador;
 
-public abstract class UmCasoDeUso{
+public abstract class UmCasoDeUso implements Runnable{
+	private static Logger logger =Logger.getLogger(UmCasoDeUso.class);
 	protected HttpServletRequest request;
 	protected HttpServletResponse response;
 	private String key = null;
 	protected Ator ator = new Ator(this);
-	public boolean aguardar;
+	protected Sistema sistema = new Sistema(this);
+	private Controlador controlador;
+	public void setControlador(Controlador controlador) {
+		this.controlador = controlador;
+	}
+	public Controlador getControlador() {
+		return controlador;
+	}
 	/**
 	 * Request Forgery, fixed
 	 * Casos de uso rodando
@@ -32,6 +42,10 @@ public abstract class UmCasoDeUso{
 		}
 		finalizar();
 	}
+	@Override
+	public void run() {
+		executar();
+	}
 	/**
 	 * Inicio do caso de uso
 	 * @throws IOException
@@ -39,16 +53,15 @@ public abstract class UmCasoDeUso{
 	protected abstract void iniciar() throws Exception;
 	
 	private void init(){
-		aguardar=false;
 		//gerar um key
 		key="";
 		while(true){
-			for(int i=0;i<8;i++){
+			for(int i=0;i<10;i++){
 				key+=(char) (Math.random()*26 + 'a');
 			}
 			if(!casosDeUso.containsKey(key)) break;
 		}
-		System.out.println("key" + key);
+		logger.debug("Gerado o key " + key + ". " + casosDeUso.size() + " casos de uso acontecendo.");
 	}
 	public String getKey(){
 		return key;
@@ -58,7 +71,6 @@ public abstract class UmCasoDeUso{
 	 */
 	public final void finalizar(){
 		casosDeUso.remove(key);
-		Controlador controlador = (Controlador)request.getAttribute(Controlador.IOC_KEY);
 		synchronized (controlador) {
 			controlador.notify();
 		}
@@ -70,7 +82,6 @@ public abstract class UmCasoDeUso{
 		ator.setRequestResponse(request,response);
 	}
 	public static void acordar(UmCasoDeUso umCasoDeUso) {
-		umCasoDeUso.aguardar=false;
 		synchronized (umCasoDeUso.ator) {
 			umCasoDeUso.ator.notify();
 		}

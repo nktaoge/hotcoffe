@@ -1,5 +1,7 @@
 package br.com.goals.hotcoffe.ioc.casosdeuso;
 
+import org.apache.log4j.Logger;
+
 import br.com.goals.hotcoffe.ioc.bo.UsuarioBo;
 import br.com.goals.hotcoffe.ioc.entidade.Dependente;
 import br.com.goals.hotcoffe.ioc.entidade.Endereco;
@@ -7,18 +9,19 @@ import br.com.goals.hotcoffe.ioc.entidade.Sapato;
 import br.com.goals.hotcoffe.ioc.entidade.Usuario;
 
 public class CadastrarUsuario extends UmCasoDeUso{
-
+	private static Logger logger = Logger.getLogger(CadastrarUsuario.class);
 	@Override
 	public void iniciar() throws Exception {
 		try{
-			System.out.println("Caso de uso Cadastrar Usuario Aguardando");
 			Usuario usuario = new Usuario();
+			logger.debug("Caso de uso Cadastrar Usuario Aguardando");
+
+			//Chama o ator e espera
 			ator.preencher(usuario);
 			
-			System.out.println("Respondido " + usuario.getNome());
+			logger.debug("Ator respondeu '" + usuario.getNome()+"'");
 			//UsuarioBo valida
 			if(UsuarioBo.isGay(usuario)){
-				System.out.println("Grande Clemilson!");
 				Sapato sapato = new Sapato();
 				ator.preencher(sapato);
 			}
@@ -32,8 +35,10 @@ public class CadastrarUsuario extends UmCasoDeUso{
 			//verificamos
 		
 			//UsuarioDao salva
+			logger.debug("gravado '" + usuario.getNome()+"'");
+			sistema.mostrar("Obrigado " + usuario.getNome());
 		}catch(Exception e){
-			
+			logger.error("Erro ao cadastrar usuario",e);
 		}
 	}
 }
