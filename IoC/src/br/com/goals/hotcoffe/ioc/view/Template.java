@@ -17,6 +17,7 @@ public class Template {
 	 */
 	public static String criarFormulario(Object obj,UmCasoDeUso umCasoDeUso) {
 		String form="<form class=\"frmIoC\" action=\"?"+ Controlador.IOC_KEY +"="+umCasoDeUso.getKey()+"\" method=\"post\">"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		form+="<fieldset><legend>" + getLabel(obj) + "</legend>";
 		Method[] metodos = obj.getClass().getMethods();
 		for (int i = 0; i < metodos.length; i++) {
 			String nome = metodos[i].getName();
@@ -24,8 +25,15 @@ public class Template {
 				form+="<div><label for=\"idField"+i+"\">" + getLabel(obj,nome) + "</label><input id=\"idField"+i+"\" name=\""+metodos[i].getName()+"\" /></div>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 			}
 		}
-		form+="<div class=\"frmIoC_btn\"><input type=\"submit\" value=\"Enviar\"/></div></form>";		 //$NON-NLS-1$
+		form+="<div class=\"frmIoC_btn\"><input type=\"submit\" value=\"Enviar\"/></div></fieldset></form>";		 //$NON-NLS-1$
 		return defaultCss + form;
+	}
+	private static String getLabel(Object obj){
+		try{
+			return Messages.getString("Template."+obj.getClass().getCanonicalName()); //$NON-NLS-1$
+		}catch(MissingResourceException e){
+			return obj.getClass().getSimpleName();
+		}
 	}
 	private static String getLabel(Object obj,String nome){
 		try{
