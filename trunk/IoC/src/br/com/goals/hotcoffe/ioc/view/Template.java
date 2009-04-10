@@ -8,7 +8,7 @@ import br.com.goals.hotcoffe.ioc.casosdeuso.UmCasoDeUso;
 
 
 public class Template {	
-	private static String defaultCss="<style type=\"text/css\">.frmIoC div label{display: block; float: left; width:100px; text-align:right;}\n.frmIoC_btn{padding-left:100px;}</style>";
+	private static String defaultCss="<style type=\"text/css\">.frmIoC div{clear:both}\n.frmIoC div label{display: block; float: left; width:100px; text-align:right;}\n.frmIoC_btn{padding-left:100px;}</style>";
 	/**
 	 * Cria um formulario HTML
 	 * @param obj todos os set serao impressos
@@ -21,7 +21,11 @@ public class Template {
 		Method[] metodos = obj.getClass().getMethods();
 		for (int i = 0; i < metodos.length; i++) {
 			String nome = metodos[i].getName();
-			if(nome.startsWith("set")){ //$NON-NLS-1$
+			if(nome.startsWith("setTxt")){
+				form+="<div><label for=\"idField"+i+"\">" + getLabel(obj,nome) + "</label><textarea id=\"idField"+i+"\" name=\""+metodos[i].getName()+"\" cols=\"40\" rows=\"10\"></textarea></div>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+			}else if(nome.startsWith("setList")){ //$NON-NLS-1$
+				form+="<div><label for=\"idField"+i+"\">" + getLabel(obj,nome) + "</label><select id=\"idField"+i+"\" name=\""+metodos[i].getName()+"\" /><option>Selecione</option></select></div>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+			}else if(nome.startsWith("set")){ //$NON-NLS-1$
 				form+="<div><label for=\"idField"+i+"\">" + getLabel(obj,nome) + "</label><input id=\"idField"+i+"\" name=\""+metodos[i].getName()+"\" /></div>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 			}
 		}
@@ -39,6 +43,12 @@ public class Template {
 		try{
 			return Messages.getString("Template."+obj.getClass().getCanonicalName()+"."+nome); //$NON-NLS-1$
 		}catch(MissingResourceException e){
+			if(nome.startsWith("setList")){
+				return nome.substring(7);
+			}
+			if(nome.startsWith("setTxt")){
+				return nome.substring(6);
+			}
 			return nome.substring(3);
 		}
 	}
