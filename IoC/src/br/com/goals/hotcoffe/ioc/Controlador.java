@@ -1,6 +1,7 @@
 package br.com.goals.hotcoffe.ioc;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -100,5 +101,9 @@ public class Controlador extends HttpServlet {
 			logger.error("Erro ao tentar executar", e);
 			response.getWriter().write("Something is wrong!");
 		}
+	}
+
+	public Class[] getListCasosDeUso() throws ClassNotFoundException {
+		return QuickStart.getClasses(pacoteCasosDeUso);
 	}
 }

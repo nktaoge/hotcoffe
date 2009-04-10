@@ -1,6 +1,7 @@
 package br.com.goals.hotcoffe.ioc.view;
 
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.MissingResourceException;
 
 import br.com.goals.hotcoffe.ioc.Controlador;
@@ -8,15 +9,24 @@ import br.com.goals.hotcoffe.ioc.casosdeuso.UmCasoDeUso;
 
 
 public class Template {	
-	private static String defaultCss="<style type=\"text/css\">.frmIoC div{clear:both}\n.frmIoC div label{display: block; float: left; width:100px; text-align:right;}\n.frmIoC_btn{padding-left:100px;}</style>";
+	
+	private String defaultCss="<style type=\"text/css\">.frmIoC div{clear:both}\n.frmIoC div label{display: block; float: left; width:100px; text-align:right;}\n.frmIoC_btn{padding-left:100px;}</style>";
+	private UmCasoDeUso umCasoDeUso;
+	private MenuPrincipal menuPrincipal = null;
+	public Template(UmCasoDeUso umCasoDeUso) {
+		this.umCasoDeUso = umCasoDeUso;
+		menuPrincipal = new MenuPrincipal(umCasoDeUso);
+	}
+	
+	
 	/**
 	 * Cria um formulario HTML
 	 * @param obj todos os set serao impressos
 	 * @param umCasoDeUso
 	 * @return html do formulario
 	 */
-	public static String criarFormulario(Object obj,UmCasoDeUso umCasoDeUso) {
-		String form="<form class=\"frmIoC\" action=\"?"+ Controlador.IOC_KEY +"="+umCasoDeUso.getKey()+"\" method=\"post\">"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	public String criarFormulario(Object obj,UmCasoDeUso umCasoDeUso) {
+		String form=menuPrincipal.toString()+"<form class=\"frmIoC\" action=\"?"+ Controlador.IOC_KEY +"="+umCasoDeUso.getKey()+"\" method=\"post\">"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		form+="<fieldset><legend>" + getLabel(obj) + "</legend>";
 		Method[] metodos = obj.getClass().getMethods();
 		for (int i = 0; i < metodos.length; i++) {
@@ -32,14 +42,21 @@ public class Template {
 		form+="<div class=\"frmIoC_btn\"><input type=\"submit\" value=\"Enviar\"/></div></fieldset></form>";		 //$NON-NLS-1$
 		return defaultCss + form;
 	}
-	private static String getLabel(Object obj){
+	public static String getLabel(Class cls){
+		try{
+			return Messages.getString("Template."+cls.getCanonicalName()); //$NON-NLS-1$
+		}catch(MissingResourceException e){
+			return cls.getSimpleName();
+		}
+	}
+	public static String getLabel(Object obj){
 		try{
 			return Messages.getString("Template."+obj.getClass().getCanonicalName()); //$NON-NLS-1$
 		}catch(MissingResourceException e){
 			return obj.getClass().getSimpleName();
 		}
 	}
-	private static String getLabel(Object obj,String nome){
+	public static String getLabel(Object obj,String nome){
 		try{
 			return Messages.getString("Template."+obj.getClass().getCanonicalName()+"."+nome); //$NON-NLS-1$
 		}catch(MissingResourceException e){

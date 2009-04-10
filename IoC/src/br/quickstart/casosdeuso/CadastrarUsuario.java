@@ -42,4 +42,5 @@ public class CadastrarUsuario extends UmCasoDeUso{
 			logger.error("Erro ao cadastrar usuario",e);
 		}
 	}
+	
 }

@@ -15,4 +15,5 @@ public class CadastrarProjSoft extends UmCasoDeUso{
 			logger.error("Erro ao qq coisa",e);
 		}
 	}
+	
 }
