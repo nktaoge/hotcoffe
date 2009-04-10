@@ -1,8 +1,9 @@
-package br.com.goals.hotcoffe.ioc.casosdeuso;
+package br.quickstart.casosdeuso;
 
 import org.apache.log4j.Logger;
 
 import br.com.goals.hotcoffe.ioc.bo.UsuarioBo;
+import br.com.goals.hotcoffe.ioc.casosdeuso.UmCasoDeUso;
 import br.com.goals.hotcoffe.ioc.entidade.Dependente;
 import br.com.goals.hotcoffe.ioc.entidade.Endereco;
 import br.com.goals.hotcoffe.ioc.entidade.Sapato;

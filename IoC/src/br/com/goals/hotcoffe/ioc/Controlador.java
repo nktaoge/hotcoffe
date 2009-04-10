@@ -19,7 +19,9 @@ public class Controlador extends HttpServlet {
 	private static final long serialVersionUID = 123L;
 	public static final String IOC_KEY = "IoC";
 	int contador=0;
+	private static String pacoteCasosDeUso = null;
     public Controlador() {
+    	
     }
 
 	/**
@@ -38,6 +40,11 @@ public class Controlador extends HttpServlet {
 	
 	private void chamarCasoDeUso(final HttpServletRequest request,final HttpServletResponse response) throws ServletException, IOException {
 		logger.debug("contador = " + ++contador);
+		pacoteCasosDeUso = getInitParameter("casosdeuso");
+		String strCasoDeUso = request.getRequestURL().toString();
+		strCasoDeUso = strCasoDeUso.substring(strCasoDeUso.lastIndexOf("/")+1);
+		
+		logger.debug(strCasoDeUso);
 		try{
 			UmCasoDeUso umCasoDeUso = null;
 			if(request.getParameter(IOC_KEY)!=null){
@@ -52,7 +59,7 @@ public class Controlador extends HttpServlet {
 					wait();
 				}
 			}else{
-				umCasoDeUso = (UmCasoDeUso) Class.forName("br.com.goals.hotcoffe.ioc.casosdeuso.CadastrarUsuario").newInstance();
+				umCasoDeUso = (UmCasoDeUso) Class.forName(pacoteCasosDeUso + "." + strCasoDeUso).newInstance();
 				umCasoDeUso.setControlador(this);
 				umCasoDeUso.setRequestResponse(request,response);
 				Thread t33 = new Thread(umCasoDeUso);
@@ -65,6 +72,7 @@ public class Controlador extends HttpServlet {
 			logger.debug("fim = " + contador);
 		}catch(Exception e){
 			logger.error("Erro ao tentar executar",e);
+			response.getWriter().write("Something is wrong!");
 		}
 	}
 }
