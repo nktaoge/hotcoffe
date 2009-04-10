@@ -16,9 +16,10 @@ public class Ator {
 	private UmCasoDeUso umCasoDeUso;
 	private HttpServletRequest request;
 	private HttpServletResponse response;
-	
+	private Template template;
 	public Ator(UmCasoDeUso umCasoDeUso) {
 		this.umCasoDeUso = umCasoDeUso;
+		template = new Template(umCasoDeUso);
 		request = umCasoDeUso.request;
 		response = umCasoDeUso.response;
 	}
@@ -30,7 +31,7 @@ public class Ator {
 		UmCasoDeUso.getCasosDeUso().put(umCasoDeUso.getKey(),umCasoDeUso);
 		try {
 			PrintWriter printWriter = umCasoDeUso.getResponse().getWriter();
-			String form = Template.criarFormulario(obj, umCasoDeUso);
+			String form = template.criarFormulario(obj, umCasoDeUso);
 			printWriter.write(form);
 			logger.debug("Caso de uso " + umCasoDeUso.getKey() + " aguardando...");
 			Controlador controlador = umCasoDeUso.getControlador();
