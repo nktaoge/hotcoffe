@@ -14,9 +14,13 @@
     <display-name>Controlador</display-name>
     <servlet-name>Controlador</servlet-name>
     <servlet-class>br.com.goals.hotcoffe.ioc.Controlador</servlet-class>
+    <init-param>
+    	<param-name>casodeuso</param-name>
+    	<param-value>br.quickstart.casosdeuso</param-value>
+    </init-param>
   </servlet>
   <servlet-mapping>
     <servlet-name>Controlador</servlet-name>
-    <url-pattern>/Controlador</url-pattern>
+    <url-pattern>/casosdeuso/*</url-pattern>
   </servlet-mapping>
 </web-app>
