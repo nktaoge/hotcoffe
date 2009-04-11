@@ -9,12 +9,20 @@ import br.com.goals.hotcoffe.ioc.casosdeuso.UmCasoDeUso;
 
 public class Template {	
 	
-	private String defaultCss="<style type=\"text/css\">.frmIoC div{clear:both}\n.frmIoC div label{display: block; float: left; width:100px; text-align:right;}\n.frmIoC_btn{padding-left:100px;}</style>";
+	private String defaultCss="<style type=\"text/css\">.frmIoC{clear:both;}\n.frmIoC div{clear:both}\n.frmIoC div label{display: block; float: left; width:100px; text-align:right;}\n.frmIoC_btn{padding-left:100px;}</style>";
+	
+	private String defaultHead = "";
+	private String upCode = "";
+	private String downCode = "</body></html>";
 	private UmCasoDeUso umCasoDeUso;
 	private MenuPrincipal menuPrincipal = null;
 	public Template(UmCasoDeUso umCasoDeUso) {
 		this.umCasoDeUso = umCasoDeUso;
 		menuPrincipal = new MenuPrincipal(this.umCasoDeUso);
+		defaultHead = "<head><link rel=\"stylesheet\" href=\"../css/template.css\" type=\"text/css\" />" + defaultCss + 
+			"<script type=\"text/javascript\" src=\"../js/menu.js\"></script></head>\n";
+		upCode = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n" + 
+			"<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"pt-br\" lang=\"pt-br\" >\n" + defaultHead + "<body>";
 	}
 	
 	
@@ -25,7 +33,7 @@ public class Template {
 	 * @return html do formulario
 	 */
 	public String criarFormulario(Object obj,UmCasoDeUso umCasoDeUso) {
-		String form=menuPrincipal+"<form class=\"frmIoC\" action=\"?"+ Controlador.IOC_KEY +"="+umCasoDeUso.getKey()+"\" method=\"post\">"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String form="<form class=\"frmIoC\" action=\"?"+ Controlador.IOC_KEY +"="+umCasoDeUso.getKey()+"\" method=\"post\">"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		form+="<fieldset><legend>" + getLabel(obj) + "</legend>";
 		Method[] metodos = obj.getClass().getMethods();
 		for (int i = 0; i < metodos.length; i++) {
@@ -39,10 +47,10 @@ public class Template {
 			}
 		}
 		form+="<div class=\"frmIoC_btn\"><input type=\"submit\" value=\"Enviar\"/></div></fieldset></form>";		 //$NON-NLS-1$
-		return defaultCss + form;
+		return upCode + menuPrincipal + form + downCode;
 	}
 	public String criarMensagem(String mensagem) {
-		return defaultCss + menuPrincipal + mensagem;
+		return upCode + menuPrincipal + "<div class=\"alert\">" + mensagem + "</div>" + downCode;
 	}
 	@SuppressWarnings("unchecked")
 	public static String getLabel(Class cls){

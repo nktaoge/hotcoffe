@@ -3,7 +3,7 @@ package br.quickstart.casosdeuso.jogo;
 import org.apache.log4j.Logger;
 
 import br.com.goals.hotcoffe.ioc.casosdeuso.UmCasoDeUso;
-import br.com.goals.hotcoffe.ioc.entidade.Jogador;
+import br.quickstart.casosdeuso.entidade.Jogador;
 
 public class CadastrarProjSoft extends UmCasoDeUso{
 	private static Logger logger = Logger.getLogger(CadastrarProjSoft.class);
