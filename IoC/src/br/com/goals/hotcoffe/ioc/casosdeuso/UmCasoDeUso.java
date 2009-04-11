@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import br.com.goals.hotcoffe.ioc.Controlador;
+import br.com.goals.hotcoffe.ioc.view.Template;
 
 public abstract class UmCasoDeUso implements Runnable{
 	private static Logger logger =Logger.getLogger(UmCasoDeUso.class);
@@ -18,6 +19,10 @@ public abstract class UmCasoDeUso implements Runnable{
 	protected Ator ator = new Ator(this);
 	protected Sistema sistema = new Sistema(this);
 	private Controlador controlador;
+	private Template template = new Template(this);
+	public Template getTemplate() {
+		return template;
+	}
 	public void setControlador(Controlador controlador) {
 		this.controlador = controlador;
 	}

@@ -1,4 +1,4 @@
-package br.quickstart.casosdeuso;
+package br.quickstart.casosdeuso.jogo;
 
 import org.apache.log4j.Logger;
 
