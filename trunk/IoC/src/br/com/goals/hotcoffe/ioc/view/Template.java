@@ -1,7 +1,6 @@
 package br.com.goals.hotcoffe.ioc.view;
 
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.MissingResourceException;
 
 import br.com.goals.hotcoffe.ioc.Controlador;
@@ -15,7 +14,7 @@ public class Template {
 	private MenuPrincipal menuPrincipal = null;
 	public Template(UmCasoDeUso umCasoDeUso) {
 		this.umCasoDeUso = umCasoDeUso;
-		menuPrincipal = new MenuPrincipal(umCasoDeUso);
+		menuPrincipal = new MenuPrincipal(this.umCasoDeUso);
 	}
 	
 	
@@ -26,7 +25,7 @@ public class Template {
 	 * @return html do formulario
 	 */
 	public String criarFormulario(Object obj,UmCasoDeUso umCasoDeUso) {
-		String form=menuPrincipal.toString()+"<form class=\"frmIoC\" action=\"?"+ Controlador.IOC_KEY +"="+umCasoDeUso.getKey()+"\" method=\"post\">"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String form=menuPrincipal+"<form class=\"frmIoC\" action=\"?"+ Controlador.IOC_KEY +"="+umCasoDeUso.getKey()+"\" method=\"post\">"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		form+="<fieldset><legend>" + getLabel(obj) + "</legend>";
 		Method[] metodos = obj.getClass().getMethods();
 		for (int i = 0; i < metodos.length; i++) {
@@ -42,11 +41,26 @@ public class Template {
 		form+="<div class=\"frmIoC_btn\"><input type=\"submit\" value=\"Enviar\"/></div></fieldset></form>";		 //$NON-NLS-1$
 		return defaultCss + form;
 	}
+	public String criarMensagem(String mensagem) {
+		return defaultCss + menuPrincipal + mensagem;
+	}
+	@SuppressWarnings("unchecked")
 	public static String getLabel(Class cls){
 		try{
 			return Messages.getString("Template."+cls.getCanonicalName()); //$NON-NLS-1$
 		}catch(MissingResourceException e){
 			return cls.getSimpleName();
+		}
+	}
+	public static String getLabel(String obj){
+		try{
+			return Messages.getString("Template."+obj); //$NON-NLS-1$
+		}catch(MissingResourceException e){
+			int ini = obj.lastIndexOf('.');
+			if(ini!=-1){
+				return obj.substring(ini+1);
+			}
+			return obj;
 		}
 	}
 	public static String getLabel(Object obj){
@@ -69,4 +83,7 @@ public class Template {
 			return nome.substring(3);
 		}
 	}
+
+
+	
 }

@@ -17,8 +17,10 @@ public class Sistema {
 	 */
 	public void mostrar(String mensagem){
 		try{
+			
 			PrintWriter printWriter = umCasoDeUso.getResponse().getWriter();
-			printWriter.write(mensagem);
+			printWriter.write(umCasoDeUso.getTemplate().criarMensagem(mensagem));
+			
 		}catch(Exception e){
 			logger.error("Erro ao mostrar mensagem '" + mensagem + "'", e);
 		}

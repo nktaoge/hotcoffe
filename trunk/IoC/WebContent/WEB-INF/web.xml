@@ -21,6 +21,6 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Controlador</servlet-name>
-    <url-pattern>/casosdeuso/*</url-pattern>
+    <url-pattern>/adm/*</url-pattern>
   </servlet-mapping>
 </web-app>

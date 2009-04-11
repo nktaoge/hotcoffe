@@ -21,12 +21,15 @@ public class Controlador extends HttpServlet {
 	private static final long serialVersionUID = 123L;
 	public static final String IOC_KEY = "IoC";
 	int contador = 0;
-	private static String pacoteCasosDeUso = null;
+	private String pacoteCasosDeUso = null;
 
 	public Controlador() {
 
 	}
 
+	public String getPacoteCasosDeUso() {
+		return pacoteCasosDeUso;
+	}
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		pacoteCasosDeUso = config.getInitParameter("casosdeuso");
@@ -103,7 +106,8 @@ public class Controlador extends HttpServlet {
 		}
 	}
 
-	public Class[] getListCasosDeUso() throws ClassNotFoundException {
+	
+	public List<Class> getListCasosDeUso() throws ClassNotFoundException {
 		return QuickStart.getClasses(pacoteCasosDeUso);
 	}
 }
