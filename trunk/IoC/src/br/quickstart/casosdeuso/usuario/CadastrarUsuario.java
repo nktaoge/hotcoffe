@@ -2,12 +2,12 @@ package br.quickstart.casosdeuso.usuario;
 
 import org.apache.log4j.Logger;
 
-import br.com.goals.hotcoffe.ioc.bo.UsuarioBo;
 import br.com.goals.hotcoffe.ioc.casosdeuso.UmCasoDeUso;
-import br.com.goals.hotcoffe.ioc.entidade.Dependente;
-import br.com.goals.hotcoffe.ioc.entidade.Endereco;
-import br.com.goals.hotcoffe.ioc.entidade.Sapato;
-import br.com.goals.hotcoffe.ioc.entidade.Usuario;
+import br.quickstart.casosdeuso.bo.UsuarioBo;
+import br.quickstart.casosdeuso.entidade.Dependente;
+import br.quickstart.casosdeuso.entidade.Endereco;
+import br.quickstart.casosdeuso.entidade.Sapato;
+import br.quickstart.casosdeuso.entidade.Usuario;
 
 public class CadastrarUsuario extends UmCasoDeUso{
 	private static Logger logger = Logger.getLogger(CadastrarUsuario.class);

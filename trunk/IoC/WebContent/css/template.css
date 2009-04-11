@@ -1,0 +1,104 @@
+.alert{
+	clear: both;
+}
+/*menu pill*/
+#pillmenu {
+	float: left;
+	margin: 0;
+}
+
+#pillmenu ul {
+	margin: 0;
+	padding: 0 22px;
+	list-style: none;
+}
+
+#pillmenu li {
+	float: left;
+	margin: 0;
+	padding: 0;
+	height: 39px;
+	background: url(../images/menu_li.jpg) top right no-repeat;
+
+}
+
+#pillmenu li:hover {
+
+}
+
+#pillmenu li a#active_menu-nav {
+	
+}
+
+#pillmenu li a {
+	font-family: Arial, Georgia, "Times New Roman", Times, serif;
+	font-size: 10px;
+	float: left;
+	display: block;
+	line-height: 36px;
+	padding: 0 24px 0 16px;
+	color: #000;
+	text-decoration: none;
+	font-weight: bold;
+	text-transform:uppercase;
+}
+
+#pillmenu li a:hover {
+	color: #ccc;
+}
+/*posicionamento*/
+#pillmenu ul li{
+	position: relative;
+}
+#pillmenu li ul{
+	/*primeiro sub para baixo*/
+	position: absolute;
+	left: 0px;
+	z-index: 997;
+	clear: both;
+	padding: 0;
+	margin: 30px 0 0 0;
+	display: none;
+}
+#pillmenu li ul li ul{
+	/*Sub sub menu p/ direita*/
+	position: absolute;
+	top: -1px;
+	left: 165px;
+	z-index: 998;
+}
+#pillmenu li ul li{
+	height: auto;
+}
+#pillmenu li ul li a
+#pillmenu li ul li a:active,
+#pillmenu li ul li a:visited,
+#pillmenu li ul li a:hover,
+#pillmenu li ul li a:link{
+	display: block;
+	width: 146px;
+}
+
+/*cores estilos*/
+#pillmenu li ul li{
+	background: #eee;
+	border: 1px solid #ccc;
+	padding-left: 3px;
+}
+#pillmenu li ul li a{
+	color: #000;
+	font-family: Arial;
+	line-height: normal;
+	padding: 0 3px 0 12px;
+	text-align: left;
+}
+#pillmenu li ul li a:link,
+#pillmenu li ul li a:visited{
+	background: url(../images/setalistaCinza.jpg) no-repeat left;
+}
+#pillmenu li ul li a:hover,
+#pillmenu li ul li a:active,
+#pillmenu li ul li a:focus{
+	color: #f00;
+	background: url(../images/setalista.jpg) no-repeat left;
+}

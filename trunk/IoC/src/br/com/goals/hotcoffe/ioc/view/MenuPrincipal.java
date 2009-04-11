@@ -89,7 +89,7 @@ public class MenuPrincipal {
 		if(menu==null){
 			try {
 				String pacoteCasosDeUso =umCasoDeUso.getControlador().getPacoteCasosDeUso();
-				menu = package2ul(pacoteCasosDeUso,pacoteCasosDeUso);
+				menu = "<div id=\"pillmenu\">" + package2ul(pacoteCasosDeUso,pacoteCasosDeUso)+ "</div>";
 			} catch (ClassNotFoundException e) {
 				menu = "Sem menu!";
 			}
