@@ -8,20 +8,28 @@ import java.util.Comparator;
 
 import org.apache.log4j.Logger;
 
+import br.com.goals.hotcoffe.ioc.Controlador;
 import br.com.goals.hotcoffe.ioc.casosdeuso.UmCasoDeUso;
 @SuppressWarnings("unchecked")
 public class MenuPrincipal {
 	private static Logger logger = Logger.getLogger(MenuPrincipal.class);
 	private String menu=null;
-	private UmCasoDeUso umCasoDeUso;
-	
+	private Controlador controlador;
+	public void setControlador(Controlador controlador) {
+		this.controlador = controlador;
+	}
 	private static Comparator<Class> comparator = new Comparator<Class>(){
 		public int compare(Class o1, Class o2) {
 			return o1.getName().compareTo(o2.getName());
 		}		
 	};
+	
+	public MenuPrincipal(Controlador controlador){
+		this.controlador = controlador;
+	}
+	
 	public MenuPrincipal(UmCasoDeUso umCasoDeUso) {
-		this.umCasoDeUso = umCasoDeUso;
+		this.controlador = umCasoDeUso.getControlador();
 	}
 	
 	private String package2ul(String pckgname,String base) throws ClassNotFoundException{
@@ -88,7 +96,7 @@ public class MenuPrincipal {
 	public String toString(){
 		if(menu==null){
 			try {
-				String pacoteCasosDeUso =umCasoDeUso.getControlador().getPacoteCasosDeUso();
+				String pacoteCasosDeUso = controlador.getPacoteCasosDeUso();
 				menu = "<div id=\"pillmenu\">" + package2ul(pacoteCasosDeUso,pacoteCasosDeUso)+ "</div>";
 			} catch (ClassNotFoundException e) {
 				menu = "Sem menu!";

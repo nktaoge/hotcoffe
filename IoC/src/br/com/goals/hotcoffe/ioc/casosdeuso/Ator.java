@@ -40,11 +40,13 @@ public class Ator {
 			logger.debug(umCasoDeUso.getKey() + " acordou...");
 			if(obj instanceof Opcoes){
 				Opcoes opcoes = (Opcoes) obj;
-				try{
-					int opt = Integer.valueOf(request.getParameter("IoC_opcoes"));
-					opcoes.setEscolha(opcoes.getList().get(opt));
-				}catch(Exception e){
-					opcoes.setEscolha(request.getParameter("IoC_opcoes"));
+				if(request.getParameter("IoC_outro")==null || request.getParameter("IoC_outro").trim().equals("")){
+					try{
+						int opt = Integer.valueOf(request.getParameter("IoC_opcoes"));
+						opcoes.setEscolha(opcoes.getList().get(opt));
+					}catch(Exception e){
+						opcoes.setEscolha(request.getParameter("IoC_outro"));
+					}
 				}
 			}else{
 				popular(obj);
