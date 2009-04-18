@@ -16,7 +16,7 @@
     <servlet-class>br.com.goals.hotcoffe.ioc.Controlador</servlet-class>
     <init-param>
     	<param-name>casosdeuso</param-name>
-    	<param-value>br.quickstart.casosdeuso</param-value>
+    	<param-value>br.com.goals.lncompilador.casosdeuso</param-value>
     </init-param>
   </servlet>
   <servlet-mapping>
