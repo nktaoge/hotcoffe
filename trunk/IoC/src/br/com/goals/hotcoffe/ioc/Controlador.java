@@ -102,7 +102,9 @@ public class Controlador extends HttpServlet {
 			logger.debug("fim = " + contador);
 		} catch (Exception e) {
 			logger.error("Erro ao tentar executar", e);
-			response.getWriter().write("Something is wrong!");
+			Template template = new Template(this);
+			template.adicionarMensagem("Something is wrong!");
+			response.getWriter().write(template.getHtml());
 		}
 	}
 

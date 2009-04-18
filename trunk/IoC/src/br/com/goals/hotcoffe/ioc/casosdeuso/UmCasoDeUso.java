@@ -34,6 +34,9 @@ public abstract class UmCasoDeUso implements Runnable{
 	}
 	public void setControlador(Controlador controlador) {
 		this.controlador = controlador;
+		if(template!=null){
+			template.setControlador(controlador);
+		}
 	}
 	public void setAtor(Ator ator) {
 		this.ator = ator;
