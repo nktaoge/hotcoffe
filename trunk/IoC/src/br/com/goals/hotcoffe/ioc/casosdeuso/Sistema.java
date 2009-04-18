@@ -25,4 +25,12 @@ public class Sistema {
 			logger.error("Erro ao mostrar mensagem '" + mensagem + "'", e);
 		}
 	}
+
+	public void perguntar(String mensagem) {
+		try{
+			umCasoDeUso.getTemplate().adicionarMensagem(mensagem);
+		}catch(Exception e){
+			logger.error("Erro ao mostrar mensagem '" + mensagem + "'", e);
+		}	
+	}
 }

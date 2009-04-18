@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import br.com.goals.hotcoffe.ioc.Controlador;
-import br.com.goals.hotcoffe.ioc.view.Template;
+import br.com.goals.hotcoffe.ioc.casosdeuso.util.Opcoes;
 
 public class Ator {
 	private static Logger logger = Logger.getLogger(Ator.class);
@@ -57,5 +57,8 @@ public class Ator {
 			HttpServletResponse response) {
 		this.request = request;
 		this.response = response;
+	}
+	public void responder(Opcoes opcoes) {
+		preencher(opcoes);
 	}
 }
