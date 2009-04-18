@@ -95,4 +95,13 @@ startList = function() {
 };
 window.onload=function(){
 	startList();
+	try{
+		var inp = document.getElementsByTagName("input");
+		for ( var i = 0; i < inp.length; i++) {
+			if(inp[i].type=="text"){
+				inp[i].focus();
+			}
+		}
+	}catch(e){
+	}
 };
