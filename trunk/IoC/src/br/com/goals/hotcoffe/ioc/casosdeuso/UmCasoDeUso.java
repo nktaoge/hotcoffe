@@ -20,11 +20,23 @@ public abstract class UmCasoDeUso implements Runnable{
 	protected Sistema sistema = new Sistema(this);
 	private Controlador controlador;
 	private Template template = new Template(this);
+	public void setTemplate(Template template) {
+		this.template = template;
+	}
+	public void setSistema(Sistema sistema) {
+		this.sistema = sistema;
+	}
+	public void setKey(String key) {
+		this.key = key;
+	}
 	public Template getTemplate() {
 		return template;
 	}
 	public void setControlador(Controlador controlador) {
 		this.controlador = controlador;
+	}
+	public void setAtor(Ator ator) {
+		this.ator = ator;
 	}
 	public Controlador getControlador() {
 		return controlador;
@@ -96,5 +108,14 @@ public abstract class UmCasoDeUso implements Runnable{
 	}
 	public HttpServletResponse getResponse() {
 		 return response;
+	}
+	protected void usar(UmCasoDeUso outroCasoDeUso) throws Exception {
+		outroCasoDeUso.setControlador(getControlador());
+		outroCasoDeUso.setRequestResponse(request, response);
+		outroCasoDeUso.setAtor(ator);
+		outroCasoDeUso.setSistema(sistema);
+		outroCasoDeUso.setTemplate(template);
+		outroCasoDeUso.setKey(key);
+		outroCasoDeUso.iniciar();
 	}
 }

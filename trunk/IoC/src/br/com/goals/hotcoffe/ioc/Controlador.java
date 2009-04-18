@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import br.com.goals.hotcoffe.ioc.casosdeuso.UmCasoDeUso;
+import br.com.goals.hotcoffe.ioc.view.Template;
 
 /**
  * Controlador dos casos de uso tudo!
@@ -74,16 +75,15 @@ public class Controlador extends HttpServlet {
 		try {
 			UmCasoDeUso umCasoDeUso = null;
 			if (request.getParameter(IOC_KEY) != null) {
-				umCasoDeUso = UmCasoDeUso.getCasoDeUso(request
-						.getParameter(IOC_KEY));
+				umCasoDeUso = UmCasoDeUso.getCasoDeUso(request.getParameter(IOC_KEY));
 			}
 			if (umCasoDeUso != null) {
 				umCasoDeUso.setControlador(this);
 				umCasoDeUso.setRequestResponse(request, response);
+				umCasoDeUso.setTemplate(new Template(umCasoDeUso));
 				synchronized (this) {
 					UmCasoDeUso.acordar(umCasoDeUso);
-					logger
-							.debug("Controlador aguardando chamar interface usuario");
+					logger.debug("Controlador aguardando chamar interface usuario");
 					wait();
 				}
 			} else {
@@ -94,11 +94,11 @@ public class Controlador extends HttpServlet {
 				Thread t33 = new Thread(umCasoDeUso);
 				synchronized (this) {
 					t33.start();
-					logger
-							.debug("Controlador aguardando chamar interface usuario");
+					logger.debug("Controlador aguardando chamar interface usuario");
 					wait();
 				}
 			}
+			response.getWriter().write(umCasoDeUso.getTemplate().getHtml());
 			logger.debug("fim = " + contador);
 		} catch (Exception e) {
 			logger.error("Erro ao tentar executar", e);
