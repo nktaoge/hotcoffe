@@ -14,7 +14,18 @@ public class CriarToken extends UmCasoDeUso{
 	public static final String TOKEN_PACKAGE = "br.com.goals.lnc.token.dicionario";
 	public static final String TOKEN_SRC_JAVA = "br/com/goals/lnc/token/dicionario/";
 	public static String workspaceSrc = null;
+	/**
+	 * Para simplicidade
+	 */
 	public static final String UM_SUBSTANTIVO = "Um substantivo";
+	/**
+	 * Para simplicidade
+	 */
+	public static final String UM_ADJETIVO = "Um adjetivo";
+	/**
+	 * Para simplicidade
+	 */
+	public static final String UM_VERBO = "Um verbo";
 	private String duvida=null;
 	private String className = null;
 	private static Logger logger = Logger.getLogger(CriarToken.class);
@@ -30,20 +41,28 @@ public class CriarToken extends UmCasoDeUso{
 	}
 	@Override
 	protected void iniciar() throws Exception {
-		
 		sistema.perguntar("O que significa '"+duvida+"'?");
+		
+		//Carregando opcoes do que poderia ser
 		Opcoes opcoes = new Opcoes();
-		opcoes.add("um verbo");//um metodo
+		opcoes.add(UM_VERBO);//um metodo
 		opcoes.add(UM_SUBSTANTIVO);//classe ou instancia
-		opcoes.add("um adjetivo");//um atributo
-		logger.debug("Responder opcoes");
+		opcoes.add(UM_ADJETIVO);//um atributo
+
+		//ator responde
 		ator.responder(opcoes);
 		logger.debug("respondido");
 		sistema.mostrar("Ok " + opcoes.getEscolha());
 		if(UM_SUBSTANTIVO.equals(opcoes.getEscolha())){
 			criarToken(className);
+		}else if(UM_VERBO.equals(opcoes.getEscolha())){
+			//criar o metodo
+		}else if(UM_ADJETIVO.equals(opcoes.getEscolha())){
+			//criar o atributo
 		}
-		
+	}
+	
+	private void doing(){
 		StackTraceElement[] stackTraceElement = Thread.currentThread().getStackTrace();
 		for (int i = 0; i < stackTraceElement.length; i++) {
 			logger.debug(stackTraceElement[i].getFileName() + 
@@ -51,9 +70,7 @@ public class CriarToken extends UmCasoDeUso{
 				":" + stackTraceElement[i].getLineNumber()
 			);
 		}
-		
 	}
-	
 	/**
 	 * Cria a classe no pacote token
 	 * @param className
