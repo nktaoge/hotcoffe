@@ -18,6 +18,10 @@
     	<param-name>casosdeuso</param-name>
     	<param-value>br.com.goals.lnc.cup</param-value>
     </init-param>
+    <init-param>
+    	<param-name>workspaceSrc</param-name>
+    	<param-value>D:/workspaceE/IoC/src/</param-value>
+    </init-param>
   </servlet>
   <servlet-mapping>
     <servlet-name>Controlador</servlet-name>
