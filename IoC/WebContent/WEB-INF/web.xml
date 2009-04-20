@@ -20,7 +20,7 @@
     </init-param>
     <init-param>
     	<param-name>workspaceSrc</param-name>
-    	<param-value>D:/workspaceE/IoC/src/</param-value>
+    	<param-value>/home/fabio/workspace/IoC/src/</param-value>
     </init-param>
   </servlet>
   <servlet-mapping>
