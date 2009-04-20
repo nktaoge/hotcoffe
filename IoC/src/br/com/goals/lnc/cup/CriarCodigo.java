@@ -52,7 +52,8 @@ public class CriarCodigo extends UmCasoDeUso{
 				retorno = retorno.substring(0,i)+ "C" + (int)c + retorno.substring(i+1); 
 			}
 		}
-		retorno = "P"+retorno;
+		//P de palavra
+		retorno = 'P'+retorno;
 		logger.debug("formatar2ClassName("+s+") = " + retorno);
 		return retorno;
 	}

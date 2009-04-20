@@ -9,22 +9,13 @@ import org.apache.log4j.Logger;
 
 import br.com.goals.hotcoffe.ioc.casosdeuso.UmCasoDeUso;
 import br.com.goals.hotcoffe.ioc.casosdeuso.util.Opcoes;
+import br.com.goals.lnc.vo.ClasseGramatical;
 
-public class CriarToken extends UmCasoDeUso{
+public class CriarToken extends UmCasoDeUso implements ClasseGramatical{
 	public static final String TOKEN_PACKAGE = "br.com.goals.lnc.token.dicionario";
 	public static final String TOKEN_SRC_JAVA = "br/com/goals/lnc/token/dicionario/";
 	public static String workspaceSrc = null;
-	/**
-	 * Para simplicidade
-	 */
-	public static final String UM_SUBSTANTIVO = "Um substantivo";
-	/**
-	 * Para simplicidade
-	 */
-	public static final String UM_ADJETIVO = "Um adjetivo";
-	/**
-	 * Para simplicidade
-	 */
+	
 	public static final String UM_VERBO = "Um verbo";
 	private String duvida=null;
 	private String className = null;
