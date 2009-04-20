@@ -47,6 +47,8 @@ public class Ator {
 					}catch(Exception e){
 						opcoes.setEscolha(request.getParameter("IoC_outro"));
 					}
+				}else{
+					opcoes.setEscolha(request.getParameter("IoC_outro"));
 				}
 			}else{
 				popular(obj);

@@ -15,8 +15,7 @@ public class CriarToken extends UmCasoDeUso implements ClasseGramatical{
 	public static final String TOKEN_PACKAGE = "br.com.goals.lnc.token.dicionario";
 	public static final String TOKEN_SRC_JAVA = "br/com/goals/lnc/token/dicionario/";
 	public static String workspaceSrc = null;
-	
-	public static final String UM_VERBO = "Um verbo";
+
 	private String duvida=null;
 	private String className = null;
 	private static Logger logger = Logger.getLogger(CriarToken.class);
@@ -45,11 +44,14 @@ public class CriarToken extends UmCasoDeUso implements ClasseGramatical{
 		logger.debug("respondido");
 		sistema.mostrar("Ok " + opcoes.getEscolha());
 		if(UM_SUBSTANTIVO.equals(opcoes.getEscolha())){
-			criarToken(className);
+			criarToken(className,UM_SUBSTANTIVO,duvida);
 		}else if(UM_VERBO.equals(opcoes.getEscolha())){
 			//criar o metodo
 		}else if(UM_ADJETIVO.equals(opcoes.getEscolha())){
 			//criar o atributo
+		}else if(UM_ARTIGO.toLowerCase().equals(opcoes.getEscolha().toLowerCase())){
+			//criar o artigo
+			criarToken(className,UM_ARTIGO,duvida);
 		}
 	}
 	
@@ -67,7 +69,7 @@ public class CriarToken extends UmCasoDeUso implements ClasseGramatical{
 	 * @param className
 	 * @throws ClassNotFoundException 
 	 */
-	private void criarToken(String className) throws ClassNotFoundException {
+	private void criarToken(String className,String classeGramatical,String escrita) throws ClassNotFoundException {
 		try {
 			
 			workspaceSrc = getControlador().getInitParameter("workspaceSrc");
@@ -80,6 +82,11 @@ public class CriarToken extends UmCasoDeUso implements ClasseGramatical{
 				"\tprivate static Logger logger = Logger.getLogger("+className+".class);\n"+
 				"\tpublic " + className + "(){\n" + 
 				"\t\tlogger.debug(\""+className+" instanciado...\");\n" +
+				"\t\tgetPodeSerClasseGramatical().add(\""+classeGramatical+"\");\n" +
+				"\t}\n"+
+				//Sem DB
+				"\tpublic String getEscrita(){\n"+
+				"\t\treturn \""+escrita.replace("\r", "").replace("\n", "\\n").replace("\"", "\\\"")+"\";\n" +
 				"\t}\n"+
 				"}";
 			File arq = null;

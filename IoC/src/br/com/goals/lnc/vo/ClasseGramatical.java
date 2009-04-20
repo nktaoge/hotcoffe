@@ -12,4 +12,7 @@ public interface ClasseGramatical {
 	/**
 	 * Para simplicidade
 	 */
+	public static final String UM_VERBO = "Um verbo";
+	
+	public static final String UM_ARTIGO = "Um artigo";
 }
