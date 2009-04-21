@@ -48,11 +48,16 @@ public class CriarToken extends UmCasoDeUso implements ClasseGramatical{
 		if(UM_SUBSTANTIVO.equals(opcoes.getEscolha())){
 			Compilador.criarToken(TOKEN_PACKAGE,className,UM_SUBSTANTIVO,duvida,TOKEN_SRC_JAVA);
 		}else if(UM_VERBO.equals(opcoes.getEscolha())){
-			//criar o metodo
+			//criar o metodoopcoes
 			Compilador.criarToken(TOKEN_PACKAGE,className,UM_VERBO,duvida,TOKEN_SRC_JAVA);
 		}else if(UM_ADJETIVO.equals(opcoes.getEscolha())){
-			//criar o atributo
+			//criar o adjetivo
 			Compilador.criarToken(TOKEN_PACKAGE,className,UM_ADJETIVO,duvida,TOKEN_SRC_JAVA);
+			//perguntar o atributo
+			sistema.perguntar("'"+duvida+"' é um atributo de? Ex.: beleza");
+			Opcoes texto = new Opcoes();
+			ator.responder(texto);
+			logger.debug("respondido " + texto.getEscolha());
 		}else if(UM_ARTIGO.toLowerCase().equals(opcoes.getEscolha().toLowerCase())){
 			//criar o artigo
 			Compilador.criarToken(TOKEN_PACKAGE,className,UM_ARTIGO,duvida,TOKEN_SRC_JAVA);
