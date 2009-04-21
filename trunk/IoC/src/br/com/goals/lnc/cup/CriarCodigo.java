@@ -6,7 +6,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import br.com.goals.hotcoffe.ioc.casosdeuso.UmCasoDeUso;
+import br.com.goals.lnc.bo.AnalisadorSintaticoFactory;
 import br.com.goals.lnc.vo.Comando;
+import br.com.goals.lnc.vo.FraseSintatica;
 import br.com.goals.lnc.vo.UmaPalavra;
 
 public class CriarCodigo extends UmCasoDeUso{
@@ -45,11 +47,14 @@ public class CriarCodigo extends UmCasoDeUso{
 			}
 		}
 		//sintatica
+		FraseSintatica fraseSintatica = null;
 		{
 			//sujeito
 			logger.info("comando = " + comando.getComando());
-			
+			AnalisadorSintaticoFactory analisador = new AnalisadorSintaticoFactory();
+			fraseSintatica = analisador.analisar(palavras);
 		}
+		logger.info("fraseSintatica " + fraseSintatica);
 		//semantica
 	}
 	

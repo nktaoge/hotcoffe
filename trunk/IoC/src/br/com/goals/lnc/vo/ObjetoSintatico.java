@@ -11,4 +11,12 @@ public class ObjetoSintatico {
 	public void setPalavras(List<UmaPalavra> palavras) {
 		this.palavras = palavras;
 	}
+	@Override
+	public String toString() {
+		String retorno = "";
+		for(UmaPalavra palavra: palavras){
+			retorno +=palavra.getEscrita() + ",";
+		}
+		return retorno;
+	}
 }

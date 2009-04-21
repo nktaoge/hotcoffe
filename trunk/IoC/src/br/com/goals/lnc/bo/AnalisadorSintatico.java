@@ -6,5 +6,5 @@ import br.com.goals.lnc.vo.FraseSintatica;
 import br.com.goals.lnc.vo.UmaPalavra;
 
 public interface AnalisadorSintatico {
-	public FraseSintatica analisar(List<UmaPalavra> list);
+	public FraseSintatica analisar(List<UmaPalavra> list) throws Exception;
 }
