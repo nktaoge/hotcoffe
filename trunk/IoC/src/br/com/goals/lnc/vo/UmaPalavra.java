@@ -16,4 +16,14 @@ public class UmaPalavra {
 	public List<String> getPodeSerClasseGramatical() {
 		return podeSerClasseGramatical;
 	}
+	
+	
+	
+	/**
+	 * Nomes das classes significado em sig
+	 */
+	private List<String> podeSignificar = new ArrayList<String>();
+	public List<String> getSignificados() {
+		return podeSignificar;
+	}
 }
