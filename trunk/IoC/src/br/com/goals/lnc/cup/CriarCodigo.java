@@ -34,12 +34,13 @@ public class CriarCodigo extends UmCasoDeUso{
 			String className = formatar2ClassName(token[i]);
 			boolean ok = false;
 			while(!ok){
+				String fullClassName = CriarToken.TOKEN_PACKAGE+'.'+className;
 				try {
-					Object c = Class.forName(CriarToken.TOKEN_PACKAGE+'.'+className).newInstance();
+					Object c = Class.forName(fullClassName).newInstance();
 					palavras.add((UmaPalavra) c);
 					ok = true;
 				} catch (ClassNotFoundException e) {
-					//Simbolo nao encontrado: identifier not found
+					logger.debug("Simbolo nao encontrado: identifier not found " + fullClassName);
 					CriarToken criarToken = new CriarToken();
 					criarToken.setDuvida(token[i]);
 					criarToken.setClassName(className);
