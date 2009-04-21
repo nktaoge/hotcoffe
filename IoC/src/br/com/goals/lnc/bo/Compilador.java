@@ -3,6 +3,7 @@ package br.com.goals.lnc.bo;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Scanner;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -85,7 +86,11 @@ public class Compilador {
 				" -d " + directory.getAbsolutePath();
 		try {
 			logger.debug("exec " + comando);
-			Runtime.getRuntime().exec(comando);
+			Process p = Runtime.getRuntime().exec(comando);
+			Scanner scanner = new Scanner(p.getInputStream());
+			while(scanner.hasNext()){
+				logger.debug(scanner.next());
+			}
 		} catch (IOException e) {
 			logger.error("Erro ao compilar classe '" + className + "'\n" + comando,e);
 		}
