@@ -47,8 +47,10 @@ public class CriarToken extends UmCasoDeUso implements ClasseGramatical{
 			criarToken(className,UM_SUBSTANTIVO,duvida);
 		}else if(UM_VERBO.equals(opcoes.getEscolha())){
 			//criar o metodo
+			criarToken(className,UM_VERBO,duvida);
 		}else if(UM_ADJETIVO.equals(opcoes.getEscolha())){
 			//criar o atributo
+			criarToken(className,UM_ADJETIVO,duvida);
 		}else if(UM_ARTIGO.toLowerCase().equals(opcoes.getEscolha().toLowerCase())){
 			//criar o artigo
 			criarToken(className,UM_ARTIGO,duvida);

@@ -1,9 +1,13 @@
 package br.com.goals.lnc.cup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import br.com.goals.hotcoffe.ioc.casosdeuso.UmCasoDeUso;
 import br.com.goals.lnc.vo.Comando;
+import br.com.goals.lnc.vo.UmaPalavra;
 
 public class CriarCodigo extends UmCasoDeUso{
 	private static Logger logger = Logger.getLogger(CriarCodigo.class);
@@ -18,23 +22,34 @@ public class CriarCodigo extends UmCasoDeUso{
 		String s =comando.getComando();
 		String[] token = s.split("\\s");
 		//Lexica
+		List<UmaPalavra> palavras = new ArrayList<UmaPalavra>();
 		for (int i = 0; i < token.length; i++) {
 			String className = formatar2ClassName(token[i]);
-			try {
-				Object c = Class.forName(CriarToken.TOKEN_PACKAGE+'.'+className).newInstance();
-			} catch (ClassNotFoundException e) {
-				//Simbolo nao encontrado: identifier not found
-				CriarToken criarToken = new CriarToken();
-				criarToken.setDuvida(token[i]);
-				criarToken.setClassName(className);
-				usar(criarToken);
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
+			boolean ok = false;
+			while(!ok){
+				try {
+					Object c = Class.forName(CriarToken.TOKEN_PACKAGE+'.'+className).newInstance();
+					palavras.add((UmaPalavra) c);
+					ok = true;
+				} catch (ClassNotFoundException e) {
+					//Simbolo nao encontrado: identifier not found
+					CriarToken criarToken = new CriarToken();
+					criarToken.setDuvida(token[i]);
+					criarToken.setClassName(className);
+					usar(criarToken);
+				} catch (InstantiationException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		//sintatica
+		{
+			//sujeito
+			logger.info("comando = " + comando.getComando());
+			
+		}
 		//semantica
 	}
 	
