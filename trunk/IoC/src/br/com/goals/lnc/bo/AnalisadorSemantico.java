@@ -1,5 +1,6 @@
 package br.com.goals.lnc.bo;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class AnalisadorSemantico {
 		String retorno = null;
 		List<String> adicionarSig = new ArrayList<String>();
 		{
-			//Pegar o sig(s) da palavra
+			//Pegar o sig(s) da palavra do sujeito
 			for(UmaPalavra umaPalavra:fraseSintatica.getSujeito().getPalavras()){
 				boolean temSignificado = false;
 				if(umaPalavra.getSignificados()!=null){
@@ -40,6 +41,7 @@ public class AnalisadorSemantico {
 				}
 			}
 		}
+		//Compilar os significados
 		Programador programador = new Programador();
 		for (String string : adicionarSig) {
 			String className = 'S' + string.substring(1);
@@ -49,6 +51,38 @@ public class AnalisadorSemantico {
 				logger.error("Erro ao recompilar a " + className,e);
 			}
 		}
+		
+		String metodoVerbo = "exz";
+		String comentario = "Verbo de ";
+		//Pegar o sig(s) da palavra do sujeito
+		for(UmaPalavra umaPalavra:fraseSintatica.getVerbo().getPalavras()){
+			metodoVerbo+=umaPalavra.getClass().getSimpleName();
+			comentario+=umaPalavra.getEscrita() + ", ";
+		}
+		
+		//Pegar o sig(s) da palavra do sujeito
+		for(UmaPalavra umaPalavra:fraseSintatica.getSujeito().getPalavras()){
+			if(umaPalavra.getSignificados()!=null && umaPalavra.getSignificados().size()==1){
+				try {
+					String sigName = umaPalavra.getSignificados().get(0);
+					Class cls = Class.forName(SIG_PACK + '.' + sigName);
+					Method[] metodos = cls.getDeclaredMethods();
+					boolean achouMetodo = false;
+					for (int i = 0; i < metodos.length; i++) {
+						if(metodos[i].getName().equals(metodoVerbo)){
+							achouMetodo = true;
+						}
+					}
+					if(!achouMetodo){
+						programador.criarMetodo(sigName,metodoVerbo,comentario);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}				
+			}
+		}
+		
+		
 		return retorno;
 	}
 
