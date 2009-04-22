@@ -32,8 +32,12 @@ public class Programador {
 	 * @throws Exception
 	 */
 	public void criarMetodo(String sigName, String metodoVerbo,String comments) throws Exception {
-		String metodoBody = "" +
-				"public boolean " + metodoVerbo + "(Object obj){\n" +
+		String metodoBody = "\n" +
+				"\t/**\n" +
+				"\t * " + comments + "\n" +
+				"\t * @param obj Objeto \n" +
+				"\t */\n" +
+				"\tpublic boolean " + metodoVerbo + "(Object obj){\n" +
 				"\t\treturn true;\n" +
 				"\t}\n\n\t";
 		

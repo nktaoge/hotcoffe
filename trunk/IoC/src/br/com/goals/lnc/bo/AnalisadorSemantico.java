@@ -53,7 +53,7 @@ public class AnalisadorSemantico {
 		}
 		
 		String metodoVerbo = "exz";
-		String comentario = "Verbo de ";
+		String comentario = "Verbo(s): ";
 		//Pegar o sig(s) da palavra do sujeito
 		for(UmaPalavra umaPalavra:fraseSintatica.getVerbo().getPalavras()){
 			metodoVerbo+=umaPalavra.getClass().getSimpleName();
