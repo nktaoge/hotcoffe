@@ -77,16 +77,21 @@ public class Compilador {
 	private static void compilar(String className,File arq,String workspaceSrc) throws ClassNotFoundException{
 		File directory = getClassDirectory("");
 		File webInf = directory.getParentFile();
+		File workspace = new File(workspaceSrc).getParentFile();
+		File build = new File(workspace,"build");
+		build = new File(build,"classes");
+		File workspaceWebInf = new File(new File(workspace,"WebContent"),"WEB-INF");
 		String comando = "javac -classpath " +
-				webInf.getAbsolutePath() + File.separatorChar + "lib" + File.separatorChar + "log4j-1.2.15.jar;" +
-				webInf.getAbsolutePath() + File.separatorChar + "lib" + File.separatorChar + "commons-io-1.4.jar;" +
-				webInf.getAbsolutePath() + File.separatorChar + "provided" + File.separatorChar + "servlet-api.jar" +
+				workspaceWebInf.getAbsolutePath() + File.separatorChar + "lib" + File.separatorChar + "log4j-1.2.15.jar" +
+				//workspaceWebInf.getAbsolutePath() + File.separatorChar + "lib" + File.separatorChar + "commons-io-1.4.jar;" +
+				//workspaceWebInf.getAbsolutePath() + File.separatorChar + "provided" + File.separatorChar + "servlet-api.jar" +
 				" -sourcepath "+workspaceSrc+" "+ 
 				arq.getAbsolutePath() +
 				" -d " + directory.getAbsolutePath();
 		try {
-			logger.debug("exec " + comando);
+			logger.debug("exec " + comando.replace(" -","\n\t-"));
 			Process p = Runtime.getRuntime().exec(comando);
+			//Process p = Runtime.getRuntime().exec("touch /home/fabio/eclipse.txt");
 			Scanner scanner = new Scanner(p.getInputStream());
 			while(scanner.hasNext()){
 				logger.debug(scanner.next());

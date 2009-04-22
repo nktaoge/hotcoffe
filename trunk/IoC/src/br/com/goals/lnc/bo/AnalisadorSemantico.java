@@ -28,6 +28,7 @@ public class AnalisadorSemantico {
 				String className = 'S' + umaPalavra.getClass().getSimpleName().substring(1);
 				try{
 					Compilador.criarSig(SIG_PACK, className, SIG_SRC);
+					umaPalavra.getSignificados().add(className);
 				}catch(Exception e){
 					logger.error("Erro ao criar sig " + className);
 				}
