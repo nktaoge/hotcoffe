@@ -80,16 +80,17 @@ public class Compilador {
 		File workspace = new File(workspaceSrc).getParentFile();
 		File build = new File(workspace,"build");
 		build = new File(build,"classes");
+		
 		File workspaceWebInf = new File(new File(workspace,"WebContent"),"WEB-INF");
 		String comando = "javac -classpath " +
-				workspaceWebInf.getAbsolutePath() + File.separatorChar + "lib" + File.separatorChar + "log4j-1.2.15.jar" +
-				//workspaceWebInf.getAbsolutePath() + File.separatorChar + "lib" + File.separatorChar + "commons-io-1.4.jar;" +
-				//workspaceWebInf.getAbsolutePath() + File.separatorChar + "provided" + File.separatorChar + "servlet-api.jar" +
+				workspaceWebInf.getAbsolutePath() + File.separatorChar + "lib" + File.separatorChar + "log4j-1.2.15.jar" + File.pathSeparatorChar +
+				workspaceWebInf.getAbsolutePath() + File.separatorChar + "lib" + File.separatorChar + "commons-io-1.4.jar" + File.pathSeparatorChar +
+				workspaceWebInf.getAbsolutePath() + File.separatorChar + "provided" + File.separatorChar + "servlet-api.jar" +
 				" -sourcepath "+workspaceSrc+" "+ 
 				arq.getAbsolutePath() +
 				" -d " + directory.getAbsolutePath();
 		try {
-			logger.debug("exec " + comando.replace(" -","\n\t-"));
+			logger.debug("exec " + comando);
 			Process p = Runtime.getRuntime().exec(comando);
 			//Process p = Runtime.getRuntime().exec("touch /home/fabio/eclipse.txt");
 			Scanner scanner = new Scanner(p.getInputStream());
