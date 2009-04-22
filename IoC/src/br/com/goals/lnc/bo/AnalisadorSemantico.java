@@ -1,5 +1,8 @@
 package br.com.goals.lnc.bo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import br.com.goals.lnc.vo.FraseSintatica;
@@ -11,30 +14,41 @@ public class AnalisadorSemantico {
 	public static final String SIG_SRC="br/com/goals/lnc/sig/";
 	public synchronized static String analisar(FraseSintatica fraseSintatica) {
 		String retorno = null;
-		//Pegar o sig(s) da palavra
-		for(UmaPalavra umaPalavra:fraseSintatica.getSujeito().getPalavras()){
-			boolean temSignificado = false;
-			if(umaPalavra.getSignificados()!=null){
-				if(umaPalavra.getSignificados().size()==1){
-					try {
-						Class.forName(SIG_PACK + '.' + umaPalavra.getSignificados().get(0));
-						temSignificado = true;
-					} catch (ClassNotFoundException e) {
-						e.printStackTrace();
+		List<String> adicionarSig = new ArrayList<String>();
+		{
+			//Pegar o sig(s) da palavra
+			for(UmaPalavra umaPalavra:fraseSintatica.getSujeito().getPalavras()){
+				boolean temSignificado = false;
+				if(umaPalavra.getSignificados()!=null){
+					if(umaPalavra.getSignificados().size()==1){
+						try {
+							Class.forName(SIG_PACK + '.' + umaPalavra.getSignificados().get(0));
+							temSignificado = true;
+						} catch (ClassNotFoundException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				if(!temSignificado){
+					String className = 'S' + umaPalavra.getClass().getSimpleName().substring(1);
+					adicionarSig.add(umaPalavra.getClass().getSimpleName());
+					try{
+						Compilador.criarSig(SIG_PACK, className, SIG_SRC);
+					}catch(Exception e){
+						logger.error("Erro ao criar sig " + className,e);
 					}
 				}
 			}
-			if(!temSignificado){
-				String className = 'S' + umaPalavra.getClass().getSimpleName().substring(1);
-				try{
-					Compilador.criarSig(SIG_PACK, className, SIG_SRC);
-					umaPalavra.getSignificados().add(className);
-				}catch(Exception e){
-					logger.error("Erro ao criar sig " + className);
-				}
+		}
+		Programador programador = new Programador();
+		for (String string : adicionarSig) {
+			String className = 'S' + string.substring(1);
+			try{
+				programador.colocarSignificadoEmPalavra(string, className);
+			}catch(Exception e){
+				logger.error("Erro ao recompilar a " + className,e);
 			}
 		}
-		
 		return retorno;
 	}
 

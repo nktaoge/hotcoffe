@@ -5,6 +5,7 @@ import br.com.goals.lnc.vo.UmaPalavra;
 public class Po extends UmaPalavra{
 	private static Logger logger = Logger.getLogger(Po.class);
 	public Po(){
+		this.getSignificados().add("So");
 		logger.debug("Po instanciado...");
 		getPodeSerClasseGramatical().add("Um artigo");
 	}

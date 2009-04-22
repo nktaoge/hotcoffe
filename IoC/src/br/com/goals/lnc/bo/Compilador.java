@@ -33,7 +33,7 @@ public class Compilador {
 		arq = new File(directory,className + ".java");
 		logger.debug("Criada a classe " + arq.getAbsolutePath());
 		FileUtils.writeStringToFile(arq, classCode);
-		compilar(className,arq,workspaceSrc);
+		compilar(arq);
 	}
 	/**
 	 * Cria a classe no pacote token
@@ -68,15 +68,14 @@ public class Compilador {
 			arq = new File(directory,className + ".java");
 			logger.debug("Criada a classe " + arq.getAbsolutePath());
 			FileUtils.writeStringToFile(arq, classCode);
-			compilar(className,arq,workspaceSrc);
+			compilar(arq);
 		} catch (IOException e) {
 			logger.error("Erro ao escrever classe '" + className + "'",e);
 		}
 	}
 	
-	private static void compilar(String className,File arq,String workspaceSrc) throws ClassNotFoundException{
+	public static void compilar(File arq) throws ClassNotFoundException{
 		File directory = getClassDirectory("");
-		File webInf = directory.getParentFile();
 		File workspace = new File(workspaceSrc).getParentFile();
 		File build = new File(workspace,"build");
 		build = new File(build,"classes");
@@ -98,7 +97,7 @@ public class Compilador {
 				logger.debug(scanner.next());
 			}
 		} catch (IOException e) {
-			logger.error("Erro ao compilar classe '" + className + "'\n" + comando,e);
+			logger.error("Erro ao compilar classe '" + arq.getName() + "'\n" + comando,e);
 		}
 	}
 	

@@ -5,6 +5,7 @@ import br.com.goals.lnc.vo.UmaPalavra;
 public class Pmax extends UmaPalavra{
 	private static Logger logger = Logger.getLogger(Pmax.class);
 	public Pmax(){
+		this.getSignificados().add("Smax");
 		logger.debug("Pmax instanciado...");
 		getPodeSerClasseGramatical().add("Um substantivo");
 	}
