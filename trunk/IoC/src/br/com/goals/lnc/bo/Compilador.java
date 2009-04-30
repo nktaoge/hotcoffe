@@ -22,18 +22,33 @@ public class Compilador {
 			"\t\tlogger.debug(\""+className+" instanciado...\");\n" +
 			"\t}\n"+
 			"}";
-		File arq = null;
-		File directory = null;
-		if(workspaceSrc==null){
-			directory = getClassDirectory(sigSrc);
-		}else{
-			directory = new File(workspaceSrc + sigSrc);
+		compilar(sigPack, sigSrc, className, classCode);
+	}
+	
+	/**
+	 * Compila uma classe
+	 * @param pack pacote
+	 * @param srcJava caminho do diretorio dentro do source src
+	 * @param className nome da classe
+	 * @param classCode codigo da classe
+	 */
+	public static void compilar(String pack,String srcJava,String className,String classCode){
+		try{
+			File arq = null;
+			File directory = null;
+			if(workspaceSrc==null){
+				directory = getClassDirectory(srcJava);
+			}else{
+				directory = new File(workspaceSrc + srcJava);
+			}
+			//escreve a classe
+			arq = new File(directory,className + ".java");
+			logger.debug("Criada a classe " + arq.getAbsolutePath());
+			FileUtils.writeStringToFile(arq, classCode);
+			compilar(arq);
+		} catch (Exception e) {
+			logger.error("Erro ao escrever classe '" + className + "'",e);
 		}
-		//escreve a classe
-		arq = new File(directory,className + ".java");
-		logger.debug("Criada a classe " + arq.getAbsolutePath());
-		FileUtils.writeStringToFile(arq, classCode);
-		compilar(arq);
 	}
 	/**
 	 * Cria a classe no pacote token
@@ -57,19 +72,8 @@ public class Compilador {
 				"\t\treturn \""+escrita.replace("\r", "").replace("\n", "\\n").replace("\"", "\\\"")+"\";\n" +
 				"\t}\n"+
 				"}";
-			File arq = null;
-			File directory = null;
-			if(workspaceSrc==null){
-				directory = getClassDirectory(srcJava);
-			}else{
-				directory = new File(workspaceSrc + srcJava);
-			}
-			//escreve a classe
-			arq = new File(directory,className + ".java");
-			logger.debug("Criada a classe " + arq.getAbsolutePath());
-			FileUtils.writeStringToFile(arq, classCode);
-			compilar(arq);
-		} catch (IOException e) {
+			compilar(pack, srcJava, className, classCode);
+		} catch (Exception e) {
 			logger.error("Erro ao escrever classe '" + className + "'",e);
 		}
 	}

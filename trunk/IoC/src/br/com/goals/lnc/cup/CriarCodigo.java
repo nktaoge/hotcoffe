@@ -23,6 +23,7 @@ public class CriarCodigo extends UmCasoDeUso{
 			Comando comando= new Comando();
 			ator.preencher(comando);
 			tratar(comando);
+			sistema.mostrar("Comando processado :-)");
 		}
 	}
 	private void tratar(Comando comando) throws Exception {

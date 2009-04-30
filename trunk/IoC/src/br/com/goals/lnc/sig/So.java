@@ -7,7 +7,11 @@ public class So {
 		return true;
 }
 
-public So(){
+
+public boolean exzPC227C169( Sfeio sfeio){
+		return true;
+	}
+	public So(){
 
 		logger.debug("So instanciado...");
 	}
