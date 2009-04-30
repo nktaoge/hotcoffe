@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import br.com.goals.hotcoffe.ioc.casosdeuso.UmCasoDeUso;
 import br.com.goals.hotcoffe.ioc.casosdeuso.util.Opcoes;
 import br.com.goals.lnc.bo.Compilador;
+import br.com.goals.lnc.bo.Programador;
 import br.com.goals.lnc.vo.ClasseGramatical;
 
 public class CriarToken extends UmCasoDeUso implements ClasseGramatical{
@@ -51,13 +52,17 @@ public class CriarToken extends UmCasoDeUso implements ClasseGramatical{
 			//criar o metodoopcoes
 			Compilador.criarToken(TOKEN_PACKAGE,className,UM_VERBO,duvida,TOKEN_SRC_JAVA);
 		}else if(UM_ADJETIVO.equals(opcoes.getEscolha())){
-			//criar o adjetivo
-			Compilador.criarToken(TOKEN_PACKAGE,className,UM_ADJETIVO,duvida,TOKEN_SRC_JAVA);
 			//perguntar o atributo
 			sistema.perguntar("'"+duvida+"' é um atributo de? Ex.: beleza");
 			Opcoes texto = new Opcoes();
 			ator.responder(texto);
 			logger.debug("respondido " + texto.getEscolha());
+			/*
+			 * informar o atributo para ser colocado no substantivo/sujeito
+			 * no significado
+			 */
+			//criar o adjetivo
+			Programador.criarAdjetivo(className,duvida,texto.getEscolha());			
 		}else if(UM_ARTIGO.toLowerCase().equals(opcoes.getEscolha().toLowerCase())){
 			//criar o artigo
 			Compilador.criarToken(TOKEN_PACKAGE,className,UM_ARTIGO,duvida,TOKEN_SRC_JAVA);

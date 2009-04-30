@@ -7,6 +7,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import br.com.goals.lnc.vo.FraseSintatica;
+import br.com.goals.lnc.vo.Metodo;
+import br.com.goals.lnc.vo.ObjetoSintatico;
 import br.com.goals.lnc.vo.UmaPalavra;
 
 public class AnalisadorSemantico {
@@ -16,32 +18,13 @@ public class AnalisadorSemantico {
 	public synchronized static String analisar(FraseSintatica fraseSintatica) {
 		String retorno = null;
 		List<String> adicionarSig = new ArrayList<String>();
-		{
-			//Pegar o sig(s) da palavra do sujeito
-			for(UmaPalavra umaPalavra:fraseSintatica.getSujeito().getPalavras()){
-				boolean temSignificado = false;
-				if(umaPalavra.getSignificados()!=null){
-					if(umaPalavra.getSignificados().size()==1){
-						try {
-							Class.forName(SIG_PACK + '.' + umaPalavra.getSignificados().get(0));
-							temSignificado = true;
-						} catch (ClassNotFoundException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-				if(!temSignificado){
-					String className = 'S' + umaPalavra.getClass().getSimpleName().substring(1);
-					adicionarSig.add(umaPalavra.getClass().getSimpleName());
-					try{
-						Compilador.criarSig(SIG_PACK, className, SIG_SRC);
-					}catch(Exception e){
-						logger.error("Erro ao criar sig " + className,e);
-					}
-				}
-			}
-		}
-		//Compilar os significados
+		//sujeito
+		adicionarSig = recuperarCoisasSemSentido(fraseSintatica.getSujeito());
+		
+		//predicados
+		adicionarSig.addAll(recuperarCoisasSemSentido(fraseSintatica.getPredicado()));
+		
+		//Compilar os significados, predicado e sujeito
 		Programador programador = new Programador();
 		for (String string : adicionarSig) {
 			String className = 'S' + string.substring(1);
@@ -51,7 +34,6 @@ public class AnalisadorSemantico {
 				logger.error("Erro ao recompilar a " + className,e);
 			}
 		}
-		
 		String metodoVerbo = "exz";
 		String comentario = "Verbo(s): ";
 		//Pegar o sig(s) da palavra do sujeito
@@ -59,7 +41,24 @@ public class AnalisadorSemantico {
 			metodoVerbo+=umaPalavra.getClass().getSimpleName();
 			comentario+=umaPalavra.getEscrita() + ", ";
 		}
-		
+		Metodo metodo = new Metodo();
+		metodo.setNome(metodoVerbo);
+		metodo.setComentario(comentario);
+		metodo.setRetorno("boolean");
+		metodo.setBody("return true;");
+		for(UmaPalavra umaPalavra:fraseSintatica.getPredicado().getPalavras()){
+			try {
+				umaPalavra = umaPalavra.getClass().newInstance();
+				for(String sig:umaPalavra.getSignificados()){
+					metodo.getParametros().add(sig);
+				}
+			} catch (InstantiationException e) {
+				logger.error("Erro ao instanciar predicado "+umaPalavra.getClass().getSimpleName(),e);
+			} catch (IllegalAccessException e) {
+				logger.error("Erro ao acessar "+umaPalavra.getClass().getSimpleName(),e);
+			}
+		}
+
 		//Pegar o sig(s) da palavra do sujeito
 		for(UmaPalavra umaPalavra:fraseSintatica.getSujeito().getPalavras()){
 			if(umaPalavra.getSignificados()!=null && umaPalavra.getSignificados().size()==1){
@@ -69,15 +68,15 @@ public class AnalisadorSemantico {
 					Method[] metodos = cls.getDeclaredMethods();
 					boolean achouMetodo = false;
 					for (int i = 0; i < metodos.length; i++) {
-						if(metodos[i].getName().equals(metodoVerbo)){
+						if(metodos[i].getName().equals(metodo.getNome())){
 							achouMetodo = true;
 						}
 					}
 					if(!achouMetodo){
-						programador.criarMetodo(sigName,metodoVerbo,comentario);
+						programador.criarMetodo(sigName,metodo);
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
+					logger.error("Erro ",e);
 				}				
 			}
 		}
@@ -85,5 +84,35 @@ public class AnalisadorSemantico {
 		
 		return retorno;
 	}
-
+	private static List<String> recuperarCoisasSemSentido(ObjetoSintatico objSintatico){
+		List<String> adicionarSig = new ArrayList<String>();
+		//Pegar o sig(s) da palavra do sujeito
+		for(UmaPalavra umaPalavra:objSintatico.getPalavras()){
+			boolean temSignificado = false;
+			if(umaPalavra.getSignificados()!=null){
+				if(umaPalavra.getSignificados().size()==1){
+					try {
+						Class.forName(SIG_PACK + '.' + umaPalavra.getSignificados().get(0));
+						temSignificado = true;
+					} catch (ClassNotFoundException e) {
+						try{
+							logger.error("Class not found " + umaPalavra.getSignificados().get(0));
+						}catch(Exception e2){
+							logger.error("Erro ao acessar " + umaPalavra.getClass().getSimpleName() + ".getSignificados().get(0)");
+						}
+					}
+				}
+			}
+			if(!temSignificado){
+				String className = 'S' + umaPalavra.getClass().getSimpleName().substring(1);
+				adicionarSig.add(umaPalavra.getClass().getSimpleName());
+				try{
+					Compilador.criarSig(SIG_PACK, className, SIG_SRC);
+				}catch(Exception e){
+					logger.error("Erro ao criar sig " + className,e);
+				}
+			}
+		}
+		return adicionarSig;
+	}
 }
