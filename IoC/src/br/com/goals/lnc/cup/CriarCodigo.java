@@ -22,13 +22,22 @@ public class CriarCodigo extends UmCasoDeUso{
 		while (true) {
 			Comando comando= new Comando();
 			ator.preencher(comando);
-			tratar(comando);
-			sistema.mostrar("Comando processado :-)");
+			String resposta = tratar(comando);
+			if(resposta!=null && !resposta.equals("")){
+				sistema.mostrar(resposta);
+			}else{
+				sistema.mostrar("Comando processado :-)");
+			}
 		}
 	}
-	private void tratar(Comando comando) throws Exception {
+	private String tratar(Comando comando) throws Exception {
 		String s =comando.getComando();
-		String[] token = s.split("\\s");
+		//TODO melhorar
+		s = s.replace("?", " ?")
+			.replace("!", " !")
+			.replace(",", " ,")
+			.replace(".", " .");
+		String[] token = s.split("\\s+");
 		//Lexica
 		List<UmaPalavra> palavras = new ArrayList<UmaPalavra>();
 		for (int i = 0; i < token.length; i++) {
@@ -62,14 +71,22 @@ public class CriarCodigo extends UmCasoDeUso{
 			fraseSintatica = analisador.analisar(palavras);
 		}
 		logger.info("fraseSintatica " + fraseSintatica);
+		
+		String codIntermediario = "";
 		//semantica
 		{
 			/*
 			 * a semantica seria talvez o modelo
 			 * hei de colocar eles em sig
 			 */
-			AnalisadorSemantico.analisar(fraseSintatica);
+			codIntermediario = AnalisadorSemantico.analisar(fraseSintatica);
 		}
+		
+		
+		if(codIntermediario!=null && !codIntermediario.equals("")){
+			logger.debug("codIntermediario = " + codIntermediario);
+		}
+		return codIntermediario;
 	}
 	
 	/**

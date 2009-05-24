@@ -82,7 +82,7 @@ public class Programador implements ClasseGramatical{
 	 * @throws Exception
 	 */
 	public void criarMetodo(String sigName, Metodo metodo) throws Exception {
-		String metodoBody = "\n\t" + metodo.toString().replace("\n", "\n\t") + "\n";	
+		String metodoBody = "\n\t" + metodo.toString().replace("\n", "\n\t") + "\n\t";	
 		File arqJava = new File(Compilador.workspaceSrc + AnalisadorSemantico.SIG_SRC + sigName + ".java");
 		String codigo = FileUtils.readFileToString(arqJava);
 		logger.info(codigo);

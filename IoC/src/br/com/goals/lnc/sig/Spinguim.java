@@ -1,8 +1,8 @@
 package br.com.goals.lnc.sig;
 
 import org.apache.log4j.Logger;
-public class Smax {
-	private static Logger logger = Logger.getLogger(Smax.class);
+public class Spinguim {
+	private static Logger logger = Logger.getLogger(Spinguim.class);
 	
 	/**
 	 * Verbo(s): é, 
@@ -11,7 +11,7 @@ public class Smax {
 		return true;
 	}
 	
-public Smax(){
-		logger.debug("Smax instanciado...");
+public Spinguim(){
+		logger.debug("Spinguim instanciado...");
 	}
 }
