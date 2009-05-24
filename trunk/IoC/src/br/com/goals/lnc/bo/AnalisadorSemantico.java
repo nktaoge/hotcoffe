@@ -15,6 +15,12 @@ public class AnalisadorSemantico {
 	private static Logger logger = Logger.getLogger(AnalisadorSemantico.class);
 	public static final String SIG_PACK="br.com.goals.lnc.sig";
 	public static final String SIG_SRC="br/com/goals/lnc/sig/";
+	
+	/**
+	 * @param fraseSintatica
+	 * @return codIntermediario
+	 */
+	@SuppressWarnings("unchecked")
 	public synchronized static String analisar(FraseSintatica fraseSintatica) {
 		String retorno = null;
 		List<String> adicionarSig = new ArrayList<String>();
@@ -80,8 +86,6 @@ public class AnalisadorSemantico {
 				}				
 			}
 		}
-		
-		
 		return retorno;
 	}
 	private static List<String> recuperarCoisasSemSentido(ObjetoSintatico objSintatico){
