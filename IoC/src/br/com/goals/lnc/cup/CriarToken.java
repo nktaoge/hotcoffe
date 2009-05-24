@@ -1,10 +1,5 @@
 package br.com.goals.lnc.cup;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import br.com.goals.hotcoffe.ioc.casosdeuso.UmCasoDeUso;
@@ -66,6 +61,8 @@ public class CriarToken extends UmCasoDeUso implements ClasseGramatical{
 		}else if(UM_ARTIGO.toLowerCase().equals(opcoes.getEscolha().toLowerCase())){
 			//criar o artigo
 			Compilador.criarToken(TOKEN_PACKAGE,className,UM_ARTIGO,duvida,TOKEN_SRC_JAVA);
+		}else{
+			//none above
 		}
 	}
 	
