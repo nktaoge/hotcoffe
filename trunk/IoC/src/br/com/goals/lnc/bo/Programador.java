@@ -5,7 +5,7 @@ import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
-import br.com.goals.lnc.cup.CriarToken;
+import br.com.goals.lnc.cup.tradutor.CriarToken;
 import br.com.goals.lnc.vo.ClasseGramatical;
 import br.com.goals.lnc.vo.Metodo;
 /**

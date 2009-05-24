@@ -1,14 +1,14 @@
-package br.com.goals.lnc.cup;
+package br.com.goals.lnc.cup.tradutor;
 
 import org.apache.log4j.Logger;
 
-import br.com.goals.hotcoffe.ioc.casosdeuso.UmCasoDeUso;
 import br.com.goals.hotcoffe.ioc.casosdeuso.util.Opcoes;
 import br.com.goals.lnc.bo.Compilador;
 import br.com.goals.lnc.bo.Programador;
+import br.com.goals.lnc.cup.BaseCup;
 import br.com.goals.lnc.vo.ClasseGramatical;
 
-public class CriarToken extends UmCasoDeUso implements ClasseGramatical{
+public class CriarToken extends BaseCup implements ClasseGramatical{
 	public static final String TOKEN_PACKAGE = "br.com.goals.lnc.token.dicionario";
 	public static final String TOKEN_SRC_JAVA = "br/com/goals/lnc/token/dicionario/";
 	
