@@ -1,36 +1,37 @@
-package br.com.goals.lnc.cup;
+package br.com.goals.lnc.cup.tradutor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import br.com.goals.hotcoffe.ioc.casosdeuso.UmCasoDeUso;
 import br.com.goals.lnc.bo.AnalisadorSemantico;
 import br.com.goals.lnc.bo.AnalisadorSintaticoFactory;
 import br.com.goals.lnc.bo.Compilador;
+import br.com.goals.lnc.cup.BaseCup;
 import br.com.goals.lnc.vo.Comando;
 import br.com.goals.lnc.vo.FraseSintatica;
 import br.com.goals.lnc.vo.UmaPalavra;
 
-public class CriarCodigo extends UmCasoDeUso{
+public class CriarCodigo extends BaseCup{
 	private static Logger logger = Logger.getLogger(CriarCodigo.class);
+	private Comando comando = null;
+	public Comando getComando() {
+		return comando;
+	}
+	public void setComando(Comando comando) {
+		this.comando = comando;
+	}
 	protected void iniciar() throws Exception {
-		if(Compilador.workspaceSrc==null){
-			Compilador.workspaceSrc = getControlador().getInitParameter("workspaceSrc");
-		}
-		while (true) {
-			Comando comando= new Comando();
-			ator.preencher(comando);
-			String resposta = tratar(comando);
-			if(resposta!=null && !resposta.equals("")){
-				sistema.mostrar(resposta);
-			}else{
-				sistema.mostrar("Comando processado :-)");
-			}
+		String resposta = tratar(comando);
+		if(resposta!=null && !resposta.equals("")){
+			sistema.mostrar(resposta);
+		}else{
+			sistema.mostrar("Comando processado :-)");
 		}
 	}
 	private String tratar(Comando comando) throws Exception {
+		
 		String s =comando.getComando();
 		//TODO melhorar
 		s = s.replace("?", " ?")

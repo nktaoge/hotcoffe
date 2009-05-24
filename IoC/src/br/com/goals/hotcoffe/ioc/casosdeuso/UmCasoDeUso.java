@@ -112,6 +112,13 @@ public abstract class UmCasoDeUso implements Runnable{
 	public HttpServletResponse getResponse() {
 		 return response;
 	}
+	
+	/**
+	 * Define o controlador, request, response, ator, sistema, template, 
+	 * key e chama o metodo iniciar
+	 * @param outroCasoDeUso
+	 * @throws Exception
+	 */
 	protected void usar(UmCasoDeUso outroCasoDeUso) throws Exception {
 		outroCasoDeUso.setControlador(getControlador());
 		outroCasoDeUso.setRequestResponse(request, response);
