@@ -1,5 +1,7 @@
 package br.com.goals.template;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,6 +12,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.io.FileUtils;
 
 /**
  * Ações comuns ao template
@@ -46,6 +50,22 @@ public class Template {
 	}
 	private String atribuiRsString(String template, ResultSet rs, String valor) throws SQLException {
 		return atribuiRsString(template,rs.getString(valor),valor);
+	}
+	
+	/**
+	 * Serve para retornar a pasta dos template(s)<br>
+	 * Ex.: /home/fabio/tomcat6/webapps/aplicacao/template<br>
+	 * Se a pasta nao existir sera criada uma nova pasta
+	 * @return retorna o path real da pasta template dentro da aplicacao
+	 */
+	public File getTemplatePath(){
+		String path = this.getClass().getClassLoader().getResource("Configuracao.properties").getPath();
+		File file = new File(path);
+		File template = new File(file.getParentFile().getParentFile().getParentFile(),"template");
+		if(!template.exists()){
+			template.mkdirs();
+		}
+		return template;
 	}
 
 	private String atribuiRsString(String template, String valor,String chave){		
@@ -632,7 +652,6 @@ public class Template {
 				procurarEm=procurarEm.substring(0,i+ini.length())
 				+conteudo+
 				procurarEm.substring(f);
-				;
 			}
 		}
 		return procurarEm;
@@ -670,6 +689,17 @@ public class Template {
 		}
 		return codHmtl;
 	}
+	
+	/**
+	 * 
+	 * @param selectName
+	 * @param valor
+	 * @return this
+	 */
+	public Template setSelect(String selectName,String valor){
+		template = marcarSelect(template, selectName, valor);
+		return this; 
+	}
 	/**
 	 * Marcar o item de um select
 	 * @param String codHtml, codigo html a ser alterado
@@ -704,5 +734,51 @@ public class Template {
 		//System.out.println(codHtml);
 		
 		return codHtml;
+	}
+	/**
+	 * Le o arquivo de template na pasta template<br>
+	 * O encoding padrao sera ISO-8859-1
+	 * 
+	 * @param string
+	 * @throws IOException
+	 */
+	public void setTemplateFile(String string) throws IOException {
+		setTemplate(FileUtils.readFileToString(new File(getTemplatePath(),string), "ISO-8859-1"));
+	}
+	@Override
+	public String toString() {
+		return getResultado();
+	}
+	/**
+	 * Set area e tambem campos do tipo input<br>
+	 * se o valor for null completa o campo com ""
+	 * @param area
+	 * @param id
+	 */
+	public void set(String area, Long valor) {
+		try{
+			String v = valor==null?"":valor.toString();
+			setArea(area, v);
+			template = Template.substituiAtributoTag(template, "input",area, "value", v);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 
+	 * @param name &lt;textarea name="NAME"
+	 * @param valor valor, substiruiremos o &lt; por &amp;lt;
+	 */
+	public void setTextArea(String name, String valor) {
+		template = Template.substituiConteudoTag(template, "textarea", name, valor.replace("<", "&lt;"));
+	}
+	
+	/**
+	 * 
+	 * @param name &lt;input name="NAME"
+	 * @param valor substituiremos o " por &amp;quot;
+	 */
+	public void setInput(String name, String valor) {
+		template = Template.substituiAtributoTag(template, "input",name, "value", valor.replace("\"", "&quot;"));
 	}
 }
