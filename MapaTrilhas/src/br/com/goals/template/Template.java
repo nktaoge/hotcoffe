@@ -184,7 +184,7 @@ public class Template {
 		if (mat.find()) {
 			String qString = "";
 			String paginas = mat.group(1);
-			G_Paginacao paginacao = new G_Paginacao();
+			Paginacao paginacao = new Paginacao();
 			// recuperar os postados e colocar no get
 			Enumeration<String> e = request.getParameterNames();
 			while (e.hasMoreElements()) {

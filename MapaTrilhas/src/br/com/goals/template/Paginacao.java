@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-public class G_Paginacao {
+public class Paginacao {
 	int resultadosPorPagina = 5;
 
 	int totalRows;
@@ -19,7 +19,7 @@ public class G_Paginacao {
 
 	ArrayList<Link> arrLinks;
 	
-	public G_Paginacao() {
+	public Paginacao() {
 		arrLinks = new ArrayList<Link>();
 	}
 
