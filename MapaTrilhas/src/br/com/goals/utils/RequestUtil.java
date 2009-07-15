@@ -13,7 +13,7 @@ public class RequestUtil {
 		Set<String> keys = request.getParameterMap().keySet();
 		
 		Class cls = obj.getClass();
-		Method metodos[] = cls.getDeclaredMethods();
+		Method metodos[] = cls.getMethods();
 		for(String key:keys){
 			//System.out.println(key + " = '" + URLDecoder.decode(request.getParameter(key), "ISO-8859-1")+"'");
 			for (int i = 0; i < metodos.length; i++) {

@@ -3,7 +3,7 @@ package br.com.goals.etrilhas.modelo;
 import java.io.Serializable;
 
 /**
- * Item que esta no mapa
+ * Item que esta no mapa, um ponto.
  * @author Fabio Issamu Oshiro
  */
 public class MapaItem extends Base implements Serializable{
@@ -11,10 +11,10 @@ public class MapaItem extends Base implements Serializable{
 	private Integer x;
 	private Integer y;
 	private String icone;
-	private String descricao;
 	private String nome;
 	private Camada camada;
-	
+	private String tipo;
+	private Object valor;
 	public MapaItem(){
 		super();
 	}
@@ -22,17 +22,24 @@ public class MapaItem extends Base implements Serializable{
 	protected String[] transients() {
 		return new String[]{"camada"};
 	}
+	
+	public String getTipo() {
+		return tipo;
+	}
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+	public Object getValor(){
+		return valor;
+	}
+	public void setValor(Object valor) {
+		this.valor = valor;
+	}
 	public Camada getCamada() {
 		return camada;
 	}
 	public void setCamada(Camada camada) {
 		this.camada = camada;
-	}
-	public String getDescricao() {
-		return descricao;
-	}
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
 	}
 	public String getNome() {
 		return nome;

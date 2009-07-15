@@ -44,7 +44,7 @@ public class MapaServlet extends BaseServlet {
 		for(Camada camada:mapa.getCamadas()){
 			retorno +="<camada pid=\""+camada.getId()+"\">";
 			for(MapaItem mapaItem:camada.getItems()){
-				retorno+="<mapaItem pid=\""+mapaItem.getId()+"\" x=\""+mapaItem.getX()+"\" y=\"" + mapaItem.getY() + "\" />";
+				retorno+="<mapaItem tipo=\""+mapaItem.getTipo()+"\" pid=\""+mapaItem.getId()+"\" x=\""+mapaItem.getX()+"\" y=\"" + mapaItem.getY() + "\" />";
 			}
 			retorno +="</camada>";
 		}

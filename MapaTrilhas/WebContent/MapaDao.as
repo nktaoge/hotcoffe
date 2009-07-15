@@ -59,6 +59,7 @@
 					tmp.y = xmlMapaItem.attribute("y");
 					tmp.x = xmlMapaItem.attribute("x");
 					tmp["id"] = xmlMapaItem.attribute("pid");
+					tmp["tipo"] = xmlMapaItem.attribute("tipo");
 					tmp["id_camada"]=idCamada;
 					tmp["btnMapaItem"].addEventListener(MouseEvent.MOUSE_UP,dropOnMap);
 					mapa.addChild(tmp);

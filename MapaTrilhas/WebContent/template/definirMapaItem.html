@@ -1,13 +1,15 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
 	<title>MapaItem <!-- ini id -->numero<!-- fim id --></title>
+	<link href="estilo.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 	<h1>Definindo o Ponto cod: <!-- ini id -->numero<!-- fim id --></h1>
 	<form action="definirMapaItem" method="post">
 		<div>
 			<input type="hidden" name="id" value="" />
-			<label for="tipo">Tipo</label>
+			<label for="tipo">Tipo:</label>
 			<select name="tipo" id="tipo">
 				<option value="Galeria">Galeria de Imagens</option>
 				<option value="Foto360">Foto 360</option>
@@ -16,17 +18,15 @@
 			</select>
 		</div>
 		<div>
-			<label for="nome">Nome</label>
+			<label for="nome">Nome:</label>
 			<input type="text" name="nome" id="nome" value="" />
 		</div>
 		<div>
-			<label for="descricao">Descri&ccedil;&atilde;o</label>
-			<textarea name="descricao" id="descricao"></textarea>
-		</div>
-		<div>
-			<label for="icone">Icone</label>
+			<label for="icone">Icone:</label>
 			<input type="text" name="icone" id="icone" value="" />
 		</div>
+		<!-- ini campos do tipo -->
+		<!-- fim campos do tipo -->
 		<div>
 			<input type="submit" value="Enviar" />
 		</div>

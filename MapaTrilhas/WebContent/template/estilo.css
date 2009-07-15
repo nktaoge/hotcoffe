@@ -1,0 +1,10 @@
+form label{
+	display:block;
+	width: 150px;
+	float:left;
+	text-align: right;
+	padding-right: 5px;
+}
+form div{
+	clear: both;
+}

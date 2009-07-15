@@ -2,12 +2,14 @@ package br.com.goals.template;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.MissingResourceException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,7 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.FileUtils;
 
 /**
- * Ações comuns ao template
+ * Ações comuns ao template<br>
+ * Depende do commons io da apache
+ * 
  * @author Fabio Issamu Oshiro
  *
  */
@@ -737,13 +741,36 @@ public class Template {
 	}
 	/**
 	 * Le o arquivo de template na pasta template<br>
-	 * O encoding padrao sera ISO-8859-1
-	 * 
+	 * O encoding padrao sera ISO-8859-1<br>
+	 * Subistutui os atributos href=img.gif para href=template/img.gif
 	 * @param string
 	 * @throws IOException
 	 */
 	public void setTemplateFile(String string) throws IOException {
-		setTemplate(FileUtils.readFileToString(new File(getTemplatePath(),string), "ISO-8859-1"));
+		String retorno = "";
+		String template = FileUtils.readFileToString(new File(getTemplatePath(),string), "ISO-8859-1");
+		Pattern patHref = Pattern.compile("\\shref=\"(.*?)\"");
+		Matcher mat = patHref.matcher(template);
+		int last = 0;
+		int fim = 0;
+		while(mat.find()){
+			String hrefVal = mat.group(1);
+			if(hrefVal.startsWith("/")
+					|| hrefVal.startsWith("http:")
+					|| hrefVal.startsWith("https:")){
+				continue;
+			}
+			//ver se o arquivo existe
+			if(new File(getTemplatePath(),hrefVal.replace('/', File.separatorChar)).exists()){
+				//Existe entao substituimos...
+				fim = mat.start();
+				retorno += template.substring(last,fim) + " href=\"template/" + hrefVal + "\"";
+				last = mat.end();
+			}
+		}
+		//copiar o fim
+		retorno += template.substring(last);
+		setTemplate(retorno);
 	}
 	@Override
 	public String toString() {
@@ -770,6 +797,7 @@ public class Template {
 	 * @param valor valor, substiruiremos o &lt; por &amp;lt;
 	 */
 	public void setTextArea(String name, String valor) {
+		if(valor == null) valor = "";
 		template = Template.substituiConteudoTag(template, "textarea", name, valor.replace("<", "&lt;"));
 	}
 	
@@ -779,6 +807,116 @@ public class Template {
 	 * @param valor substituiremos o " por &amp;quot;
 	 */
 	public void setInput(String name, String valor) {
+		if(valor == null){
+			valor = "";
+		}
 		template = Template.substituiAtributoTag(template, "input",name, "value", valor.replace("\"", "&quot;"));
+	}
+	/**
+	 * &lt;form action="acao.do"><br>
+	 * &lt;-- ini area --><br>
+	 * Esta area sera substituida por campos criados automaticamente<br>
+	 * Por enquanto nao coloque os campos que vc quer!
+	 * por reflection<br>
+	 * &lt;-- fim area --><br>
+	 * &lt;/form>
+	 * @param area
+	 * @param obj
+	 * @throws AreaNaoEncontradaException 
+	 */
+	public void setForm(String area, Object obj) throws AreaNaoEncontradaException {
+		try{
+			String campos = criarCampos(obj);
+			setArea(area, campos);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private String criarCampos(Object obj) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException{
+		if(obj==null) return "";
+		String retorno="";
+		Method[] metodos = obj.getClass().getMethods();
+		for (int i = 0; i < metodos.length; i++) {
+			String nome = metodos[i].getName();
+			Class cls[] = metodos[i].getParameterTypes();
+			if(cls.length!=1) continue;
+			if(!cls[0].getName().startsWith("java.lang")) continue;
+			if(!nome.startsWith("set") && !nome.startsWith("get")) continue;
+			String inputName = metodos[i].getName().substring(3);
+			String inputValue = "";
+			try{
+				Object object = obj.getClass().getMethod("get"+inputName,null).invoke(obj,new Object[]{});
+				if(object!=null){
+					inputValue = object.toString();
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			if(nome.equals("getId")){
+				Object val = metodos[i].invoke(obj,new Object[]{});
+				if(val!=null)
+					retorno+="<input type=\"hidden\" id=\"idField"+i+"\" name=\"id\" value=\""+val.toString()+"\" />";
+			}else if(nome.equals("setId")){
+				//do nothing :-)
+			}else if(nome.startsWith("setTxt")){
+				retorno+="<div><label for=\"idField"+i+"\">" + getLabel(obj,nome) + ": </label><textarea id=\"idField"+i+"\" name=\""+inputName+"\" cols=\"40\" rows=\"10\">"+inputValue.replace("<", "&lt;")+"</textarea></div>";
+			}else if(nome.startsWith("setList")){
+				retorno+="<div><label for=\"idField"+i+"\">" + getLabel(obj,nome) + ": </label><select id=\"idField"+i+"\" name=\""+inputName+"\" /><option>Selecione</option></select></div>";
+			}else if(nome.startsWith("set")){
+				retorno+="<div><label for=\"idField"+i+"\">" + getLabel(obj,nome) + ": </label><input id=\"idField"+i+"\" name=\""+inputName+"\" value=\""+inputValue.replace("\"", "&quot;")+"\" /></div>";
+			}
+		}
+		return retorno;
+	}
+	
+	public static String getLabel(String obj){
+		try{
+			return Messages.getString("Template."+obj); //$NON-NLS-1$
+		}catch(MissingResourceException e){
+			int ini = obj.lastIndexOf('.');
+			if(ini!=-1){
+				return separarNome(obj.substring(ini+1));
+			}
+			return separarNome(obj);
+		}
+	}
+	public static String getLabel(Object obj){
+		try{
+			return Messages.getString("Template."+obj.getClass().getCanonicalName()); //$NON-NLS-1$
+		}catch(MissingResourceException e){
+			return separarNome(obj.getClass().getSimpleName());
+		}
+	}
+	public static String getLabel(Object obj,String nome){
+		try{
+			return Messages.getString("Template."+obj.getClass().getCanonicalName()+"."+nome); //$NON-NLS-1$
+		}catch(MissingResourceException e){
+			if(nome.startsWith("setList")){
+				return separarNome(nome.substring(7));
+			}
+			if(nome.startsWith("setTxt")){
+				return separarNome(nome.substring(6));
+			}
+			return separarNome(nome.substring(3));
+		}
+	}
+	/**
+	 * 
+	 * @param nome
+	 * @return meuNome -> meu Nome
+	 */
+	private static String separarNome(String nome){
+		String retorno=nome.charAt(0)+"";
+		for (int i = 1; i < nome.length(); i++) {
+			String ch = nome.substring(i, i+1);
+			if(ch.toUpperCase().equals(ch)){
+				retorno+=' ' +ch;
+			}else{
+				retorno+=ch;
+			}
+		}
+		return retorno;
 	}
 }

@@ -13,6 +13,10 @@ import br.com.goals.etrilhas.modelo.Base;
 
 public class BaseDao<T extends Base> {
 	private static String basePath = null;
+	/**
+	 * 
+	 * @return a pasta data
+	 */
 	public String getBasePath() {
 		if(basePath==null){
 			String path = this.getClass().getClassLoader().getResource("Configuracao.properties").getPath();
