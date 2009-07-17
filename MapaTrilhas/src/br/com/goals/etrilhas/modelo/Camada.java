@@ -8,13 +8,18 @@ public class Camada extends Base implements Serializable{
 	private static final long serialVersionUID = -6443776154995413804L;
 	private String nome;
 	private String descricao;
-	
+	private Integer ordem;
 	/**
 	 * pertence a 
 	 */
 	private Mapa mapa;
 	private List<MapaItem> items = new ArrayList<MapaItem>();
-	
+	public Integer getOrdem() {
+		return ordem;
+	}
+	public void setOrdem(Integer ordem) {
+		this.ordem = ordem;
+	}
 	public String getDescricao() {
 		return descricao;
 	}
@@ -44,7 +49,7 @@ public class Camada extends Base implements Serializable{
 	public List<MapaItem> getItems() {
 		return items;
 	}
-	public void setItems(List<MapaItem> items) {
+	public void setItems(List<MapaItem> items){
 		this.items = items;
 	}
 }

@@ -14,6 +14,7 @@ public class MapaItem extends Base implements Serializable{
 	private String nome;
 	private Camada camada;
 	private String tipo;
+	private Integer ordem;
 	private Object valor;
 	public MapaItem(){
 		super();
@@ -23,6 +24,12 @@ public class MapaItem extends Base implements Serializable{
 		return new String[]{"camada"};
 	}
 	
+	public Integer getOrdem() {
+		return ordem;
+	}
+	public void setOrdem(Integer ordem) {
+		this.ordem = ordem;
+	}
 	public String getTipo() {
 		return tipo;
 	}

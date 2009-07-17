@@ -1,13 +1,19 @@
+var btnClose = "<div id=\"titleBar\"><a href=\"#\" onclick=\"fecharVideo()\">Fechar</a></div>";
+function fecharVideo(){
+	$("#Video").hide();
+}
 function executarFuncao(args){
 	var a = args.split(":");
 	var tipo = a[1];
 	var id = a[0];
-	alert("chamando " + id + " tipo="+tipo);
+	$("#"+tipo).html("Chamando " + id + " tipo="+tipo);
+	//alert("chamando " + id + " tipo="+tipo);
 	$.ajax({
 		  url: "data/"+tipo+"-"+id+".html",
 		  cache: false,
 		  success: function(html){
-		    	$("#"+tipo).append(html);
+		    	$("#"+tipo).html(btnClose + html);
+		    	$("#"+tipo).show();
 		  }
 	});
 }
@@ -31,7 +37,7 @@ function resizeFlashTo(v){
 }
 function definirMapaItem(id){
 	try{
-		var win = window.open("definirMapaItem?id="+id,"id"+id,"width=700, height=600");
+		var win = window.open("definirMapaItem?id="+id,"id"+id,"width=700, height=600,scrollbars=1");
 		win.focus();
 	}catch(e){
 		

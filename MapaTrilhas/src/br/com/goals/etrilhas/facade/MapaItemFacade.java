@@ -19,7 +19,21 @@ public class MapaItemFacade{
 	public static MapaItemFacade getInstance() {
 		return instance;
 	}
-	
+	public void criarHtml(MapaItem mapaItem){
+		try{
+			if(mapaItem.getTipo()!=null){
+				if(mapaItem.getTipo().equals("Video")){
+					Video video = (Video)mapaItem.getValor();
+					//TODO meio incoerente...
+					video.setId(mapaItem.getId());
+					VideoDao videoDao = new VideoDao();
+					videoDao.criar(video);
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
 	public void atualizar(MapaItem mapaItem, Mapa mapa) throws FacadeException {
 		try {
 			if(mapaItem.getCamada()!=null){
@@ -34,21 +48,11 @@ public class MapaItemFacade{
 						}
 					}
 				}
+				mapaDao.atualizar(mapa);
+			}else{
+				System.out.println("Atencao MapaItemFacade.atualizar() camada==null!");
 			}
-			try{
-				if(mapaItem.getTipo()!=null){
-					if(mapaItem.getTipo().equals("Video")){
-						Video video = (Video)mapaItem.getValor();
-						//TODO meio incoerente...
-						video.setId(mapaItem.getId());
-						VideoDao videoDao = new VideoDao();
-						videoDao.criar(video);
-					}
-				}
-			}catch(Exception e){
-				e.printStackTrace();
-			}
-			mapaDao.atualizar(mapa);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new FacadeException(e.getMessage());

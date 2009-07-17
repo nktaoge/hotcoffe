@@ -3,7 +3,15 @@ package br.com.goals.etrilhas.modelo;
 public class Foto extends Base{
 
 	private static final long serialVersionUID = 1208424388838652916L;
+	
+	private Integer ordem;
 
+	public Integer getOrdem() {
+		return ordem;
+	}
+	public void setOrdem(Integer ordem) {
+		this.ordem = ordem;
+	}
 	private String txtDescricao;
 	/**
 	 * @return the txtDescricao

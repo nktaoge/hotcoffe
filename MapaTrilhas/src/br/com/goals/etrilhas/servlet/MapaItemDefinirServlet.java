@@ -77,7 +77,7 @@ public class MapaItemDefinirServlet extends BaseServlet {
 				//O tipo permanesce o mesmo
 				RequestUtil.request(request, mapaItem.getValor());
 			}
-			MapaItemFacade.getInstance().atualizar(mapaItem, mapa);
+			MapaItemFacade.getInstance().criarHtml(mapaItem);
 			MapaFacade.getInstance().atualizar(mapa);
 			
 			//Montar resposta para o usuario
