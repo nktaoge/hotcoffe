@@ -20,6 +20,7 @@ public class MapaItemDao extends BaseDao<MapaItem> {
 		for(Camada camada:mapa.getCamadas()){
 			for(MapaItem mapaItem:camada.getItems()){
 				if(mapaItem.getId().equals(id)){
+					mapaItem.setCamada(camada);
 					return mapaItem;
 				}
 			}

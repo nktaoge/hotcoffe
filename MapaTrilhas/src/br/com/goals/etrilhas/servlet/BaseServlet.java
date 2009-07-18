@@ -3,11 +3,14 @@ package br.com.goals.etrilhas.servlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
+import br.com.goals.etrilhas.dao.CamadaDao;
 import br.com.goals.etrilhas.modelo.Mapa;
 
 public class BaseServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+    
+	protected CamadaDao camadaDao = new CamadaDao();
+	
     public BaseServlet() {
         super();
     }

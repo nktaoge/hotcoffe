@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
 
+import br.com.goals.etrilhas.modelo.Camada;
+
 /**
  * Ações comuns ao template<br>
  * Depende do commons io da apache
@@ -539,16 +541,31 @@ public class Template extends BaseTemplate{
 			
 		}
 	}
+	
+	/**
+	 * Se houver uma marcacao &lt;-- ini box "area" --> e o valor for nul ou "" o box sera retirado.
+	 * @param area
+	 * @param valor
+	 * @throws AreaNaoEncontradaException
+	 */
 	public void setArea(String area, String valor) throws AreaNaoEncontradaException {
 		area = area.replace("(","\\(");
 		area = area.replace(")","\\)");
 		area = area.replace(".","\\.");
-		Pattern patArea = Pattern.compile("<!-- ini "+area+" -->(.*?)<!-- fim "+area+" -->",Pattern.DOTALL);
-		Matcher mat = patArea.matcher(template);
-		if(mat.find()){
-			template = mat.replaceAll(StringUtils.tratarCaracteresEspeciaisRegex(valor));
+		if(valor==null || valor.equals("")){
+			Pattern patBoxArea = Pattern.compile("<!-- ini box "+area+" -->(.*?)<!-- fim box "+area+" -->",Pattern.DOTALL);
+			Matcher mat = patBoxArea.matcher(template);
+			if(mat.find()){
+				template = mat.replaceAll("");
+			}
 		}else{
-			throw new AreaNaoEncontradaException(area); 
+			Pattern patArea = Pattern.compile("<!-- ini "+area+" -->(.*?)<!-- fim "+area+" -->",Pattern.DOTALL);
+			Matcher mat = patArea.matcher(template);
+			if(mat.find()){
+				template = mat.replaceAll(StringUtils.tratarCaracteresEspeciaisRegex(valor));
+			}else{
+				throw new AreaNaoEncontradaException(area); 
+			}
 		}
 	}
 	public static String substituiSrcImagem(String html, String novoSrc) {
@@ -832,6 +849,40 @@ public class Template extends BaseTemplate{
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+	}
+	/**
+	 * Cria a area com opcoes de radio,
+	 * Padrão:
+	 * label = nome<br>
+	 * value = id<br>
+	 * @param string
+	 * @param camadas
+	 * @throws AreaNaoEncontradaException 
+	 */
+	
+	@SuppressWarnings("unchecked")
+	public void setRadio(String string, List opcoes,Object checked) throws AreaNaoEncontradaException {
+		String html = "";
+		try{
+			String fieldName = opcoes.get(0).getClass().getSimpleName()+".id";
+			for (Object obj : opcoes) {
+				//ver se o obj tem id e nome
+				String id = obj.getClass().getMethod("getId", null).invoke(obj, null).toString();
+				String label="";
+				Object lbl = obj.getClass().getMethod("getNome",null).invoke(obj, null);
+				if(lbl==null){
+					label = "<span title=\""+fieldName+"="+id + "\">Sem nome</span>";
+				}
+				html+="<div><label for=\""+fieldName+"_"+id+"\">"+label+"</label><input type=\"radio\" name=\""+fieldName+"\" id=\""+fieldName+"_"+id+"\" value=\""+id+"\" ";
+				if(checked!=null && checked.toString().equals(id)){
+					html+="checked=\"checked\" ";
+				}
+				html+="/></div>";
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		setArea(string, html);
 	}
 	
 	

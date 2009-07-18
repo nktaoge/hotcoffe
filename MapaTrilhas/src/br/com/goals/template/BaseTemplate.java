@@ -31,7 +31,7 @@ public class BaseTemplate{
 		try{
 			return Messages.getString(strKey);
 		}catch(MissingResourceException e){
-			logger.warn("Not found: " + strKey);
+			logger.warn("Label not found: " + strKey);
 			if(nome.startsWith("setList")){
 				return separarNome(nome.substring(7));
 			}

@@ -1,6 +1,7 @@
 package br.com.goals.etrilhas.servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import br.com.goals.etrilhas.dao.MapaItemDao;
 import br.com.goals.etrilhas.facade.MapaFacade;
 import br.com.goals.etrilhas.facade.MapaItemFacade;
+import br.com.goals.etrilhas.modelo.Camada;
 import br.com.goals.etrilhas.modelo.Mapa;
 import br.com.goals.etrilhas.modelo.MapaItem;
 import br.com.goals.template.Template;
@@ -47,6 +49,8 @@ public class MapaItemDefinirServlet extends BaseServlet {
 			template.setInput("icone",mapaItem.getIcone());
 			template.setSelect("tipo", mapaItem.getTipo());
 			template.setForm("campos do tipo",mapaItem.getValor());
+			template.setRadio("camadas",mapa.getCamadas(),mapaItem.getCamada().getId());
+			template.setArea("mensagem","");
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -79,7 +83,19 @@ public class MapaItemDefinirServlet extends BaseServlet {
 			}
 			MapaItemFacade.getInstance().criarHtml(mapaItem);
 			MapaFacade.getInstance().atualizar(mapa);
-			
+			//Verificar se colocou em outra camada
+			Long camadaId = Long.parseLong(request.getParameter("Camada.id"));
+			if(!camadaId.equals(mapaItem.getCamada().getId())){
+				//trocar de camada
+				Camada camada = camadaDao.selecionar(mapa,camadaId);
+				//retira da camada antiga
+				mapaItem.getCamada().getItems().remove(mapaItem);
+				mapaItem.setCamada(camada);
+				if(camada.getItems()==null){
+					camada.setItems(new ArrayList<MapaItem>());
+				}
+				camada.getItems().add(mapaItem);
+			}
 			//Montar resposta para o usuario
 			Template template = new Template();
 			template.setTemplateFile("definirMapaItem.html");
@@ -88,7 +104,8 @@ public class MapaItemDefinirServlet extends BaseServlet {
 			template.setInput("icone",mapaItem.getIcone());
 			template.setSelect("tipo",mapaItem.getTipo());
 			template.setForm("campos do tipo",mapaItem.getValor());
-			
+			template.setRadio("camadas",mapa.getCamadas(),mapaItem.getCamada().getId());
+			template.setArea("mensagem","Alterado com sucesso");
 			response.getWriter().write(template.toString());
 		}catch(Exception e){
 			e.printStackTrace();
