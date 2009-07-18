@@ -8,17 +8,39 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 public class RequestUtil {
-	@SuppressWarnings("unchecked")
+	/**
+	 * Pega o request e atribui os parametros que casam com o objeto por atributo.<br>
+	 * ou seja, não coloca coisas que são null<br>
+	 * 
+	 * Ex.: &lt;input name="Pessoa.nome">
+	 * 
+	 * @param request
+	 * @param obj
+	 * @throws Exception
+	 */
 	public static void request(HttpServletRequest request, Object obj) throws Exception{
+		requestByPrefix(obj.getClass().getSimpleName()+".",request,obj);
+	}
+	@SuppressWarnings("unchecked")
+	public static void requestByPrefix(String prefixo,HttpServletRequest request, Object obj)throws Exception{
 		Set<String> keys = request.getParameterMap().keySet();
 		
 		Class cls = obj.getClass();
 		Method metodos[] = cls.getMethods();
 		for(String key:keys){
-			//System.out.println(key + " = '" + URLDecoder.decode(request.getParameter(key), "ISO-8859-1")+"'");
+			String key2methodName="";
+			if(prefixo!=null){
+				//verifica se inicia com o prefixo
+				if(!key.startsWith(prefixo)){
+					continue;
+				}
+				key2methodName = key.substring(prefixo.length());
+				key2methodName = "set" + Character.toUpperCase(key2methodName.charAt(0))+key2methodName.substring(1);
+			}
+			
 			for (int i = 0; i < metodos.length; i++) {
 				try {
-					if(metodos[i].getName().equals("set" + Character.toUpperCase(key.charAt(0))+key.substring(1))){
+					if(metodos[i].getName().equals(key2methodName)){
 						String keyVal = request.getParameter(key);
 						System.out.println("RequestUtil.request(): " + metodos[i].getName() + " = " + URLDecoder.decode(keyVal, "ISO-8859-1"));
 						Class parametros[]=metodos[i].getParameterTypes();
@@ -45,8 +67,17 @@ public class RequestUtil {
 				} catch (InvocationTargetException e) {
 					e.printStackTrace();
 				}
-				
 			}
 		}
+	}
+	/**
+	 * Pega o request e atribui os parametros que casam com o objeto por atributo.<br>
+	 * ou seja, não coloca coisas que são null
+	 * @param request
+	 * @param obj
+	 * @throws Exception
+	 */
+	public static void requestByAttName(HttpServletRequest request, Object obj) throws Exception{
+		requestByPrefix(null, request, obj);
 	}
 }

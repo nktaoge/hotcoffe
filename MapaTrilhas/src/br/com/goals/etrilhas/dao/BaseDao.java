@@ -13,6 +13,7 @@ import br.com.goals.etrilhas.modelo.Base;
 
 public class BaseDao<T extends Base> {
 	private static String basePath = null;
+	 
 	/**
 	 * 
 	 * @return a pasta data
@@ -52,6 +53,15 @@ public class BaseDao<T extends Base> {
 		obj.setId(new Date().getTime());
 		String path = getBasePath()+obj.getClass().getSimpleName()+ "-" + obj.getId() + ".xml";
 		System.out.println(path);
+		gravar(obj, path);
+	}
+	/**
+	 * Somente um grava...
+	 * @param obj
+	 * @param path
+	 * @throws Exception
+	 */
+	protected synchronized void gravar(T obj, String path)throws Exception{
 		// Create output stream.
 		FileOutputStream fos = new FileOutputStream(path);
 		// Create XML encoder.
@@ -60,17 +70,10 @@ public class BaseDao<T extends Base> {
 		xenc.writeObject(obj);
 		xenc.close();
 	}
-	
 	public void atualizar(T obj) throws Exception{
 		String path = getBasePath()+obj.getClass().getSimpleName()+ "-" + obj.getId() + ".xml";
 		System.out.println("atualizado " + path);
-		// Create output stream.
-		FileOutputStream fos = new FileOutputStream(path);
-		// Create XML encoder.
-		XMLEncoder xenc = new XMLEncoder(fos);
-		// Write object.
-		xenc.writeObject(obj);
-		xenc.close();
+		gravar(obj, path);	
 	}
 	@SuppressWarnings("unchecked")
 	public List<T> listar() throws Exception{

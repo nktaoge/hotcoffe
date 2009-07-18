@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
-import java.util.MissingResourceException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,7 +23,7 @@ import org.apache.commons.io.FileUtils;
  * @author Fabio Issamu Oshiro
  *
  */
-public class Template {
+public class Template extends BaseTemplate{
 	private static Pattern patRs = Pattern.compile("<!-- ini rs -->(.*?)<!-- fim rs -->", Pattern.DOTALL);
 	private static Pattern patRsItens = Pattern.compile("<!-- ini rs\\((.*?)\\) -->(.*?)<!-- fim rs\\(\\1\\) -->", Pattern.DOTALL);
 	private static Pattern patRsImagens = Pattern.compile("<!-- ini rs imagem\\((.*?)\\) -->(.*?)<!-- fim rs imagem\\(\\1\\) -->", Pattern.DOTALL);
@@ -343,7 +342,7 @@ public class Template {
 		}
 	}
 	public void encaixaResultSet(ResultSet rs) {
-		encaixaResultSet(rs,2000000);
+		encaixaResultSet(rs,Integer.MAX_VALUE);
 	}
 
 	public void replace(String procurar,String substituir){
@@ -826,97 +825,16 @@ public class Template {
 	 */
 	public void setForm(String area, Object obj) throws AreaNaoEncontradaException {
 		try{
-			String campos = criarCampos(obj);
-			setArea(area, campos);
+			if(obj!=null){
+				String campos = criarCampos(obj.getClass().getSimpleName()+".",obj);
+				setArea(area, campos);
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	private String criarCampos(Object obj) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException{
-		if(obj==null) return "";
-		String retorno="";
-		Method[] metodos = obj.getClass().getMethods();
-		for (int i = 0; i < metodos.length; i++) {
-			String nome = metodos[i].getName();
-			Class cls[] = metodos[i].getParameterTypes();
-			if(cls.length!=1) continue;
-			if(!cls[0].getName().startsWith("java.lang")) continue;
-			if(!nome.startsWith("set") && !nome.startsWith("get")) continue;
-			String inputName = metodos[i].getName().substring(3);
-			String inputValue = "";
-			try{
-				Object object = obj.getClass().getMethod("get"+inputName,null).invoke(obj,new Object[]{});
-				if(object!=null){
-					inputValue = object.toString();
-				}
-			}catch(Exception e){
-				e.printStackTrace();
-			}
-			if(nome.equals("getId")){
-				Object val = metodos[i].invoke(obj,new Object[]{});
-				if(val!=null)
-					retorno+="<input type=\"hidden\" id=\"idField"+i+"\" name=\"id\" value=\""+val.toString()+"\" />";
-			}else if(nome.equals("setId")){
-				//do nothing :-)
-			}else if(nome.startsWith("setTxt")){
-				retorno+="<div><label for=\"idField"+i+"\">" + getLabel(obj,nome) + ": </label><textarea id=\"idField"+i+"\" name=\""+inputName+"\" cols=\"40\" rows=\"10\">"+inputValue.replace("<", "&lt;")+"</textarea></div>";
-			}else if(nome.startsWith("setList")){
-				retorno+="<div><label for=\"idField"+i+"\">" + getLabel(obj,nome) + ": </label><select id=\"idField"+i+"\" name=\""+inputName+"\" /><option>Selecione</option></select></div>";
-			}else if(nome.startsWith("set")){
-				retorno+="<div><label for=\"idField"+i+"\">" + getLabel(obj,nome) + ": </label><input id=\"idField"+i+"\" name=\""+inputName+"\" value=\""+inputValue.replace("\"", "&quot;")+"\" /></div>";
-			}
-		}
-		return retorno;
-	}
 	
-	public static String getLabel(String obj){
-		try{
-			return Messages.getString("Template."+obj); //$NON-NLS-1$
-		}catch(MissingResourceException e){
-			int ini = obj.lastIndexOf('.');
-			if(ini!=-1){
-				return separarNome(obj.substring(ini+1));
-			}
-			return separarNome(obj);
-		}
-	}
-	public static String getLabel(Object obj){
-		try{
-			return Messages.getString("Template."+obj.getClass().getCanonicalName()); //$NON-NLS-1$
-		}catch(MissingResourceException e){
-			return separarNome(obj.getClass().getSimpleName());
-		}
-	}
-	public static String getLabel(Object obj,String nome){
-		try{
-			return Messages.getString("Template."+obj.getClass().getCanonicalName()+"."+nome); //$NON-NLS-1$
-		}catch(MissingResourceException e){
-			if(nome.startsWith("setList")){
-				return separarNome(nome.substring(7));
-			}
-			if(nome.startsWith("setTxt")){
-				return separarNome(nome.substring(6));
-			}
-			return separarNome(nome.substring(3));
-		}
-	}
-	/**
-	 * 
-	 * @param nome
-	 * @return meuNome -> meu Nome
-	 */
-	private static String separarNome(String nome){
-		String retorno=nome.charAt(0)+"";
-		for (int i = 1; i < nome.length(); i++) {
-			String ch = nome.substring(i, i+1);
-			if(ch.toUpperCase().equals(ch)){
-				retorno+=' ' +ch;
-			}else{
-				retorno+=ch;
-			}
-		}
-		return retorno;
-	}
+	
+	
 }
