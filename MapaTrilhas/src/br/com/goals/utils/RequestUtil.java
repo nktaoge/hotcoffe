@@ -7,7 +7,10 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+
 public class RequestUtil {
+	private static Logger logger = Logger.getLogger(RequestUtil.class);
 	/**
 	 * Pega o request e atribui os parametros que casam com o objeto por atributo.<br>
 	 * ou seja, não coloca coisas que são null<br>
@@ -26,23 +29,25 @@ public class RequestUtil {
 		Set<String> keys = request.getParameterMap().keySet();
 		
 		Class cls = obj.getClass();
+		String objName = cls.getSimpleName();
 		Method metodos[] = cls.getMethods();
 		for(String key:keys){
-			String key2methodName="";
+			String key2methodName=key;
+			logger.debug("key="+key);
 			if(prefixo!=null){
 				//verifica se inicia com o prefixo
 				if(!key.startsWith(prefixo)){
 					continue;
 				}
 				key2methodName = key.substring(prefixo.length());
-				key2methodName = "set" + Character.toUpperCase(key2methodName.charAt(0))+key2methodName.substring(1);
 			}
-			
+			key2methodName = "set" + Character.toUpperCase(key2methodName.charAt(0))+key2methodName.substring(1);
+			logger.debug("key2methodName = " +key2methodName);			
 			for (int i = 0; i < metodos.length; i++) {
 				try {
 					if(metodos[i].getName().equals(key2methodName)){
 						String keyVal = request.getParameter(key);
-						System.out.println("RequestUtil.request(): " + metodos[i].getName() + " = " + URLDecoder.decode(keyVal, "ISO-8859-1"));
+						logger.debug(objName + "." + metodos[i].getName() + "(" + URLDecoder.decode(keyVal, "ISO-8859-1")+")");
 						Class parametros[]=metodos[i].getParameterTypes();
 						for (int j = 0; j < parametros.length; j++) {
 							if(parametros[j].getSimpleName().equals("Integer")){

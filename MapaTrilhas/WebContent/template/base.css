@@ -1,0 +1,22 @@
+body,form{
+	margin:0;
+	padding:0;
+	font-family: sans-serif;
+}
+form label{
+	display:block;
+	width: 150px;
+	float:left;
+	text-align: right;
+	padding-right: 5px;
+}
+form div{
+	clear: both;
+}
+.mensagem{
+	color: #f00;
+	border: 1px dotted #f00;
+	width: 400px;
+	padding: 5px;
+	margin: 5px;
+}

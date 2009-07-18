@@ -9,10 +9,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import br.com.goals.etrilhas.modelo.Base;
 
 public class BaseDao<T extends Base> {
 	private static String basePath = null;
+	private static Logger logger = Logger.getLogger(BaseDao.class);
 	 
 	/**
 	 * 
@@ -72,7 +75,8 @@ public class BaseDao<T extends Base> {
 	}
 	public void atualizar(T obj) throws Exception{
 		String path = getBasePath()+obj.getClass().getSimpleName()+ "-" + obj.getId() + ".xml";
-		System.out.println("atualizado " + path);
+		//logger.warn("atualizado " + path, new Exception());
+		logger.debug("atualizado " + path);		
 		gravar(obj, path);	
 	}
 	@SuppressWarnings("unchecked")
