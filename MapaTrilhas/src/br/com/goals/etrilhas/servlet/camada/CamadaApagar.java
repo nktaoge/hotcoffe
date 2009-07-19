@@ -6,7 +6,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.goals.etrilhas.facade.MapaFacade;
 import br.com.goals.etrilhas.modelo.Mapa;
 import br.com.goals.etrilhas.servlet.BaseServlet;
 
@@ -18,7 +17,6 @@ public class CamadaApagar extends BaseServlet{
 		Mapa mapa = getMapa(request);
 		try {
 			camadaFacade.apagar(mapa,id);
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
