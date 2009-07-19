@@ -1,4 +1,4 @@
-package br.com.goals.etrilhas.servlet;
+package br.com.goals.etrilhas.servlet.camada;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.com.goals.etrilhas.modelo.Camada;
 import br.com.goals.etrilhas.modelo.Mapa;
+import br.com.goals.etrilhas.servlet.BaseServlet;
 import br.com.goals.template.Template;
 import br.com.goals.utils.RequestUtil;
 
@@ -28,7 +29,7 @@ public class CamadaEditar extends BaseServlet {
 		Template template = getTemplate();
 		try{
 			Long id = Long.parseLong(request.getParameter("id"));
-			Camada camada = camadaDao.selecionar(getMapa(request),id);
+			Camada camada = camadaFacade.selecionar(getMapa(request),id);
 			template.setForm("camada",camada);
 			template.setArea("mensagem", "");
 		}catch(Exception e){
@@ -43,7 +44,7 @@ public class CamadaEditar extends BaseServlet {
 		try{
 			Mapa mapa = getMapa(request);
 			Long id = Long.parseLong(request.getParameter("Camada.id"));
-			Camada camada = camadaDao.selecionar(mapa,id);
+			Camada camada = camadaFacade.selecionar(mapa,id);
 			RequestUtil.request(request, camada);
 			template.setForm("camada",camada);
 			

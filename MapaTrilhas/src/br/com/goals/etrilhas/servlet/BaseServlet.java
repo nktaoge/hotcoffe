@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
 import br.com.goals.etrilhas.dao.CamadaDao;
+import br.com.goals.etrilhas.facade.CamadaFacade;
 import br.com.goals.etrilhas.facade.FacadeException;
 import br.com.goals.etrilhas.facade.MapaFacade;
 import br.com.goals.etrilhas.modelo.Mapa;
@@ -11,7 +12,7 @@ import br.com.goals.etrilhas.modelo.Mapa;
 public class BaseServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	protected static MapaFacade mapaFacade = MapaFacade.getInstance();
-	protected CamadaDao camadaDao = new CamadaDao();
+	protected static CamadaFacade camadaFacade = CamadaFacade.getInstance();
 	
     public BaseServlet() {
         super();

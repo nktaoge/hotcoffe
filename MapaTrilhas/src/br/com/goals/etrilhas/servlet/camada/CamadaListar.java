@@ -1,4 +1,4 @@
-package br.com.goals.etrilhas.servlet;
+package br.com.goals.etrilhas.servlet.camada;
 
 import java.io.IOException;
 
@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.com.goals.etrilhas.modelo.Camada;
 import br.com.goals.etrilhas.modelo.Mapa;
+import br.com.goals.etrilhas.servlet.BaseServlet;
 import br.com.goals.template.RsItemCustomizado;
 import br.com.goals.template.Template;
 

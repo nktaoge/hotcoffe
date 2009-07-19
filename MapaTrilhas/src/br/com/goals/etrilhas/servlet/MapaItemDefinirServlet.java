@@ -87,7 +87,7 @@ public class MapaItemDefinirServlet extends BaseServlet {
 			Long camadaId = Long.parseLong(request.getParameter("Camada.id"));
 			if(!camadaId.equals(mapaItem.getCamada().getId())){
 				//trocar de camada
-				Camada camada = camadaDao.selecionar(mapa,camadaId);
+				Camada camada = camadaFacade.selecionar(mapa,camadaId);
 				//retira da camada antiga
 				mapaItem.getCamada().getItems().remove(mapaItem);
 				mapaItem.setCamada(camada);

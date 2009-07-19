@@ -4,11 +4,19 @@ import java.util.Date;
 import java.util.List;
 
 import br.com.goals.etrilhas.dao.BaseDao;
+import br.com.goals.etrilhas.dao.CamadaDao;
 import br.com.goals.etrilhas.modelo.Camada;
 import br.com.goals.etrilhas.modelo.Mapa;
 
 public class CamadaFacade {
+	private static CamadaFacade instance = new CamadaFacade();
 	private BaseDao<Mapa> mapaDao = new BaseDao<Mapa>();
+	private CamadaDao camadaDao = new CamadaDao();
+	private CamadaFacade(){}
+	public static CamadaFacade getInstance() {
+		return instance ;
+	}
+	
 	public void criar(Camada camada, Mapa mapa) throws FacadeException{
 		camada.setId(new Date().getTime());
 		mapa.getCamadas().add(camada);
@@ -48,4 +56,20 @@ public class CamadaFacade {
 			throw new FacadeException(e.getMessage());
 		}
 	}
+	public Camada selecionar(Mapa mapa, Long id) throws FacadeException {
+		try {
+			return camadaDao.selecionar(mapa, id);
+		} catch (Exception e) {
+			throw new FacadeException(e.getMessage());
+		}
+	}
+	public void apagar(Mapa mapa, Long id) throws FacadeException {
+		try {
+			camadaDao.apagar(mapa, id);
+			MapaFacade.getInstance().atualizar(mapa);
+		} catch (Exception e) {
+			throw new FacadeException(e.getMessage());
+		}
+	}
+	
 }

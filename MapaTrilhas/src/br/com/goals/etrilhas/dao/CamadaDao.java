@@ -12,4 +12,14 @@ public class CamadaDao {
 		}
 		throw new Exception("Camada id " + id + " not found.");
 	}
+
+	public void apagar(Mapa mapa, Long id) throws Exception{
+		for(Camada tmp:mapa.getCamadas()){
+			if(tmp.getId().equals(id)){
+				mapa.getCamadas().remove(tmp);
+				return;
+			}
+		}
+		throw new Exception("Camada id " + id + " not found.");
+	}
 }

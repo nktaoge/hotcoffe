@@ -841,6 +841,8 @@ public class Template extends BaseTemplate{
 				Object lbl = obj.getClass().getMethod("getNome").invoke(obj);
 				if(lbl==null){
 					label = "<span title=\""+fieldName+"="+id + "\">Sem nome ("+(semNomeNum++)+")</span>";
+				}else{
+					label = lbl.toString();
 				}
 				html+="<div><label for=\""+fieldName+"_"+id+"\">"+label+"</label><input type=\"radio\" name=\""+fieldName+"\" id=\""+fieldName+"_"+id+"\" value=\""+id+"\" ";
 				if(checked!=null && checked.toString().equals(id)){
