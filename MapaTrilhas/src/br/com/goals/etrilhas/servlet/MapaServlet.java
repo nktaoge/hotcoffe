@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.goals.etrilhas.facade.MapaFacade;
 import br.com.goals.etrilhas.modelo.Camada;
 import br.com.goals.etrilhas.modelo.Mapa;
 import br.com.goals.etrilhas.modelo.MapaItem;
@@ -17,7 +16,7 @@ import br.com.goals.etrilhas.modelo.MapaItem;
  */
 public class MapaServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
-	private static MapaFacade mapaFacade = MapaFacade.getInstance();
+	
     /**
      * @see HttpServlet#HttpServlet()
      */

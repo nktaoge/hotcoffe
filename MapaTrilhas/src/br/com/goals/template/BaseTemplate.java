@@ -66,6 +66,7 @@ public class BaseTemplate{
 		Method[] metodos = obj.getClass().getMethods();
 		for (int i = 0; i < metodos.length; i++) {
 			String nome = metodos[i].getName();
+			logger.debug("metodo = " + nome);
 			Class cls[] = metodos[i].getParameterTypes();
 			if(cls.length!=1) continue;
 			if(!cls[0].getName().startsWith("java.lang")) continue;
@@ -75,7 +76,7 @@ public class BaseTemplate{
 			//Obter o valor
 			String inputValue = "";
 			try{
-				Object object = obj.getClass().getMethod("get"+inputName,null).invoke(obj,new Object[]{});
+				Object object = obj.getClass().getMethod("get"+inputName).invoke(obj,new Object[]{});
 				if(object!=null){
 					inputValue = object.toString();
 				}
@@ -88,11 +89,20 @@ public class BaseTemplate{
 			
 			//Montar o campo
 			if(nome.equals("getId")){
-				Object val = metodos[i].invoke(obj,new Object[]{});
+				Object val = metodos[i].invoke(obj);
 				if(val!=null)
-					retorno+="<input type=\"hidden\" id=\"idField"+i+"\" name=\"id\" value=\""+val.toString()+"\" />";
+					retorno+="<input type=\"hidden\" id=\"idField"+i+"\" name=\""+prefixo+"id\" value=\""+val.toString()+"\" />";
 			}else if(nome.equals("setId")){
-				//do nothing :-)
+				Object val=null;
+				try {
+					val = obj.getClass().getMethod("getId").invoke(obj);
+				} catch (SecurityException e) {
+					e.printStackTrace();
+				} catch (NoSuchMethodException e) {
+					e.printStackTrace();
+				}
+				if(val!=null)
+					retorno+="<input type=\"hidden\" id=\"idField"+i+"\" name=\""+prefixo+"id\" value=\""+val.toString()+"\" />";
 			}else if(nome.startsWith("setTxt")){
 				retorno+="<div><label for=\"idField"+i+"\">" + getLabel(obj,nome) + ": </label><textarea id=\"idField"+i+"\" name=\""+inputName+"\" cols=\"40\" rows=\"10\">"+inputValue.replace("<", "&lt;")+"</textarea></div>";
 			}else if(nome.startsWith("setList")){

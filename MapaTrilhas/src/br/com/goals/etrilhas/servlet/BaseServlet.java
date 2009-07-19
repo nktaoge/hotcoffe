@@ -4,11 +4,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
 import br.com.goals.etrilhas.dao.CamadaDao;
+import br.com.goals.etrilhas.facade.FacadeException;
+import br.com.goals.etrilhas.facade.MapaFacade;
 import br.com.goals.etrilhas.modelo.Mapa;
 
 public class BaseServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    
+	protected static MapaFacade mapaFacade = MapaFacade.getInstance();
 	protected CamadaDao camadaDao = new CamadaDao();
 	
     public BaseServlet() {
@@ -18,6 +20,14 @@ public class BaseServlet extends HttpServlet {
     	request.getSession().setAttribute("mapa",mapa);
 	}
     public Mapa getMapa(HttpServletRequest request){
-    	return (Mapa)request.getSession().getAttribute("mapa");
+    	Mapa mapa = (Mapa)request.getSession().getAttribute("mapa");
+    	if(mapa==null){
+    		try {
+				mapa = mapaFacade.selecionar(1L);
+			} catch (FacadeException e) {
+				e.printStackTrace();
+			}
+    	}
+    	return mapa; 
     }
 }

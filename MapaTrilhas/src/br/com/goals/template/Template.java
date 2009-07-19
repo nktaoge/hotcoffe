@@ -2,10 +2,8 @@ package br.com.goals.template;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -15,8 +13,7 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
-
-import br.com.goals.etrilhas.modelo.Camada;
+import org.apache.log4j.Logger;
 
 /**
  * Ações comuns ao template<br>
@@ -26,6 +23,7 @@ import br.com.goals.etrilhas.modelo.Camada;
  *
  */
 public class Template extends BaseTemplate{
+	private static Logger logger = Logger.getLogger(Template.class);
 	private static Pattern patRs = Pattern.compile("<!-- ini rs -->(.*?)<!-- fim rs -->", Pattern.DOTALL);
 	private static Pattern patRsItens = Pattern.compile("<!-- ini rs\\((.*?)\\) -->(.*?)<!-- fim rs\\(\\1\\) -->", Pattern.DOTALL);
 	private static Pattern patRsImagens = Pattern.compile("<!-- ini rs imagem\\((.*?)\\) -->(.*?)<!-- fim rs imagem\\(\\1\\) -->", Pattern.DOTALL);
@@ -33,6 +31,8 @@ public class Template extends BaseTemplate{
 	private static Pattern patProxima = Pattern.compile("<!-- ini proxima -->(.*?)<!-- fim proxima -->", Pattern.DOTALL);
 	private static Pattern patLimpaLink = Pattern.compile("(<a\\s.*?>|</a>)", Pattern.DOTALL);
 
+	private int semNomeNum = 1;
+	
 	/**
 	 * paginacao
 	 */
@@ -53,9 +53,6 @@ public class Template extends BaseTemplate{
 	public void addReplace(String igual,String novoValor){
 		substituir.put(igual, novoValor);
 	}
-	private String atribuiRsString(String template, ResultSet rs, String valor) throws SQLException {
-		return atribuiRsString(template,rs.getString(valor),valor);
-	}
 	
 	/**
 	 * Serve para retornar a pasta dos template(s)<br>
@@ -73,7 +70,16 @@ public class Template extends BaseTemplate{
 		return template;
 	}
 
-	private String atribuiRsString(String template, String valor,String chave){		
+	/**
+	 * Atribui a string na area.<br>
+	 * Se houver bloco, o bloco sera retirado.<br>
+	 * Se na marcacao conter dd/MM/yyyy a data sera convertida de yyyy-mm-dd para BR
+	 * @param template
+	 * @param valor
+	 * @param chave
+	 * @return
+	 */
+	private String atribuirRsString(String template, String valor,String chave,String fieldName){		
 		if(valor==null || valor.equals("")){
 			Pattern patRs = Pattern.compile("<!-- ini bloco " + chave + " -->(.*?)<!-- fim bloco " + chave + " -->", Pattern.DOTALL);
 			Matcher mat = patRs.matcher(template);
@@ -84,14 +90,16 @@ public class Template extends BaseTemplate{
 		Pattern patRs = Pattern.compile("<!-- ini rs\\(" + chave + "\\) -->(.*?)<!-- fim rs\\(" + chave + "\\) -->", Pattern.DOTALL);
 		Matcher mat = patRs.matcher(template);
 		if (mat.find()) {
-			if(valor==null){
-				valor="";
-			}
+			if(valor==null) valor="";
 			if(substituir.get(valor)!=null){
 				valor=substituir.get(valor);
 			}
-			if(mat.group(1).trim().equals("dd/MM/yyyy")){
+			String tmp=mat.group(1).trim();
+			if(tmp.equals("dd/MM/yyyy")){
 				valor = Conversor.deYYYYMMDDparaDDMMYYYY(valor);
+			}else if(tmp.startsWith("<input ")){
+				String aux =tmp.replaceAll("value=\"[^\"]*\"","value=\"" + valor.replace("\"", "&quot;") + "\""); 
+				valor = aux.replaceAll("name=\"[^\"]*\"","name=\"" + fieldName + "\"");
 			}
 			template = mat.replaceAll(StringUtils.tratarCaracteresEspeciaisRegex(valor));
 		}
@@ -316,7 +324,8 @@ public class Template extends BaseTemplate{
 						item = templateRs;
 						Matcher matCol = patRsItens.matcher(templateRs);
 						while (matCol.find()) {
-							item = atribuiRsString(item, rs, matCol.group(1));
+							String g1=matCol.group(1);
+							item = atribuirRsString(item, rs.getString(g1), g1,g1+"_"+i);
 						}
 						if(rsItemCustomizado!=null){
 							item=rsItemCustomizado.tratar(rs, item);
@@ -328,7 +337,8 @@ public class Template extends BaseTemplate{
 						item = templateRs;
 						Matcher matCol = patRsItens.matcher(templateRs);
 						while (matCol.find()) {
-							item = atribuiRsString(item, rs, matCol.group(1));
+							String g1=matCol.group(1);
+							item = atribuirRsString(item, rs.getString(g1), g1,g1+"_"+i);
 						}
 						if(rsItemCustomizado!=null){
 							item=rsItemCustomizado.tratar(rs, item);
@@ -339,8 +349,7 @@ public class Template extends BaseTemplate{
 				template = mat.replaceAll(StringUtils.tratarCaracteresEspeciaisRegex(sb.toString()));
 			}
 		} catch (Exception e) {
-			System.out.println("Erro no plugin.Template");
-			e.printStackTrace();
+			logger.error("Erro ",e);
 		}
 	}
 	public void encaixaResultSet(ResultSet rs) {
@@ -419,16 +428,30 @@ public class Template extends BaseTemplate{
 				for(int i=ini;i<tot && i<max;i++) {
 					Object obj = resultado.get(i);
 					Class cls = obj.getClass();
+					String baseName = cls.getSimpleName();
+					String id = i+"";
+					try{
+						id = cls.getMethod("getId").invoke(obj).toString();
+					}catch(Exception e){
+						
+					}
 					item = templateRs;
 					Matcher matCol = patRsItens.matcher(templateRs);
 					while (matCol.find()) {
+						String chave = matCol.group(1);
 						try{
-							String chave = matCol.group(1);
 							Method meth = cls.getMethod(chave);
 							Object retobj = meth.invoke(obj);
-							item = atribuiRsString(item,retobj==null?"":retobj.toString(),chave);
+							item = atribuirRsString(item,retobj==null?"":retobj.toString(),chave,baseName+"_"+id+"."+meth.getName());
 						} catch(NoSuchMethodException e){
-							System.out.println("Template.encaixaResultSet() Atencao, o metodo nao existe "+e.getMessage());
+							logger.warn("o metodo nao existe "+e.getMessage());
+							try{
+								Method meth = cls.getMethod("get" + Character.toUpperCase(chave.charAt(0)) + chave.substring(1));
+								Object retobj = meth.invoke(obj);
+								item = atribuirRsString(item,retobj==null?"":retobj.toString(),chave,baseName+"_"+id+"."+chave);
+							} catch(NoSuchMethodException e2){
+								logger.warn("também nao existe "+e2.getMessage());
+							}	
 						}
 					}
 					//procurar pelas imagens
@@ -438,9 +461,8 @@ public class Template extends BaseTemplate{
 							String chave = matCol.group(1);
 							Object retobj = cls.getMethod(chave).invoke(obj);
 							item = matCol.replaceAll(substituiSrcImagem(matCol.group(2), retobj.toString()));
-							//item = atribuiRsString(item,retobj.toString(),chave);
 						} catch(NoSuchMethodException e){
-							System.out.println("Template.encaixaResultSet() Atencao, o metodo nao existe "+e.getMessage());
+							logger.warn("o metodo nao existe "+e.getMessage());
 						}
 					}
 					if(rsItemCustomizado!=null){
@@ -451,8 +473,7 @@ public class Template extends BaseTemplate{
 				template = mat.replaceAll(StringUtils.tratarCaracteresEspeciaisRegex(sb.toString()));
 			}
 		} catch (Exception e) {
-			System.out.println("Erro no plugin.Template");
-			e.printStackTrace();
+			logger.error("Erro ",e);
 		}
 		
 	}
@@ -463,56 +484,13 @@ public class Template extends BaseTemplate{
 	@SuppressWarnings("unchecked")
 	public void encaixaResultSet(List resultado) {
 		encaixaResultSet(resultado,0,resultado.size());
-		if (true)return;
-		//ini nope
-		try {
-			String templateRs = "";
-			Matcher mat = patRs.matcher(template);
-			if (mat.find()) {
-				templateRs = mat.group(1);
-				StringBuilder sb = new StringBuilder();
-				String item;
-				int tot = resultado.size();
-				for(int i=0;i<tot;i++) {
-					Object obj = resultado.get(i);
-					Class cls = obj.getClass();
-					item = templateRs;
-					Matcher matCol = patRsItens.matcher(templateRs);
-					while (matCol.find()) {
-						try{
-							String chave = matCol.group(1);
-							Method meth = cls.getMethod(chave);
-							Object retobj = meth.invoke(obj);
-							item = atribuiRsString(item,retobj.toString(),chave);
-						} catch(NoSuchMethodException e){
-							System.out.println("Template.encaixaResultSet() Atencao, o metodo nao existe "+e.getMessage());
-						}
-					}
-					//procurar pelas imagens
-					matCol = patRsImagens.matcher(item);
-					while(matCol.find()){
-						try{
-							String chave = matCol.group(1);
-							Object retobj = cls.getMethod(chave).invoke(obj);
-							item = matCol.replaceAll(substituiSrcImagem(matCol.group(2), retobj.toString()));
-							//item = atribuiRsString(item,retobj.toString(),chave);
-						} catch(NoSuchMethodException e){
-							System.out.println("Template.encaixaResultSet() Atencao, o metodo nao existe "+e.getMessage());
-						}
-					}
-					if(rsItemCustomizado!=null){
-						item=rsItemCustomizado.tratar(obj, item);
-					}
-					sb.append(item);
-				}
-				template = mat.replaceAll(StringUtils.tratarCaracteresEspeciaisRegex(sb.toString()));
-			}
-		} catch (Exception e) {
-			System.out.println("Erro no plugin.Template");
-			e.printStackTrace();
-		}
-		
 	}
+	
+	/**
+	 * 
+	 * @param nome
+	 * @param href
+	 */
 	public void setLink(String nome,String href){
 		String link = getArea("link("+nome+")");
 		String novo = Template.substituiHrefA(link,href);
@@ -598,7 +576,6 @@ public class Template extends BaseTemplate{
 		Matcher mat = pat.matcher(template);
 		if (mat.find()) {
 			String tag = mat.group();
-			//System.out.println(tag);
 			//limpar o atributo
 			Pattern patAtr = Pattern.compile("\\s"+atributo + "=\".*?\"",Pattern.DOTALL);
 			Matcher matAtr = patAtr.matcher(tag);
@@ -735,7 +712,6 @@ public class Template extends BaseTemplate{
 			String opts = matSelect.group(3);
 			//retirar qualquer marca de selected="selected"
 			opts = opts.replace(" selected=\"selected\"", "");
-			//System.out.println(opts);
 			//achar o valor nos options e marcar
 			Pattern patOpt = Pattern.compile("<option[^>]*?value=\""+valor+"\"[^>]*?>");
 			Matcher matOpt = patOpt.matcher(opts);
@@ -744,15 +720,8 @@ public class Template extends BaseTemplate{
 				opt = opt.substring(0, opt.length()-1) + " selected=\"selected\">";
 				opts = matOpt.replaceAll(opt);
 			}
-			//System.out.println("**********");
-			//System.out.println(opts);
 			codHtml = matSelect.replaceAll(matSelect.group(1)+opts+"</select>");
-		}//else{
-			//System.out.println("not match!");
-		//}
-		
-		//System.out.println(codHtml);
-		
+		}
 		return codHtml;
 	}
 	/**
@@ -867,11 +836,11 @@ public class Template extends BaseTemplate{
 			String fieldName = opcoes.get(0).getClass().getSimpleName()+".id";
 			for (Object obj : opcoes) {
 				//ver se o obj tem id e nome
-				String id = obj.getClass().getMethod("getId", null).invoke(obj, null).toString();
+				String id = obj.getClass().getMethod("getId").invoke(obj).toString();
 				String label="";
-				Object lbl = obj.getClass().getMethod("getNome",null).invoke(obj, null);
+				Object lbl = obj.getClass().getMethod("getNome").invoke(obj);
 				if(lbl==null){
-					label = "<span title=\""+fieldName+"="+id + "\">Sem nome</span>";
+					label = "<span title=\""+fieldName+"="+id + "\">Sem nome ("+(semNomeNum++)+")</span>";
 				}
 				html+="<div><label for=\""+fieldName+"_"+id+"\">"+label+"</label><input type=\"radio\" name=\""+fieldName+"\" id=\""+fieldName+"_"+id+"\" value=\""+id+"\" ";
 				if(checked!=null && checked.toString().equals(id)){

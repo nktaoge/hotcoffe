@@ -69,4 +69,24 @@
     <servlet-name>MapaItemDefinirServlet</servlet-name>
     <url-pattern>/definirMapaItem</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CamadaListar</display-name>
+    <servlet-name>CamadaListar</servlet-name>
+    <servlet-class>br.com.goals.etrilhas.servlet.CamadaListar</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CamadaListar</servlet-name>
+    <url-pattern>/camadaListar</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CamadaEditar</display-name>
+    <servlet-name>CamadaEditar</servlet-name>
+    <servlet-class>br.com.goals.etrilhas.servlet.CamadaEditar</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CamadaEditar</servlet-name>
+    <url-pattern>/camadaEditar</url-pattern>
+  </servlet-mapping>
 </web-app>

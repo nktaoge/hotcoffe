@@ -1,6 +1,8 @@
 package br.com.goals.etrilhas.modelo;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Mapa extends Base{
@@ -8,7 +10,13 @@ public class Mapa extends Base{
 	private String imagemVetorial;
 	private String imagemSatelite;
 	private List<Camada> camadas = new ArrayList<Camada>();
+	private Comparator<Camada> comparador = new Comparator<Camada>(){
+		public int compare(Camada o1, Camada o2) {
+			return o1.getOrdem()-o2.getOrdem();
+		}		
+	};
 	public List<Camada> getCamadas() {
+		Collections.sort(camadas,comparador );
 		return camadas;
 	}
 	public void setCamadas(List<Camada> camadas) {
