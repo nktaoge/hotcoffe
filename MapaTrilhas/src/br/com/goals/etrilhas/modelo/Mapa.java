@@ -12,7 +12,11 @@ public class Mapa extends Base{
 	private List<Camada> camadas = new ArrayList<Camada>();
 	private Comparator<Camada> comparador = new Comparator<Camada>(){
 		public int compare(Camada o1, Camada o2) {
-			return o1.getOrdem()-o2.getOrdem();
+			try{
+				return o1.getOrdem()-o2.getOrdem();
+			}catch(Exception e){
+				return 0;
+			}
 		}		
 	};
 	public List<Camada> getCamadas() {

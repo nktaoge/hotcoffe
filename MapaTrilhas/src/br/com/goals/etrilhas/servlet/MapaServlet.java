@@ -41,7 +41,7 @@ public class MapaServlet extends BaseServlet {
 		setMapa(request,mapa);
 		String retorno = "<mapa>";
 		for(Camada camada:mapa.getCamadas()){
-			retorno +="<camada pid=\""+camada.getId()+"\">";
+			retorno +="<camada pid=\""+camada.getId()+"\" nome=\""+camada.getNome()+"\">";
 			for(MapaItem mapaItem:camada.getItems()){
 				retorno+="<mapaItem tipo=\""+mapaItem.getTipo()+"\" pid=\""+mapaItem.getId()+"\" x=\""+mapaItem.getX()+"\" y=\"" + mapaItem.getY() + "\" />";
 			}
@@ -49,6 +49,7 @@ public class MapaServlet extends BaseServlet {
 		}
 		retorno+="<msg>"+msg+"</msg>";
 		retorno+="</mapa>";
+		System.out.println(retorno);
 		response.getWriter().write(retorno);
 		response.getWriter().close();
 	}
