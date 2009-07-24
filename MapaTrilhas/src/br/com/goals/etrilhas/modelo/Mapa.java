@@ -11,7 +11,7 @@ public class Mapa extends Base implements Serializable{
 	private String imagemVetorial;
 	private String imagemSatelite;
 	private List<Camada> camadas = new ArrayList<Camada>();
-	private Comparator<Camada> comparador = new Comparator<Camada>(){
+	private static Comparator<Camada> comparador = new Comparator<Camada>(){
 		public int compare(Camada o1, Camada o2) {
 			try{
 				return o1.getOrdem()-o2.getOrdem();

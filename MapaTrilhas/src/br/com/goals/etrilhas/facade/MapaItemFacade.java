@@ -1,6 +1,7 @@
 package br.com.goals.etrilhas.facade;
 
 import java.util.Date;
+import java.util.List;
 
 import br.com.goals.etrilhas.dao.BaseDao;
 import br.com.goals.etrilhas.dao.VideoDao;
@@ -72,5 +73,14 @@ public class MapaItemFacade{
 			e.printStackTrace();
 			throw new FacadeException(e.getMessage());
 		}
+	}
+
+	public List<MapaItem> listar(Mapa mapa,Long camadaId) throws FacadeException {
+		for(Camada camada:mapa.getCamadas()){
+			if(camada.getId().equals(camadaId)){
+				return camada.getItems();
+			}
+		}
+		throw new FacadeException("Camada nao encontrada " + camadaId);
 	}
 }

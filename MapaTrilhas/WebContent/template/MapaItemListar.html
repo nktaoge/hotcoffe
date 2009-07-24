@@ -1,15 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-	<title>Lista de Camadas</title>
+	<title>Lista de Pontos</title>
 	<link href="estilo.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 	<!-- ini menu -->
 	<!-- fim menu -->
-	<h1>Lista de Camadas</h1>
+	<h1>Lista de Pontos</h1>
 	<div>
-		<a href="camadaCriar">Criar Camada</a>
+		<a href="CamadaListar">Listar Camadas</a>
 	</div>
 	<!-- ini box mensagem -->
 		<div class="mensagem">
@@ -18,7 +18,7 @@
 			<!-- fim mensagem -->
 		</div>
 	<!-- fim box mensagem -->
-	<form action="camadaListar" method="post">
+	<form action="MapaItemListar" method="post">
 		<table>
 			<tr>
 				<th>
@@ -35,7 +35,7 @@
 				<tr>
 					<td>
 						<!-- ini rs(nome) -->
-							Nome da Camada
+							Nome do Ponto
 						<!-- fim rs(nome) -->
 					</td>
 					<td>
@@ -50,15 +50,13 @@
 						<!-- ini link(apagar) -->
 							<a href="#" onclick="return confirm('Deseja mesmo apagar?')">Apagar</a>
 						<!-- fim link(apagar) -->
-						<!-- ini link(pontos) -->
-							<a href="#">Pontos</a>
-						<!-- fim link(pontos) -->
 					</td>
 				</tr>	
 			<!-- fim rs -->
 		</table>
 		<div>
 			<input type="submit" value="Enviar" />
+			<input type="hidden" name="camada.id" value="" />
 		</div>
 	</form>
 </body>

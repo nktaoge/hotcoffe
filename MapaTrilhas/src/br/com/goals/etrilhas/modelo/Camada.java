@@ -2,6 +2,8 @@ package br.com.goals.etrilhas.modelo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Camada extends Base implements Serializable{
@@ -14,6 +16,15 @@ public class Camada extends Base implements Serializable{
 	 */
 	private Mapa mapa;
 	private List<MapaItem> items = new ArrayList<MapaItem>();
+	private static Comparator<MapaItem> comparador = new Comparator<MapaItem>(){
+		public int compare(MapaItem o1, MapaItem o2) {
+			try{
+				return o1.getOrdem()-o2.getOrdem();
+			}catch(Exception e){
+				return 0;
+			}
+		}		
+	};
 	public Integer getOrdem() {
 		return ordem;
 	}
@@ -47,6 +58,7 @@ public class Camada extends Base implements Serializable{
 
 	
 	public List<MapaItem> getItems() {
+		Collections.sort(items,comparador );
 		return items;
 	}
 	public void setItems(List<MapaItem> items){

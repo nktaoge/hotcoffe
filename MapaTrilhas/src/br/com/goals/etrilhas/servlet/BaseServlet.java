@@ -2,14 +2,13 @@ package br.com.goals.etrilhas.servlet;
 
 import java.io.IOException;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import br.com.goals.etrilhas.facade.CamadaFacade;
 import br.com.goals.etrilhas.facade.FacadeException;
 import br.com.goals.etrilhas.facade.MapaFacade;
+import br.com.goals.etrilhas.facade.MapaItemFacade;
 import br.com.goals.etrilhas.modelo.Mapa;
 import br.com.goals.template.Template;
 
@@ -17,7 +16,7 @@ public abstract class BaseServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	protected static MapaFacade mapaFacade = MapaFacade.getInstance();
 	protected static CamadaFacade camadaFacade = CamadaFacade.getInstance();
-	
+	protected static MapaItemFacade mapaItemFacade = MapaItemFacade.getInstance();
     public BaseServlet() {
         super();
     }

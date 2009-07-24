@@ -808,6 +808,20 @@ public class Template extends BaseTemplate{
 		}
 		template = Template.substituiAtributoTag(template, "input",name, "value", valor.replace("\"", "&quot;"));
 	}
+	
+	/**
+	 * 
+	 * @param name &lt;input name="NAME"
+	 * @param valor se for null sera substituido por ""
+	 */
+	public void setInput(String name, Long valor) {
+		if(valor == null){
+			setInput(name, "");
+		}else{
+			setInput(name, valor+"");
+		}
+	}
+	
 	/**
 	 * &lt;form action="acao.do"><br>
 	 * &lt;-- ini area --><br>
@@ -866,6 +880,8 @@ public class Template extends BaseTemplate{
 		}
 		setArea(string, html);
 	}
+
+	
 	
 	
 	
