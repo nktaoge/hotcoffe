@@ -51,12 +51,12 @@
   </servlet-mapping>
   <servlet>
     <description></description>
-    <display-name>CamadaServlet</display-name>
-    <servlet-name>CamadaServlet</servlet-name>
-    <servlet-class>br.com.goals.etrilhas.servlet.camada.CamadaServlet</servlet-class>
+    <display-name>CamadaFlash</display-name>
+    <servlet-name>CamadaFlash</servlet-name>
+    <servlet-class>br.com.goals.etrilhas.servlet.camada.CamadaFlash</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>CamadaServlet</servlet-name>
+    <servlet-name>CamadaFlash</servlet-name>
     <url-pattern>/Camada.xml</url-pattern>
   </servlet-mapping>
   <servlet>
@@ -98,5 +98,15 @@
   <servlet-mapping>
     <servlet-name>CamadaApagar</servlet-name>
     <url-pattern>/camadaApagar</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CamadaCriar</display-name>
+    <servlet-name>CamadaCriar</servlet-name>
+    <servlet-class>br.com.goals.etrilhas.servlet.camada.CamadaCriar</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CamadaCriar</servlet-name>
+    <url-pattern>/camadaCriar</url-pattern>
   </servlet-mapping>
 </web-app>
