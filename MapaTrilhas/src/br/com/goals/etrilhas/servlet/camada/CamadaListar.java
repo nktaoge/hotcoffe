@@ -18,9 +18,8 @@ public class CamadaListar extends BaseServlet {
     public CamadaListar() {
         super();
     }
-    private Template getTemplate() throws IOException{
-    	Template template = new Template();
-		template.setTemplateFile("camadaListar.html");
+    public Template getTemplate(HttpServletRequest request) throws IOException{
+    	Template template = super.getTemplate(request);
 		template.setRsItemCustomizado(new RsItemCustomizado(){
 			public String tratar(Object o, String item) {
 				if(o instanceof Camada){
@@ -40,22 +39,20 @@ public class CamadaListar extends BaseServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//Montar resposta para o usuario
-		Template template = getTemplate();
+		Template template = getTemplate(request);
 		try{
 			Mapa mapa = getMapa(request);
 			template.encaixaResultSet(mapa.getCamadas());
-			template.setArea("mensagem","");
+			template.setMensagem("");
 		}catch(Exception e){
 			e.printStackTrace();
-			try{
-				template.setArea("mensagem",e.getMessage());
-			}catch(Exception e2){}
+			template.setMensagem("Erro: "+ e.getMessage());
 		}
 		response.getWriter().write(template.toString());
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//Montar resposta para o usuario
-		Template template = getTemplate();
+		Template template = getTemplate(request);
 		try{
 			Mapa mapa = getMapa(request);
 			for(Camada camada: mapa.getCamadas()){
@@ -70,12 +67,10 @@ public class CamadaListar extends BaseServlet {
 			template.encaixaResultSet(mapa.getCamadas());
 
 			mapaFacade.atualizar(mapa);
-			template.setArea("mensagem","Ordem alterada");
+			template.setMensagem("Ordem alterada.");
 		}catch(Exception e){
 			e.printStackTrace();
-			try{
-				template.setArea("mensagem",e.getMessage());
-			}catch(Exception e2){}
+			template.setMensagem("Erro: " + e.getMessage());
 		}
 		response.getWriter().write(template.toString());
 	}

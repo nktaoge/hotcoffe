@@ -1,11 +1,12 @@
 package br.com.goals.etrilhas.modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class Mapa extends Base{
+public class Mapa extends Base implements Serializable{
 	private static final long serialVersionUID = -5227948201808476322L;
 	private String imagemVetorial;
 	private String imagemSatelite;

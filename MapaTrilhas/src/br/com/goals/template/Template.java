@@ -521,6 +521,17 @@ public class Template extends BaseTemplate{
 	}
 	
 	/**
+	 * Metodo para conveniencia
+	 * @param mensagem
+	 */
+	public void setMensagem(String mensagem){
+		try{
+			setArea("mensagem", mensagem);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	/**
 	 * Se houver uma marcacao &lt;-- ini box "area" --> e o valor for nul ou "" o box sera retirado.
 	 * @param area
 	 * @param valor

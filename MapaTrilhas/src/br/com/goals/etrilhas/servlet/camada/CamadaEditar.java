@@ -1,8 +1,8 @@
 package br.com.goals.etrilhas.servlet.camada;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,21 +18,16 @@ public class CamadaEditar extends BaseServlet {
     public CamadaEditar() {
         super();
     }
-
-    private Template getTemplate() throws IOException{
-    	Template template = new Template();
-    	template.setTemplateFile("camadaEditar.html");
-    	return template;
-    }
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Template template = getTemplate();
+		Template template = getTemplate(request);
 		try{
 			Long id = Long.parseLong(request.getParameter("id"));
 			Camada camada = camadaFacade.selecionar(getMapa(request),id);
 			template.setForm("camada",camada);
-			template.setArea("mensagem", "");
+			template.setMensagem("");
 		}catch(Exception e){
+			template.setMensagem("Erro: " + e.getMessage());
 			e.printStackTrace();
 		}
 		response.getWriter().write(template.toString());
@@ -40,7 +35,7 @@ public class CamadaEditar extends BaseServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Template template = getTemplate();
+		Template template = getTemplate(request);
 		try{
 			Mapa mapa = getMapa(request);
 			Long id = Long.parseLong(request.getParameter("Camada.id"));
@@ -50,9 +45,10 @@ public class CamadaEditar extends BaseServlet {
 			
 			mapaFacade.atualizar(mapa);
 			
-			template.setArea("mensagem", "");
+			template.setMensagem("Camada atualizada com sucesso.");
 		}catch(Exception e){
 			e.printStackTrace();
+			template.setMensagem("Erro: " + e.getMessage());
 		}
 		response.getWriter().write(template.toString());
 		response.getWriter().close();

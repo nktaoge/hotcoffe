@@ -20,13 +20,13 @@ import br.com.goals.utils.RequestUtil;
 /**
  * Servlet implementation class MapaItemDefinirServlet
  */
-public class MapaItemDefinirServlet extends BaseServlet {
+public class MapaItemDefinir extends BaseServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MapaItemDefinirServlet() {
+    public MapaItemDefinir() {
         super();
     }
 
@@ -34,13 +34,19 @@ public class MapaItemDefinirServlet extends BaseServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Template template = new Template();
-		template.setTemplateFile("definirMapaItem.html");
+		Long id = null;
+		Template template = null;
+		try{
+			id = Long.parseLong(request.getParameter("id"));
+			super.setCurrentMapaItemId(request, id);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		template = getTemplate(request);
 		/*
 		 * Verificar se possui um tipo
 		 */
 		try{
-			Long id = Long.parseLong(request.getParameter("id"));
 			Mapa mapa = getMapa(request);
 			MapaItemDao mapaItemDao = new MapaItemDao();
 			MapaItem mapaItem = mapaItemDao.selecionar(mapa, id);
@@ -50,7 +56,7 @@ public class MapaItemDefinirServlet extends BaseServlet {
 			template.setSelect("tipo", mapaItem.getTipo());
 			template.setForm("campos do tipo",mapaItem.getValor());
 			template.setRadio("camadas",mapa.getCamadas(),mapaItem.getCamada().getId());
-			template.setArea("mensagem","");
+			template.setMensagem("");
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -97,15 +103,14 @@ public class MapaItemDefinirServlet extends BaseServlet {
 				camada.getItems().add(mapaItem);
 			}
 			//Montar resposta para o usuario
-			Template template = new Template();
-			template.setTemplateFile("definirMapaItem.html");
+			Template template = getTemplate(request);
 			template.set("id",id);
 			template.setInput("nome",mapaItem.getNome());
 			template.setInput("icone",mapaItem.getIcone());
 			template.setSelect("tipo",mapaItem.getTipo());
 			template.setForm("campos do tipo",mapaItem.getValor());
 			template.setRadio("camadas",mapa.getCamadas(),mapaItem.getCamada().getId());
-			template.setArea("mensagem","Alterado com sucesso");
+			template.setMensagem("Alterado com sucesso");
 			response.getWriter().write(template.toString());
 		}catch(Exception e){
 			e.printStackTrace();
