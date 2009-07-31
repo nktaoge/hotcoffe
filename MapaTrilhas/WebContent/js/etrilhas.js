@@ -12,8 +12,11 @@ function executarFuncao(args){
 		  url: "data/"+tipo+"-"+id+".html",
 		  cache: false,
 		  success: function(html){
+				var obj = $("#"+tipo);
 		    	$("#"+tipo).html(btnClose + html);
-		    	$("#"+tipo).show();
+		    	obj.css('top', $(window).height()/2-obj.height()/2);
+                obj.css('left', $(window).width()/2-obj.width()/2); 
+                obj.show();
 		  }
 	});
 }
