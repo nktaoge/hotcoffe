@@ -31,14 +31,22 @@ public class BaseTemplate{
 		try{
 			return Messages.getString(strKey);
 		}catch(MissingResourceException e){
+			String retorno = "";
 			logger.warn("Label not found: " + strKey);
 			if(nome.startsWith("setList")){
-				return separarNome(nome.substring(7));
+				retorno = separarNome(nome.substring(7));
+			}else if(nome.startsWith("setTxt")){
+				retorno = separarNome(nome.substring(6));
+			}else if(nome.startsWith("setHtml")){
+				retorno = separarNome(nome.substring(7));
+			}else{
+				retorno = separarNome(nome.substring(3));
 			}
-			if(nome.startsWith("setTxt")){
-				return separarNome(nome.substring(6));
+			//casos comuns
+			if(retorno.equals("Descricao")){
+				retorno = "Descri&ccedil;&atilde;o";
 			}
-			return separarNome(nome.substring(3));
+			return retorno;
 		}
 	}
 	/**
@@ -103,6 +111,8 @@ public class BaseTemplate{
 				}
 				if(val!=null)
 					retorno+="<input type=\"hidden\" id=\"idField"+i+"\" name=\""+prefixo+"id\" value=\""+val.toString()+"\" />";
+			}else if(nome.startsWith("setHtml")){
+				retorno+="<div><label for=\"idField"+i+"\">" + getLabel(obj,nome) + ": </label><textarea id=\"idField"+i+"\" name=\""+inputName+"\" class=\"mceEditor\" cols=\"40\" rows=\"10\">"+inputValue.replace("<", "&lt;")+"</textarea></div>";
 			}else if(nome.startsWith("setTxt")){
 				retorno+="<div><label for=\"idField"+i+"\">" + getLabel(obj,nome) + ": </label><textarea id=\"idField"+i+"\" name=\""+inputName+"\" cols=\"40\" rows=\"10\">"+inputValue.replace("<", "&lt;")+"</textarea></div>";
 			}else if(nome.startsWith("setList")){

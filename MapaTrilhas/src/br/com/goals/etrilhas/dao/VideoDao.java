@@ -13,7 +13,7 @@ public class VideoDao extends BaseDao<Video> {
 		Template template = new Template();
 		template.setTemplateFile("video.html");
 		template.setArea("video", obj.getTxtCodYoutube());
-		template.setArea("descricao",obj.getTxtDescricao());
+		template.setArea("descricao",obj.getHtmlDescricao());
 		File f = new File(getBasePath()+"Video-"+obj.getId()+".html");
 		FileUtils.writeStringToFile(f, template.toString(),"ISO-8859-1");
 	}

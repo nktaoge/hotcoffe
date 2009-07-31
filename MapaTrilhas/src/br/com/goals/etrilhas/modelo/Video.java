@@ -3,7 +3,7 @@ package br.com.goals.etrilhas.modelo;
 public class Video extends Base{
 	private static final long serialVersionUID = -8460141478677514943L;
 	private String urlRelativaFlv;
-	private String txtDescricao;
+	private String htmlDescricao;
 	private String codTxtYoutube;
 	public String getTxtCodYoutube() {
 		return codTxtYoutube;
@@ -14,15 +14,15 @@ public class Video extends Base{
 	/**
 	 * @return the txtDescricao
 	 */
-	public String getTxtDescricao() {
-		return txtDescricao;
+	public String getHtmlDescricao() {
+		return htmlDescricao;
 	}
 
 	/**
 	 * @param txtDescricao the txtDescricao to set
 	 */
-	public void setTxtDescricao(String txtDescricao) {
-		this.txtDescricao = txtDescricao;
+	public void setHtmlDescricao(String txtDescricao) {
+		this.htmlDescricao = txtDescricao;
 	}
 	public String getUrlRelativaFlv() {
 		return urlRelativaFlv;
