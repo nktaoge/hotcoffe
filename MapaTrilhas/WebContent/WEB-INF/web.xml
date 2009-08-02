@@ -119,4 +119,27 @@
     <servlet-name>MapaItemListar</servlet-name>
     <url-pattern>/MapaItemListar</url-pattern>
   </servlet-mapping>
+  
+  <!-- ini jFM -->
+  	<!-- 
+  	<context-param>
+    	<description>seperate with commas</description>
+    	<param-name>dirmappings</param-name>
+		<param-value>/=C:/java/jakarta-tomcat-5.0.19/webapps/ROOT,apache=D:/apache/htdocs</param-value>
+    </context-param>
+     -->
+	<context-param>
+    	<description>is prepended to file paths</description>
+    	<param-name>filebase</param-name>
+		<param-value>D:/workspaceE/MapaTrilhas/WebContent/media</param-value>
+    </context-param>
+	<servlet>
+        <servlet-name>Controller</servlet-name>
+        <servlet-class>de.jwi.jfm.servlets.Controller</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Controller</servlet-name>
+		<url-pattern>/path/*</url-pattern>
+    </servlet-mapping>
+  <!-- fim jFM -->
 </web-app>
