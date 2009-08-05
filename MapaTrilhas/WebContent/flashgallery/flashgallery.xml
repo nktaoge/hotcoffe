@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pics>
+	<pic src="http://localhost:8080/MapaTrilhas/flashgallery/img/bailarina.jpg" title="Titulo" />
+	<pic src="http://localhost:8080/MapaTrilhas/flashgallery/img/bailarinabotero.jpg" title="Titulo" />
+	<pic src="http://localhost:8080/MapaTrilhas/flashgallery/img/baile1.jpg" title="Titulo" />
+	<pic src="http://localhost:8080/MapaTrilhas/flashgallery/img/baile.jpg" title="Titulo" />
+	<pic src="http://localhost:8080/MapaTrilhas/flashgallery/img/balao03.jpg" title="Titulo" />
+	<pic src="http://localhost:8080/MapaTrilhas/flashgallery/img/balaobicho.jpg" title="Titulo" />
+	<pic src="http://localhost:8080/MapaTrilhas/flashgallery/img/banheiro_banana_craft.jpg" title="Titulo" />
+	<pic src="http://localhost:8080/MapaTrilhas/flashgallery/img/pompom.jpg" title="Titulo" />
+</pics>
