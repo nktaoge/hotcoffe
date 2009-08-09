@@ -43,7 +43,10 @@ public class MapaServlet extends BaseServlet {
 		for(Camada camada:mapa.getCamadas()){
 			retorno +="<camada pid=\""+camada.getId()+"\" nome=\""+camada.getNome()+"\">";
 			for(MapaItem mapaItem:camada.getItems()){
-				retorno+="<mapaItem tipo=\""+mapaItem.getTipo()+"\" pid=\""+mapaItem.getId()+"\" x=\""+mapaItem.getX()+"\" y=\"" + mapaItem.getY() + "\" />";
+				if(mapaItem.getIcone()==null){
+					mapaItem.setIcone("default.png");
+				}
+				retorno+="<mapaItem icone=\""+mapaItem.getIcone()+"\" tipo=\""+mapaItem.getTipo()+"\" pid=\""+mapaItem.getId()+"\" x=\""+mapaItem.getX()+"\" y=\"" + mapaItem.getY() + "\" />";
 			}
 			retorno +="</camada>";
 		}

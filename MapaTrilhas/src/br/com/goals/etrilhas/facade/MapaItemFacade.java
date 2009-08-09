@@ -83,4 +83,16 @@ public class MapaItemFacade{
 		}
 		throw new FacadeException("Camada nao encontrada " + camadaId);
 	}
+
+	public void apagar(Mapa mapa, Long id) throws FacadeException {
+		for(Camada camada:mapa.getCamadas()){
+			for(MapaItem mapaItem:camada.getItems()){
+				if(mapaItem.getId().equals(id)){
+					camada.getItems().remove(mapaItem);
+					MapaFacade.getInstance().atualizar(mapa);
+					return;
+				}
+			}
+		}		
+	}
 }

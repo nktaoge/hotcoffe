@@ -655,7 +655,7 @@ public class Template extends BaseTemplate{
 	public static String substituiEntre(String procurarEm,String ini, String fim, String conteudo) {
 		int i=procurarEm.indexOf(ini);
 		if(i!=-1){
-			int f = procurarEm.indexOf(fim);
+			int f = procurarEm.indexOf(fim,i);
 			if(f!=-1){
 				procurarEm=procurarEm.substring(0,i+ini.length())
 				+conteudo+
@@ -689,10 +689,11 @@ public class Template extends BaseTemplate{
 	 * @return código alterado
 	 */
 	public static String substituiConteudoTag(String codHmtl, String tag, String name, String value) {
-		final String reg = "<" + tag + "(\\s|\\s[^<]*?\\s)name=\""+name+"\"(.*?)>";
+		final String reg = "<" + tag + "(\\s|\\s[^<]*?\\s)name=\""+name+"\"([^>]*)>";
 		Pattern pat = Pattern.compile(reg, Pattern.DOTALL);
 		Matcher matcher = pat.matcher(codHmtl);
 		if (matcher.find()){
+			logger.debug("iniTag = " + matcher.group());
 			return substituiEntre(codHmtl, matcher.group(), "</"+tag+">",value);
 		}
 		return codHmtl;
@@ -707,6 +708,22 @@ public class Template extends BaseTemplate{
 	public Template setSelect(String selectName,String valor){
 		template = marcarSelect(template, selectName, valor);
 		return this; 
+	}
+	
+	/**
+	 * 
+	 * @param selectName
+	 * @param valor
+	 * @param list
+	 */
+	public void setSelect(String selectName, String valor, String[] list) {
+		String opts="";
+		for(String aux:list){
+			opts+="<option value=\""+aux.replace("\"", "&quot;")+"\">"+aux.replace("<","&lt;")+"</option>";
+		}
+		logger.debug("opts = '" + opts+"'");
+		template = substituiConteudoTag(template, "select", selectName, opts);
+		template = marcarSelect(template, selectName, valor);
 	}
 	/**
 	 * Marcar o item de um select
@@ -880,6 +897,8 @@ public class Template extends BaseTemplate{
 		}
 		setArea(string, html);
 	}
+
+	
 
 	
 	

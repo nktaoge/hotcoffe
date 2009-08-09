@@ -1,5 +1,6 @@
 package br.com.goals.etrilhas.servlet;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -14,6 +15,7 @@ import br.com.goals.etrilhas.facade.MapaItemFacade;
 import br.com.goals.etrilhas.modelo.Camada;
 import br.com.goals.etrilhas.modelo.Mapa;
 import br.com.goals.etrilhas.modelo.MapaItem;
+import br.com.goals.template.AreaNaoEncontradaException;
 import br.com.goals.template.Template;
 import br.com.goals.utils.RequestUtil;
 
@@ -30,6 +32,14 @@ public class MapaItemDefinir extends BaseServlet {
         super();
     }
 
+    private void carregarTemplate(Template template,MapaItem mapaItem,Mapa mapa) throws AreaNaoEncontradaException{
+    	template.setInput("nome",mapaItem.getNome());
+    	File dirIcones = new File(template.getTemplatePath().getParent(),"media/icones");
+		template.setSelect("icone",mapaItem.getIcone(),dirIcones.list());
+		template.setSelect("tipo", mapaItem.getTipo());
+		template.setForm("campos do tipo",mapaItem.getValor());
+		template.setRadio("camadas",mapa.getCamadas(),mapaItem.getCamada().getId());
+    }
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -51,11 +61,7 @@ public class MapaItemDefinir extends BaseServlet {
 			MapaItemDao mapaItemDao = new MapaItemDao();
 			MapaItem mapaItem = mapaItemDao.selecionar(mapa, id);
 			template.set("id",id);
-			template.setInput("nome",mapaItem.getNome());
-			template.setInput("icone",mapaItem.getIcone());
-			template.setSelect("tipo", mapaItem.getTipo());
-			template.setForm("campos do tipo",mapaItem.getValor());
-			template.setRadio("camadas",mapa.getCamadas(),mapaItem.getCamada().getId());
+			carregarTemplate(template, mapaItem, mapa);
 			template.setMensagem("");
 		}catch(Exception e){
 			e.printStackTrace();
@@ -88,7 +94,7 @@ public class MapaItemDefinir extends BaseServlet {
 				RequestUtil.request(request, mapaItem.getValor());
 			}
 			MapaItemFacade.getInstance().criarHtml(mapaItem);
-			MapaFacade.getInstance().atualizar(mapa);
+			
 			//Verificar se colocou em outra camada
 			Long camadaId = Long.parseLong(request.getParameter("Camada.id"));
 			if(!camadaId.equals(mapaItem.getCamada().getId())){
@@ -102,14 +108,13 @@ public class MapaItemDefinir extends BaseServlet {
 				}
 				camada.getItems().add(mapaItem);
 			}
+			MapaFacade.getInstance().atualizar(mapa);
+			
 			//Montar resposta para o usuario
 			Template template = getTemplate(request);
 			template.set("id",id);
-			template.setInput("nome",mapaItem.getNome());
-			template.setInput("icone",mapaItem.getIcone());
-			template.setSelect("tipo",mapaItem.getTipo());
-			template.setForm("campos do tipo",mapaItem.getValor());
-			template.setRadio("camadas",mapa.getCamadas(),mapaItem.getCamada().getId());
+			carregarTemplate(template, mapaItem, mapa);
+			
 			template.setMensagem("Alterado com sucesso");
 			response.getWriter().write(template.toString());
 		}catch(Exception e){
