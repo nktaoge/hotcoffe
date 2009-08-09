@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<java version="1.6.0_06" class="java.beans.XMLDecoder"> 
+ <object class="br.com.goals.etrilhas.modelo.Mapa"> 
+  <void property="id"> 
+   <long>1</long> 
+  </void> 
+ </object> 
+</java> 
