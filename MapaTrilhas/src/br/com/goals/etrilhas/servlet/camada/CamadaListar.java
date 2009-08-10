@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import br.com.goals.etrilhas.modelo.Camada;
 import br.com.goals.etrilhas.modelo.Mapa;
 import br.com.goals.etrilhas.servlet.BaseServlet;
+import br.com.goals.template.AreaNaoEncontradaException;
 import br.com.goals.template.RsItemCustomizado;
 import br.com.goals.template.Template;
 
@@ -26,9 +27,13 @@ public class CamadaListar extends BaseServlet {
 					Camada camada = (Camada) o;
 					Template temp = new Template();
 					temp.setTemplate(item);
-					temp.setLink("editar", "camadaEditar?id=" + camada.getId());
-					temp.setLink("apagar", "camadaApagar?id=" + camada.getId());
-					temp.setLink("pontos", "MapaItemListar?camada.id=" + camada.getId());
+					try {
+						temp.setLink("editar", "camadaEditar?id=" + camada.getId());
+						temp.setLink("apagar", "camadaApagar?id=" + camada.getId());
+						temp.setLink("pontos", "MapaItemListar?camada.id=" + camada.getId());
+					} catch (AreaNaoEncontradaException e) {
+						e.printStackTrace();
+					}
 					return temp.toString();
 				}else{
 					return item;

@@ -490,11 +490,17 @@ public class Template extends BaseTemplate{
 	 * 
 	 * @param nome
 	 * @param href
+	 * @throws AreaNaoEncontradaException 
 	 */
-	public void setLink(String nome,String href){
-		String link = getArea("link("+nome+")");
-		String novo = Template.substituiHrefA(link,href);
-		template = template.replace(link, novo);
+	public void setLink(String nome,String href) throws AreaNaoEncontradaException{
+		if(href==null){
+			logger.debug("retirando o link "+nome);
+			setArea("link("+nome+")","");
+		}else{
+			String link = getArea("link("+nome+")");
+			String novo = Template.substituiHrefA(link,href);
+			template = template.replace(link, novo);
+		}
 	}
 	public String getArea(String area) {
 		area = area.replace("(","\\(");
@@ -521,7 +527,8 @@ public class Template extends BaseTemplate{
 	}
 	
 	/**
-	 * Metodo para conveniencia
+	 * Metodo para conveniencia<br>
+	 * igual a setArea("mensagem", mensagem);
 	 * @param mensagem
 	 */
 	public void setMensagem(String mensagem){
@@ -541,13 +548,16 @@ public class Template extends BaseTemplate{
 		area = area.replace("(","\\(");
 		area = area.replace(")","\\)");
 		area = area.replace(".","\\.");
+		boolean boxApagado = false;
 		if(valor==null || valor.equals("")){
 			Pattern patBoxArea = Pattern.compile("<!-- ini box "+area+" -->(.*?)<!-- fim box "+area+" -->",Pattern.DOTALL);
 			Matcher mat = patBoxArea.matcher(template);
 			if(mat.find()){
 				template = mat.replaceAll("");
+				boxApagado = true;
 			}
-		}else{
+		}
+		if(!boxApagado){
 			Pattern patArea = Pattern.compile("<!-- ini "+area+" -->(.*?)<!-- fim "+area+" -->",Pattern.DOTALL);
 			Matcher mat = patArea.matcher(template);
 			if(mat.find()){

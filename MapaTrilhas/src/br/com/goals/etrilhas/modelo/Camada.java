@@ -25,6 +25,11 @@ public class Camada extends Base implements Serializable{
 			}
 		}		
 	};
+	
+	@Override
+	public void setId(Long id) {
+		super.setId(id);
+	}
 	public Integer getOrdem() {
 		return ordem;
 	}

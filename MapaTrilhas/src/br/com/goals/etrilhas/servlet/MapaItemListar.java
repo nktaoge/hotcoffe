@@ -7,9 +7,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.goals.etrilhas.modelo.Camada;
 import br.com.goals.etrilhas.modelo.Mapa;
 import br.com.goals.etrilhas.modelo.MapaItem;
+import br.com.goals.template.AreaNaoEncontradaException;
 import br.com.goals.template.RsItemCustomizado;
 import br.com.goals.template.Template;
 
@@ -27,8 +27,12 @@ public class MapaItemListar extends BaseServlet {
 					MapaItem mapaItem = (MapaItem) o;
 					Template temp = new Template();
 					temp.setTemplate(item);
-					temp.setLink("editar", "definirMapaItem?id=" + mapaItem.getId());
-					temp.setLink("apagar", "MapaItemApagar?id=" + mapaItem.getId());
+					try {
+						temp.setLink("editar", "definirMapaItem?id=" + mapaItem.getId());
+						temp.setLink("apagar", "MapaItemApagar?id=" + mapaItem.getId());
+					} catch (AreaNaoEncontradaException e) {
+						e.printStackTrace();
+					}
 					return temp.toString();
 				}else{
 					return item;

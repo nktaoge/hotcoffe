@@ -13,6 +13,7 @@ import br.com.goals.etrilhas.dao.MapaItemDao;
 import br.com.goals.etrilhas.facade.MapaFacade;
 import br.com.goals.etrilhas.facade.MapaItemFacade;
 import br.com.goals.etrilhas.modelo.Camada;
+import br.com.goals.etrilhas.modelo.Galeria;
 import br.com.goals.etrilhas.modelo.Mapa;
 import br.com.goals.etrilhas.modelo.MapaItem;
 import br.com.goals.template.AreaNaoEncontradaException;
@@ -39,6 +40,12 @@ public class MapaItemDefinir extends BaseServlet {
 		template.setSelect("tipo", mapaItem.getTipo());
 		template.setForm("campos do tipo",mapaItem.getValor());
 		template.setRadio("camadas",mapa.getCamadas(),mapaItem.getCamada().getId());
+		String linkEdicao = null;
+		if(mapaItem.getValor() !=null && mapaItem.getValor() instanceof Galeria){
+			Galeria galeria =(Galeria) mapaItem.getValor();
+			linkEdicao = "GaleriaServlet?galeriaId=" + galeria.getId();
+		}
+		template.setLink("linkEdicao", linkEdicao);
     }
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)

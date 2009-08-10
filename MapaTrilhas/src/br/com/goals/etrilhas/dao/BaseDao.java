@@ -5,10 +5,11 @@ import java.beans.XMLEncoder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import br.com.goals.etrilhas.modelo.Base;
@@ -16,7 +17,39 @@ import br.com.goals.etrilhas.modelo.Base;
 public class BaseDao<T extends Base> {
 	private static String basePath = null;
 	private static Logger logger = Logger.getLogger(BaseDao.class);
-	 
+	private static Long lastIdGenerated = null; 
+	private static File lastIds;
+	public BaseDao() {
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static long getNextId(){
+		if(lastIdGenerated==null){
+			lastIdGenerated = 3L;
+			try {
+				lastIds = new File(new BaseDao().getBasePath()+"lastIds.txt");
+				if(!lastIds.exists()){
+					FileUtils.writeStringToFile(lastIds, lastIdGenerated.toString(),"UTF-8");
+				}else{
+					String lastId;
+					lastId = FileUtils.readFileToString(lastIds,"UTF-8");
+					lastIdGenerated = Long.parseLong(lastId); 
+				}
+			} catch (IOException e) {
+				logger.error("Erro ",e);
+			}
+		}else{
+			//entao eh not null, e por isso incrementamos
+			lastIdGenerated++;
+			try{
+				FileUtils.writeStringToFile(lastIds, lastIdGenerated.toString(),"UTF-8");
+			}catch(Exception e){
+				logger.error("Erro " , e);
+			}
+		}
+		return lastIdGenerated;
+	}
 	/**
 	 * 
 	 * @return a pasta data
@@ -36,6 +69,17 @@ public class BaseDao<T extends Base> {
 		}
 		return basePath;
 	}
+	
+	public static void setBasePath(String basePath){
+		logger.info("BaseDao.setBasePath('" +basePath +"');");
+		File verificar = new File(basePath);
+		if(!verificar.exists()){
+			logger.info("Criando o diretorio " + basePath + "...");
+			verificar.mkdirs();
+		}
+		BaseDao.basePath = basePath;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public T selecionar(long id) throws Exception{
 		File dir = new File(getBasePath());
@@ -53,9 +97,9 @@ public class BaseDao<T extends Base> {
 	}
 	public void criar(T obj) throws Exception {
 		//Cria o ID
-		obj.setId(new Date().getTime());
+		obj.setId(getNextId());
 		String path = getBasePath()+obj.getClass().getSimpleName()+ "-" + obj.getId() + ".xml";
-		System.out.println(path);
+		logger.debug("criando " + path);	
 		gravar(obj, path);
 	}
 	/**

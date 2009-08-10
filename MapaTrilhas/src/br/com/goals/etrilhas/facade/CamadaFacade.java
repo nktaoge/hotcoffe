@@ -18,7 +18,7 @@ public class CamadaFacade {
 	}
 	
 	public void criar(Camada camada, Mapa mapa) throws FacadeException{
-		camada.setId(new Date().getTime());
+		camada.setId(BaseDao.getNextId());
 		mapa.getCamadas().add(camada);
 		try{
 			mapaDao.atualizar(mapa);

@@ -62,7 +62,7 @@ public class MapaItemFacade{
 
 	public void criar(MapaItem mapaItem, Mapa mapa) throws FacadeException{
 		try {
-			mapaItem.setId(new Date().getTime());
+			mapaItem.setId(BaseDao.getNextId());
 			for(Camada camada:mapa.getCamadas()){
 				if(camada.getId().equals(mapaItem.getCamada().getId())){
 					camada.getItems().add(mapaItem);

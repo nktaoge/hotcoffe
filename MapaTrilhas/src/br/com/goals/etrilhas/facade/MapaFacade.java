@@ -3,10 +3,11 @@ package br.com.goals.etrilhas.facade;
 import java.util.List;
 
 import br.com.goals.etrilhas.dao.BaseDao;
+import br.com.goals.etrilhas.dao.MapaDao;
 import br.com.goals.etrilhas.modelo.Mapa;
 
 public class MapaFacade extends BaseFacade<Mapa>{
-	private BaseDao<Mapa> mapaDao = new BaseDao<Mapa>();
+	private MapaDao mapaDao = new MapaDao();
 	private static MapaFacade instance = new MapaFacade();
 	private MapaFacade(){}
 	public static MapaFacade getInstance() {

@@ -24,6 +24,11 @@ public class MapaItem extends Base implements Serializable{
 		return new String[]{"camada"};
 	}
 	
+	@Override
+	public void setId(Long id) {
+		super.setId(id);
+	}
+	
 	public Integer getOrdem() {
 		return ordem;
 	}
