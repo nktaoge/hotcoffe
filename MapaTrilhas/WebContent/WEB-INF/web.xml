@@ -2,9 +2,9 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
   <display-name>MapaTrilhas</display-name>
   <context-param>
-  	<description>Sobreescreve o valor default</description>
-  	<param-name>chroot</param-name>
-  	<param-value>D:\workspaceE\MapaTrilhas\WebContent</param-value>
+    <description>Sobreescreve o valor default</description>
+    <param-name>chroot</param-name>
+    <param-value>D:\workspaceE\MapaTrilhas\WebContent</param-value>
   </context-param>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
@@ -146,5 +146,25 @@
   <servlet-mapping>
     <servlet-name>MapaItemApagar</servlet-name>
     <url-pattern>/MapaItemApagar</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>GaleriaServlet</display-name>
+    <servlet-name>GaleriaServlet</servlet-name>
+    <servlet-class>br.com.goals.etrilhas.servlet.galeria.GaleriaServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GaleriaServlet</servlet-name>
+    <url-pattern>/GaleriaServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>InserirFoto</display-name>
+    <servlet-name>InserirFoto</servlet-name>
+    <servlet-class>br.com.goals.etrilhas.servlet.galeria.InserirFoto</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>InserirFoto</servlet-name>
+    <url-pattern>/InserirFoto</url-pattern>
   </servlet-mapping>
 </web-app>

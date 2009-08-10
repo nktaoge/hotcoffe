@@ -56,11 +56,22 @@
 		</div>
 	<!-- fim box mensagem -->
 	<form action="?" method="post">
-		<!-- ini rs -->
-			<!-- ini rs imagem(getUrlRelativaJpg) -->
-				<img src="#" />
-			<!-- fim rs imagem(getUrlRelativaJpg) -->
-		<!-- fim rs -->
+		<div>
+			<!-- ini rs -->
+				<!-- ini rs imagem(getUrlRelativaJpg) -->
+					<img src="#" />
+				<!-- fim rs imagem(getUrlRelativaJpg) -->
+			<!-- fim rs -->
+		</div>
+		<div>
+			<input type="submit" value="Enviar" />
+		</div>
+	</form>
+	<form action="InserirFoto" method="post" enctype="multipart/form-data">
+		<div>
+			<input type="file" name="arquivo" />
+			<textarea name="descricao" rows="10" cols="10" class="mceEditor"></textarea>
+		</div>
 		<div>
 			<input type="submit" value="Enviar" />
 		</div>
