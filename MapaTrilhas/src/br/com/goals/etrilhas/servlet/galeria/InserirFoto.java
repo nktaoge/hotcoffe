@@ -55,23 +55,27 @@ public class InserirFoto extends BaseServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@SuppressWarnings("unchecked")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//TODO verificar se podemos sobreescrever
 		if (FileUpload.isMultipartContent(request)) {
 			try {
 				DiskFileUpload diskFileUpload = new DiskFileUpload();
 				diskFileUpload.setSizeMax(1000000);
 				diskFileUpload.setSizeThreshold(4096);
-				List<FileItem> fileItens = diskFileUpload.parseRequest(request);		
+				List<FileItem> fileItens = diskFileUpload.parseRequest(request);
+				String descricao = "";
 				for(FileItem fileItem:fileItens){
 					if (fileItem.isFormField()) {
 						logger.debug(fileItem.getFieldName()+" = " +fileItem.getString());
-						
+						descricao = fileItem.getString();
 					}else{
 						File subindo = new File(fileItem.getName());
 						File arquivo = new File(getFotosDir(),subindo.getName());
 						fileItem.write(arquivo);
 					}
 				}
+				//TODO salvar a descricao usando um template
 			} catch (Exception e) {
 				throw new ServletException(e.getMessage(), e);
 			}
