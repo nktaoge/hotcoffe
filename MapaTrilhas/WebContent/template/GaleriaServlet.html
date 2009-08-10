@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-	<title>MapaItem <!-- ini id -->numero<!-- fim id --></title>
+	<title>Galeria <!-- ini id -->numero<!-- fim id --></title>
 	<link href="estilo.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="tiny_mce/tiny_mce.js"></script>
 	<script type="text/javascript">
@@ -47,7 +47,7 @@
 <body>
 	<!-- ini menu -->
 	<!-- fim menu -->
-	<h1>Definindo o Ponto cod: <!-- ini id -->numero<!-- fim id --></h1>
+	<h1>Editando a Galeria cod: <!-- ini id -->numero<!-- fim id --></h1>
 	<!-- ini box mensagem -->
 		<div class="mensagem">
 			<!-- ini mensagem -->
@@ -55,47 +55,12 @@
 			<!-- fim mensagem -->
 		</div>
 	<!-- fim box mensagem -->
-	<form action="definirMapaItem" method="post">
-		<table>
-			<tr>
-				<td valign="top">
-					<div class="tit" title="Defina a camada que este ponto pertence">Camada:</div>
-					<div>
-						<!-- ini camadas -->
-						<!-- fim camadas -->
-					</div>
-					<a href="CamadaListar">Gerenciar Camadas</a>
-				</td>
-				<td>
-					<div>
-						
-						<input type="hidden" name="id" value="" />
-						<label for="tipo">Tipo:</label>
-						<select name="tipo" id="tipo">
-							<option value="Galeria">Galeria de Imagens</option>
-							<option value="Foto360">Foto 360</option>
-							<option value="Video">V&iacute;deo</option>
-							<option value="MapaLinkMapa">Link para outro Mapa</option>
-						</select>
-					</div>
-					<div>
-						<label for="nome">Nome:</label>
-						<input type="text" name="nome" id="nome" value="" />
-					</div>
-					<div>
-						<label for="icone">Icone:</label>
-						<select name="icone" id="icone">
-						
-						</select>
-					</div>
-					<!-- ini campos do tipo -->
-					<!-- fim campos do tipo -->
-					<!-- ini link(linkEdicao) -->
-						<a href="#">Editar</a>
-					<!-- fim link(linkEdicao) -->
-				</td>
-			</tr>
-		</table>
+	<form action="?" method="post">
+		<!-- ini rs -->
+			<!-- ini rs imagem(getUrlRelativaJpg) -->
+				<img src="#" />
+			<!-- fim rs imagem(getUrlRelativaJpg) -->
+		<!-- fim rs -->
 		<div>
 			<input type="submit" value="Enviar" />
 		</div>
