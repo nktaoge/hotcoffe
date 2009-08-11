@@ -55,20 +55,20 @@
 			<!-- fim mensagem -->
 		</div>
 	<!-- fim box mensagem -->
-	<form action="?" method="post">
-		<div>
-			<!-- ini rs -->
+	<div>
+		<!-- ini rs -->
+			<div style="float:left; width:200px; height:200px; border: 1px solid #888; overflow:auto;">
 				<!-- ini rs imagem(getUrlRelativaJpg) -->
-					<img src="#" />
+					<img src="#" height="100" alt="Imagem"/>
 				<!-- fim rs imagem(getUrlRelativaJpg) -->
-			<!-- fim rs -->
-		</div>
-		<div>
-			<input type="submit" value="Enviar" />
-		</div>
-	</form>
+				<!-- ini rs(getTxtDescricao) -->
+				<!-- fim rs(getTxtDescricao) -->
+			</div>
+		<!-- fim rs -->
+	</div>
 	<form action="InserirFoto" method="post" enctype="multipart/form-data">
 		<div>
+			<input type="hidden" name="galeriaId" value="" />
 			<input type="file" name="arquivo" />
 			<textarea name="descricao" rows="10" cols="10" class="mceEditor"></textarea>
 		</div>

@@ -25,7 +25,7 @@
         <void property="valor"> 
          <object class="br.com.goals.etrilhas.modelo.Galeria"> 
           <void property="id"> 
-           <long>6</long> 
+           <long>7</long> 
           </void> 
          </object> 
         </void> 
