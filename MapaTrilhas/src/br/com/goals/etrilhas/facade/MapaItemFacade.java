@@ -6,6 +6,7 @@ import java.util.List;
 import br.com.goals.etrilhas.dao.BaseDao;
 import br.com.goals.etrilhas.dao.VideoDao;
 import br.com.goals.etrilhas.modelo.Camada;
+import br.com.goals.etrilhas.modelo.Galeria;
 import br.com.goals.etrilhas.modelo.Mapa;
 import br.com.goals.etrilhas.modelo.MapaItem;
 import br.com.goals.etrilhas.modelo.Video;
@@ -20,6 +21,11 @@ public class MapaItemFacade{
 	public static MapaItemFacade getInstance() {
 		return instance;
 	}
+	
+	/**
+	 * 
+	 * @param mapaItem
+	 */
 	public void criarHtml(MapaItem mapaItem){
 		try{
 			if(mapaItem.getTipo()!=null){
@@ -29,6 +35,8 @@ public class MapaItemFacade{
 					video.setId(mapaItem.getId());
 					VideoDao videoDao = new VideoDao();
 					videoDao.criar(video);
+				}else if(mapaItem.getTipo().equals("Galeria")){
+					GaleriaFacade.getInstance().criarHtml((Galeria)mapaItem.getValor(),mapaItem.getId());
 				}
 			}
 		}catch(Exception e){

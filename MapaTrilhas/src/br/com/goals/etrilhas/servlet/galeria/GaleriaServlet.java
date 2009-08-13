@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import br.com.goals.etrilhas.facade.GaleriaFacade;
 import br.com.goals.etrilhas.modelo.Galeria;
 import br.com.goals.etrilhas.servlet.BaseServlet;
+import br.com.goals.template.AreaNaoEncontradaException;
 import br.com.goals.template.Template;
 
 /**
@@ -27,6 +28,17 @@ public class GaleriaServlet extends BaseServlet {
         super();
     }
 
+    @Override
+    public Template getTemplate(HttpServletRequest request) throws IOException {
+    	Template template = super.getTemplate(request);
+    	try {
+			template.setArea("id",request.getParameter("galeriaId"));
+		} catch (AreaNaoEncontradaException e) {
+			e.printStackTrace();
+		}
+    	return template;
+    }
+    
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -34,8 +46,11 @@ public class GaleriaServlet extends BaseServlet {
 		Template template = getTemplate(request);
 		try{
 			Long galeriaId = Long.parseLong(request.getParameter("galeriaId"));
+			template.setInput("galeriaId", galeriaId);
 			Galeria galeria = galeriaFacade.selecionar(galeriaId);
+			logger.debug("galeria.getFotos().size() = " + galeria.getFotos().size());
 			template.encaixaResultSet(galeria.getFotos());
+			template.setMensagem("");
 		}catch(Exception e){
 			logger.error("Erro inesperado ",e);
 			template.setMensagem(e.getMessage());

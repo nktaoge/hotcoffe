@@ -460,6 +460,7 @@ public class Template extends BaseTemplate{
 						try{
 							String chave = matCol.group(1);
 							Object retobj = cls.getMethod(chave).invoke(obj);
+							logger.debug("imagem " + retobj.toString());
 							item = matCol.replaceAll(substituiSrcImagem(matCol.group(2), retobj.toString()));
 						} catch(NoSuchMethodException e){
 							logger.warn("o metodo nao existe "+e.getMessage());
@@ -478,7 +479,12 @@ public class Template extends BaseTemplate{
 		
 	}
 	/**
-	 * Coloca a lista de resultados no template
+	 * Coloca a lista de resultados no template<br>
+	 * <code>
+	 * &lt;!-- ini rs imagem(getUrlRelativaJpg) --&gt;<br>
+	 * 	&lt;img src="#" /&gt;<br>
+	 * &lt;!-- fim rs imagem(getUrlRelativaJpg) --&gt;<br>
+	 * </code>
 	 * @param resultado lista de objetos do resultado
 	 */
 	@SuppressWarnings("unchecked")
@@ -558,6 +564,7 @@ public class Template extends BaseTemplate{
 			}
 		}
 		if(!boxApagado){
+			if(valor==null) valor="";
 			Pattern patArea = Pattern.compile("<!-- ini "+area+" -->(.*?)<!-- fim "+area+" -->",Pattern.DOTALL);
 			Matcher mat = patArea.matcher(template);
 			if(mat.find()){

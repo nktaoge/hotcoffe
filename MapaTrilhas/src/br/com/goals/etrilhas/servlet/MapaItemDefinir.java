@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.goals.etrilhas.dao.MapaItemDao;
+import br.com.goals.etrilhas.facade.GaleriaFacade;
 import br.com.goals.etrilhas.facade.MapaFacade;
 import br.com.goals.etrilhas.facade.MapaItemFacade;
 import br.com.goals.etrilhas.modelo.Camada;
@@ -98,6 +99,13 @@ public class MapaItemDefinir extends BaseServlet {
 				mapaItem.setValor(obj);
 			}else{
 				//O tipo permanesce o mesmo
+				if(mapaItem.getValor()!=null && mapaItem.getValor() instanceof Galeria){
+					Galeria galeria = (Galeria)mapaItem.getValor();
+					if(galeria.getId()!=null){
+						galeria = GaleriaFacade.getInstance().selecionar(galeria.getId());
+						mapaItem.setValor(galeria);
+					}
+				}
 				RequestUtil.request(request, mapaItem.getValor());
 			}
 			MapaItemFacade.getInstance().criarHtml(mapaItem);
