@@ -12,70 +12,12 @@
      </void> 
     </object> 
    </void> 
-   <void method="add"> 
-    <object class="br.com.goals.etrilhas.modelo.Foto"> 
-     <void property="txtDescricao"> 
-      <string>&lt;p&gt;asdf asdf asd&lt;/p&gt;</string> 
-     </void> 
-     <void property="urlRelativaJpg"> 
-      <string>media/fotos/horarioServidor.gif</string> 
-     </void> 
-    </object> 
-   </void> 
-   <void method="add"> 
-    <object class="br.com.goals.etrilhas.modelo.Foto"> 
-     <void property="txtDescricao"> 
-      <string></string> 
-     </void> 
-     <void property="urlRelativaJpg"> 
-      <string>media/fotos/images.jpg</string> 
-     </void> 
-    </object> 
-   </void> 
-   <void method="add"> 
-    <object class="br.com.goals.etrilhas.modelo.Foto"> 
-     <void property="txtDescricao"> 
-      <string></string> 
-     </void> 
-     <void property="urlRelativaJpg"> 
-      <string>media/fotos/alfa_glossy.jpg</string> 
-     </void> 
-    </object> 
-   </void> 
-   <void method="add"> 
-    <object class="br.com.goals.etrilhas.modelo.Foto"> 
-     <void property="txtDescricao"> 
-      <string>&lt;p&gt;teaetae&lt;/p&gt;</string> 
-     </void> 
-     <void property="urlRelativaJpg"> 
-      <string>media/fotos/alfa_glossy.jpg</string> 
-     </void> 
-    </object> 
-   </void> 
-   <void method="add"> 
-    <object class="br.com.goals.etrilhas.modelo.Foto"> 
-     <void property="txtDescricao"> 
-      <string>&lt;p&gt;asdfasdfa&lt;/p&gt;&#13;
-&lt;p&gt;sdf&lt;/p&gt;&#13;
-&lt;p&gt;asd&lt;/p&gt;&#13;
-&lt;p&gt;fa&lt;/p&gt;&#13;
-&lt;p&gt;sdf&lt;/p&gt;&#13;
-&lt;p&gt;asdf&lt;/p&gt;&#13;
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;&#13;
-&lt;p&gt;asd&lt;/p&gt;&#13;
-&lt;p&gt;f&lt;/p&gt;&#13;
-&lt;p&gt;as&lt;/p&gt;&#13;
-&lt;p&gt;dfa&lt;/p&gt;&#13;
-&lt;p&gt;sdf&lt;/p&gt;</string> 
-     </void> 
-     <void property="urlRelativaJpg"> 
-      <string>media/fotos/alfa_glossy.jpg</string> 
-     </void> 
-    </object> 
-   </void> 
   </void> 
   <void property="id"> 
    <long>7</long> 
+  </void> 
+  <void property="txtDescricao"> 
+   <string></string> 
   </void> 
  </object> 
 </java> 

@@ -1,6 +1,9 @@
-var btnClose = "<div id=\"titleBar\"><a href=\"#\" onclick=\"fecharVideo()\">Fechar</a></div>";
-function fecharVideo(){
+var btnClose = "<div id=\"titleBar\"><a href=\"javascript:fecharBox();\"><img src=\"img/btnFechar.png\" alt=\"fechar\"/></a></div>";
+function fecharBox(){
 	$("#Video").hide();
+	$("#Galeria").hide();
+	$("#Video").html("");
+	$("#Galeria").html("");
 }
 function executarFuncao(args){
 	var a = args.split(":");
@@ -16,7 +19,7 @@ function executarFuncao(args){
 		    	$("#"+tipo).html(btnClose + html);
 		    	obj.css('top', $(window).height()/2-obj.height()/2);
                 obj.css('left', $(window).width()/2-obj.width()/2); 
-                obj.show();
+                obj.show('slow');
 		  }
 	});
 }
@@ -46,3 +49,34 @@ function definirMapaItem(id){
 		
 	}
 }
+var aPicL=$("#pic0");
+var fotoPrincipalN=1;
+function openFoto(indice){
+	var url = arrFotos[indice];
+	arrFotosI = indice;
+	var aPic = $("#pic" + arrFotosI);
+	aPic.css("color","#f00");
+	aPicL.css("color","#000");
+	aPicL = aPic;
+	fotoPrincipalN++;
+	var openId = "#fotoPrincipal"+(fotoPrincipalN%2);
+	fotoPrincipalN++;
+	var closeId = "#fotoPrincipal"+(fotoPrincipalN%2);
+	fotoPrincipalN++;
+	var open = $(openId);
+	open.html("<img src=\""+url+"\" alt=\"Imagem\" height=\"277\" />");
+	$(closeId).hide('slow');
+	open.show('slow');	
+}
+function nextFoto(){
+	arrFotosI++;
+	openFoto(arrFotosI%arrFotos.length);
+}
+function prevFoto(){
+	arrFotosI--;
+	if(arrFotosI<0){
+		arrFotosI=arrFotos.length-1;
+	}
+	openFoto(arrFotosI);
+}
+
