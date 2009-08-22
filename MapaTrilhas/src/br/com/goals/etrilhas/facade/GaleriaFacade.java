@@ -81,7 +81,7 @@ public class GaleriaFacade extends BaseFacade<Galeria>{
 		Template template = new Template();
 		template.setTemplateFile("galeria.html");
 		template.setArea("links", scriptArr + links);
-		template.setArea("foto", "<img src=\""+primeiraFoto.getUrlRelativaJpg()+"\" height=\"300\" />");
+		template.setArea("foto", "<img src=\""+primeiraFoto.getUrlRelativaJpg()+"\" height=\"277\" />");
 		template.setArea("descricao",primeiraFoto.getTxtDescricao());
 		File f = new File(galeriaDao.getBasePath()+"Galeria-"+itemId+".html");
 		FileUtils.writeStringToFile(f, template.toString(),"ISO-8859-1");
