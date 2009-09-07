@@ -28,9 +28,9 @@ public class IpFlutuante implements Filter {
 					//atualizar o Ip na goals
 					System.out.println("Atualizando o ip na goals");
 					try {
-						URL url = new URL("http://www.goals.com.br/remote_hosts/?nome=fabio&senha=fabio123");
+						URL url = new URL("http://www.goals.com.br/remote_hosts/?nome=fabio&senha=");
 						url.getContent();
-						Thread.sleep(60000);
+						Thread.sleep(600000);
 					} catch (MalformedURLException e) {
 						e.printStackTrace();
 					} catch (IOException e) {
