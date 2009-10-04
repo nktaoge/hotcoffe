@@ -40,14 +40,14 @@ public class BaseDao<T extends Base> {
 				logger.error("Erro ",e);
 			}
 		}else{
-			//entao eh not null, e por isso incrementamos
-			lastIdGenerated++;
 			try{
 				FileUtils.writeStringToFile(lastIds, lastIdGenerated.toString(),"UTF-8");
 			}catch(Exception e){
 				logger.error("Erro " , e);
 			}
 		}
+		//entao eh not null, e por isso incrementamos
+		lastIdGenerated++;
 		return lastIdGenerated;
 	}
 	/**

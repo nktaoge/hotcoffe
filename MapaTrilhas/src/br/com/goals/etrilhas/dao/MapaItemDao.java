@@ -17,14 +17,25 @@ public class MapaItemDao extends BaseDao<MapaItem> {
 		return super.listar();
 	}
 	public MapaItem selecionar(Mapa mapa,Long id) throws Exception{
+		MapaItem retorno = null;
 		for(Camada camada:mapa.getCamadas()){
 			for(MapaItem mapaItem:camada.getItems()){
 				if(mapaItem.getId().equals(id)){
 					mapaItem.setCamada(camada);
-					return mapaItem;
+					if(retorno==null){
+						retorno = mapaItem;
+					}else{
+						//ha um segundo com o mesmo id?
+						camada.getItems().remove(mapaItem);
+						break;
+					}
 				}
 			}
 		}
-		throw new Exception("Item com o id "+ id + " nao encontrado.");
+		if(retorno==null){
+			throw new Exception("Item com o id "+ id + " nao encontrado.");
+		}else{
+			return retorno;
+		}
 	}
 }

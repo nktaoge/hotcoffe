@@ -1,11 +1,5 @@
 package br.com.goals.etrilhas.dao;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
-
-import org.apache.commons.io.FileUtils;
-
 import br.com.goals.etrilhas.modelo.Camada;
 import br.com.goals.etrilhas.modelo.Galeria;
 import br.com.goals.etrilhas.modelo.Mapa;
