@@ -13,7 +13,11 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
+
+import com.sun.xml.internal.bind.v2.runtime.RuntimeUtil.ToStringAdapter;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Ações comuns ao template<br>
@@ -23,7 +27,7 @@ import org.apache.log4j.Logger;
  *
  */
 public class Template extends BaseTemplate{
-	private static Logger logger = Logger.getLogger(Template.class);
+	private static Logger logger = Logger.getLogger(Template.class.getName());
 	private static Pattern patRs = Pattern.compile("<!-- ini rs -->(.*?)<!-- fim rs -->", Pattern.DOTALL);
 	private static Pattern patRsItens = Pattern.compile("<!-- ini rs\\((.*?)\\) -->(.*?)<!-- fim rs\\(\\1\\) -->", Pattern.DOTALL);
 	private static Pattern patRsImagens = Pattern.compile("<!-- ini rs imagem\\((.*?)\\) -->(.*?)<!-- fim rs imagem\\(\\1\\) -->", Pattern.DOTALL);
@@ -349,7 +353,7 @@ public class Template extends BaseTemplate{
 				template = mat.replaceAll(StringUtils.tratarCaracteresEspeciaisRegex(sb.toString()));
 			}
 		} catch (Exception e) {
-			logger.error("Erro ",e);
+			logger.log(Level.SEVERE, "Erro", e);
 		}
 	}
 	public void encaixaResultSet(ResultSet rs) {
@@ -368,7 +372,9 @@ public class Template extends BaseTemplate{
 		template = templateOriginal;
 		return retorno;
 	}
-
+	
+	
+	
 	/**
 	 * Retorna o objeto template de uma área
 	 * @param area nome da área
@@ -444,13 +450,13 @@ public class Template extends BaseTemplate{
 							Object retobj = meth.invoke(obj);
 							item = atribuirRsString(item,retobj==null?"":retobj.toString(),chave,baseName+"_"+id+"."+meth.getName());
 						} catch(NoSuchMethodException e){
-							logger.warn("o metodo nao existe "+e.getMessage());
+							logger.warning("o metodo nao existe "+e.getMessage());
 							try{
 								Method meth = cls.getMethod("get" + Character.toUpperCase(chave.charAt(0)) + chave.substring(1));
 								Object retobj = meth.invoke(obj);
 								item = atribuirRsString(item,retobj==null?"":retobj.toString(),chave,baseName+"_"+id+"."+chave);
 							} catch(NoSuchMethodException e2){
-								logger.warn("também nao existe "+e2.getMessage());
+								logger.warning("também nao existe "+e2.getMessage());
 							}	
 						}
 					}
@@ -460,10 +466,10 @@ public class Template extends BaseTemplate{
 						try{
 							String chave = matCol.group(1);
 							Object retobj = cls.getMethod(chave).invoke(obj);
-							logger.debug("imagem " + retobj.toString());
+							logger.info("imagem " + retobj.toString());
 							item = matCol.replaceAll(substituiSrcImagem(matCol.group(2), retobj.toString()));
 						} catch(NoSuchMethodException e){
-							logger.warn("o metodo nao existe "+e.getMessage());
+							logger.warning("o metodo nao existe "+e.getMessage());
 						}
 					}
 					if(rsItemCustomizado!=null){
@@ -474,7 +480,7 @@ public class Template extends BaseTemplate{
 				template = mat.replaceAll(StringUtils.tratarCaracteresEspeciaisRegex(sb.toString()));
 			}
 		} catch (Exception e) {
-			logger.error("Erro ",e);
+			logger.log(Level.SEVERE,"Erro ",e);
 		}
 		
 	}
@@ -500,7 +506,7 @@ public class Template extends BaseTemplate{
 	 */
 	public void setLink(String nome,String href) throws AreaNaoEncontradaException{
 		if(href==null){
-			logger.debug("retirando o link "+nome);
+			logger.info("retirando o link "+nome);
 			setArea("link("+nome+")","");
 		}else{
 			String link = getArea("link("+nome+")");
@@ -710,7 +716,7 @@ public class Template extends BaseTemplate{
 		Pattern pat = Pattern.compile(reg, Pattern.DOTALL);
 		Matcher matcher = pat.matcher(codHmtl);
 		if (matcher.find()){
-			logger.debug("iniTag = " + matcher.group());
+			logger.info("iniTag = " + matcher.group());
 			return substituiEntre(codHmtl, matcher.group(), "</"+tag+">",value);
 		}
 		return codHmtl;
@@ -738,7 +744,7 @@ public class Template extends BaseTemplate{
 		for(String aux:list){
 			opts+="<option value=\""+aux.replace("\"", "&quot;")+"\">"+aux.replace("<","&lt;")+"</option>";
 		}
-		logger.debug("opts = '" + opts+"'");
+		logger.info("opts = '" + opts + "'");
 		template = substituiConteudoTag(template, "select", selectName, opts);
 		template = marcarSelect(template, selectName, valor);
 	}
@@ -802,10 +808,12 @@ public class Template extends BaseTemplate{
 		retorno += template.substring(last);
 		setTemplate(retorno);
 	}
+	
 	@Override
 	public String toString() {
 		return getResultado();
 	}
+	
 	/**
 	 * Set area e tambem campos do tipo input<br>
 	 * se o valor for null completa o campo com ""
