@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+<!--
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd"> 
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
+ -->
+    <servlet>
+        <servlet-name>guestbook</servlet-name>
+        <servlet-class>guestbook.GuestbookServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>guestbook</servlet-name>
+        <url-pattern>/guestbook</url-pattern>
+    </servlet-mapping>
+    <servlet>
+    	<servlet-name>pergunta-add</servlet-name>
+    	<servlet-class>br.com.goals.quiz.servlet.PerguntaAdd</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>pergunta-add</servlet-name>
+        <url-pattern>/perguntaAdd</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>sign</servlet-name>
+        <servlet-class>guestbook.SignGuestbookServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>sign</servlet-name>
+        <url-pattern>/sign</url-pattern>
+    </servlet-mapping>
+    <welcome-file-list>
+        <welcome-file>guestbook.jsp</welcome-file>
+    </welcome-file-list>
+</web-app>

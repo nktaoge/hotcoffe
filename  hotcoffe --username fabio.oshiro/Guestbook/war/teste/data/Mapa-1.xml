@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<java version="1.6.0_06" class="java.beans.XMLDecoder"> 
+ <object class="br.com.goals.etrilhas.modelo.Mapa"> 
+  <void property="camadas"> 
+   <void method="add"> 
+    <object class="br.com.goals.etrilhas.modelo.Camada"> 
+     <void property="descricao"> 
+      <string></string> 
+     </void> 
+     <void property="id"> 
+      <long>3</long> 
+     </void> 
+     <void property="items"> 
+      <void method="add"> 
+       <object class="br.com.goals.etrilhas.modelo.MapaItem"> 
+        <void property="icone"> 
+         <string>default.png</string> 
+        </void> 
+        <void property="id"> 
+         <long>4</long> 
+        </void> 
+        <void property="nome"> 
+         <string></string> 
+        </void> 
+        <void property="tipo"> 
+         <string>Galeria</string> 
+        </void> 
+        <void property="valor"> 
+         <object class="br.com.goals.etrilhas.modelo.Galeria"> 
+          <void property="fotos"> 
+           <void method="add"> 
+            <object class="br.com.goals.etrilhas.modelo.Foto"> 
+             <void property="txtDescricao"> 
+              <string>&lt;p&gt;asdfasdf asdfasdf&lt;/p&gt;</string> 
+             </void> 
+             <void property="urlRelativaJpg"> 
+              <string>media/fotos/images.jpg</string> 
+             </void> 
+            </object> 
+           </void> 
+           <void method="add"> 
+            <object class="br.com.goals.etrilhas.modelo.Foto"> 
+             <void property="txtDescricao"> 
+              <string>&lt;p&gt;asdf asdfasdasdasd&lt;/p&gt;</string> 
+             </void> 
+             <void property="urlRelativaJpg"> 
+              <string>media/fotos/horarioServidor.gif</string> 
+             </void> 
+            </object> 
+           </void> 
+           <void method="add"> 
+            <object class="br.com.goals.etrilhas.modelo.Foto"> 
+             <void property="txtDescricao"> 
+              <string>&lt;p&gt;Logo marca qualquer&lt;/p&gt;</string> 
+             </void> 
+             <void property="urlRelativaJpg"> 
+              <string>media/fotos/alfa_glossy.jpg</string> 
+             </void> 
+            </object> 
+           </void> 
+          </void> 
+          <void property="id"> 
+           <long>8</long> 
+          </void> 
+          <void property="txtDescricao"> 
+           <string></string> 
+          </void> 
+         </object> 
+        </void> 
+        <void property="x"> 
+         <int>136</int> 
+        </void> 
+        <void property="y"> 
+         <int>182</int> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="br.com.goals.etrilhas.modelo.MapaItem"> 
+        <void property="icone"> 
+         <string>default.png</string> 
+        </void> 
+        <void property="id"> 
+         <long>8</long> 
+        </void> 
+        <void property="nome"> 
+         <string></string> 
+        </void> 
+        <void property="tipo"> 
+         <string>Video</string> 
+        </void> 
+        <void property="valor"> 
+         <object class="br.com.goals.etrilhas.modelo.Video"> 
+          <void property="htmlDescricao"> 
+           <string>&lt;p&gt;Minha super descri&amp;ccedil;&amp;atilde;o&lt;/p&gt;</string> 
+          </void> 
+          <void property="id"> 
+           <long>8</long> 
+          </void> 
+          <void property="txtCodYoutube"> 
+           <string>&lt;object width=&quot;425&quot; height=&quot;344&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/QN8HwUxFouM&amp;hl=en&amp;fs=1&amp;&quot;&gt;&lt;/param&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot;&gt;&lt;/param&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot;&gt;&lt;/param&gt;&lt;embed src=&quot;http://www.youtube.com/v/QN8HwUxFouM&amp;hl=en&amp;fs=1&amp;&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;425&quot; height=&quot;344&quot;&gt;&lt;/embed&gt;&lt;/object&gt;</string> 
+          </void> 
+          <void property="urlRelativaFlv"> 
+           <string></string> 
+          </void> 
+         </object> 
+        </void> 
+        <void property="x"> 
+         <int>825</int> 
+        </void> 
+        <void property="y"> 
+         <int>346</int> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="br.com.goals.etrilhas.modelo.MapaItem"> 
+        <void property="icone"> 
+         <string>default.png</string> 
+        </void> 
+        <void property="id"> 
+         <long>8</long> 
+        </void> 
+        <void property="x"> 
+         <int>677</int> 
+        </void> 
+        <void property="y"> 
+         <int>537</int> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="br.com.goals.etrilhas.modelo.MapaItem"> 
+        <void property="icone"> 
+         <string>default.png</string> 
+        </void> 
+        <void property="id"> 
+         <long>9</long> 
+        </void> 
+        <void property="nome"> 
+         <string>Meu Vídeo</string> 
+        </void> 
+        <void property="tipo"> 
+         <string>Video</string> 
+        </void> 
+        <void property="valor"> 
+         <object class="br.com.goals.etrilhas.modelo.Video"> 
+          <void property="htmlDescricao"> 
+           <string>&lt;p&gt;V&amp;iacute;deo da Serra da Mantiqueira, fingindo...&lt;/p&gt;</string> 
+          </void> 
+          <void property="id"> 
+           <long>9</long> 
+          </void> 
+          <void property="txtCodYoutube"> 
+           <string>&lt;object width=&quot;425&quot; height=&quot;344&quot;&gt;&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/_f-DzVEO7fU&amp;hl=en&amp;fs=1&amp;&quot;&gt;&lt;/param&gt;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot;&gt;&lt;/param&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot;&gt;&lt;/param&gt;&lt;embed src=&quot;http://www.youtube.com/v/_f-DzVEO7fU&amp;hl=en&amp;fs=1&amp;&quot; type=&quot;application/x-shockwave-flash&quot; allowscriptaccess=&quot;always&quot; allowfullscreen=&quot;true&quot; width=&quot;425&quot; height=&quot;344&quot;&gt;&lt;/embed&gt;&lt;/object&gt;</string> 
+          </void> 
+          <void property="urlRelativaFlv"> 
+           <string></string> 
+          </void> 
+         </object> 
+        </void> 
+        <void property="x"> 
+         <int>315</int> 
+        </void> 
+        <void property="y"> 
+         <int>209</int> 
+        </void> 
+       </object> 
+      </void> 
+     </void> 
+     <void property="nome"> 
+      <string>Bio Diversidade</string> 
+     </void> 
+     <void property="ordem"> 
+      <int>1</int> 
+     </void> 
+    </object> 
+   </void> 
+  </void> 
+  <void property="id"> 
+   <long>1</long> 
+  </void> 
+ </object> 
+</java> 

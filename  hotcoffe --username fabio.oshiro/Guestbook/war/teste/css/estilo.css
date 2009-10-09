@@ -1,0 +1,66 @@
+@IMPORT url("base.css");
+.galeriaDesc div,
+.videoDesc div{
+	height: 326px;
+	overflow: auto;
+}
+#youtube{
+	float: left;
+	width: 425px;
+}
+#fla{
+	position:absolute;
+	top:0px;
+	left:0px;
+	z-index: 98;
+	width: 100%;
+	height: 100%;
+}
+#Galeria,
+#Video{
+	background-image: url("../img/fundo.png");
+	position:absolute;
+	top:0px;
+	left:0px;
+	z-index: 100;
+	width: 775px;
+	height: 393px;
+	display:none;
+}
+#titleBar{
+	text-align: right;
+	font-family: sans-serif;
+}
+
+.galeria td{
+	/*border: 1px solid #888;*/
+}
+.galeria td#links{
+	text-align: center;
+	height: 25px;
+	font-size: 10pt;
+}
+.galeria td#links a{
+	color: #000;
+	text-decoration: none;
+	font-weight: bold;
+}
+.mainPic{
+	width: 420px;
+	height: 278px; 
+	overflow: hidden; 
+}
+#titleBar{
+	height: 22px;
+	padding-right: 20px;
+	padding-top: 8px;
+}
+#titleBar a img{
+	border: 0;
+}
+#fotoPrincipal0,
+#fotoPrincipal1{
+	text-align: center;
+	padding-left: 10px;
+}
+
