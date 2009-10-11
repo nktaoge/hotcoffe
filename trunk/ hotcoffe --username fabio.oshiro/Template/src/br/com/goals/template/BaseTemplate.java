@@ -4,10 +4,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.MissingResourceException;
 
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
+
 
 public class BaseTemplate{
-	private static Logger logger = Logger.getLogger(BaseTemplate.class.getName());
+	private static Logger logger = Logger.getLogger(BaseTemplate.class);
 	public static String getLabel(String obj){
 		try{
 			return Messages.getString("Template."+obj); //$NON-NLS-1$
@@ -32,7 +33,7 @@ public class BaseTemplate{
 			return Messages.getString(strKey);
 		}catch(MissingResourceException e){
 			String retorno = "";
-			logger.warning("Label not found: " + strKey);
+			logger.warn("Label not found: " + strKey);
 			if(nome.startsWith("setList")){
 				retorno = separarNome(nome.substring(7));
 			}else if(nome.startsWith("setTxt")){
@@ -74,7 +75,7 @@ public class BaseTemplate{
 		Method[] metodos = obj.getClass().getMethods();
 		for (int i = 0; i < metodos.length; i++) {
 			String nome = metodos[i].getName();
-			logger.info("metodo = " + nome);
+			logger.debug("metodo = " + nome);
 			Class cls[] = metodos[i].getParameterTypes();
 			if(cls.length!=1) continue;
 			if(!cls[0].getName().startsWith("java.lang")) continue;
