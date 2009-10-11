@@ -3,24 +3,17 @@ package br.com.goals.quiz.servlet;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.goals.quiz.QuizFacade;
 import br.com.goals.quiz.vo.Opcao;
 import br.com.goals.quiz.vo.Pergunta;
 import br.com.goals.template.RequestUtil;
 import br.com.goals.template.Template;
 
-public class PerguntaAdd extends HttpServlet {
+public class PerguntaAdd extends BaseServletQuiz {
 	private static final long serialVersionUID = 1L;
-	private static QuizFacade quizFacade = new QuizFacade();
-	public Template getTemplate(HttpServletRequest request) throws IOException{
-    	Template template = new Template();
-    	template.setTemplateFile(this.getClass().getSimpleName()+".html");
-    	return template;
-    }
+	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try{
@@ -35,6 +28,7 @@ public class PerguntaAdd extends HttpServlet {
 				pergunta = new Pergunta();
 			}
 			template.setForm("pergunta", pergunta);
+			response.setContentType("text/html");
 			response.getWriter().write(template.toString());
 		}catch(Exception e){
 			e.printStackTrace();
@@ -59,6 +53,7 @@ public class PerguntaAdd extends HttpServlet {
 			System.out.println("texto = " + pergunta.getTxtTexto());
 			Template template = getTemplate(request);
 			template.setForm("pergunta", pergunta);
+			response.setContentType("text/html");
 			response.getWriter().write(template.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
