@@ -7,10 +7,13 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
+/**
+ * Facilita repopular os objetos postados de um formulario 
+ */
 public class RequestUtil {
-	private static Logger logger = Logger.getLogger(RequestUtil.class.getName());
+	private static Logger logger = Logger.getLogger(RequestUtil.class);
 	private static boolean parseLong = false;
 	
 	public static void setParseLong(boolean parseLong) {
@@ -39,7 +42,7 @@ public class RequestUtil {
 		Method metodos[] = cls.getMethods();
 		for(String key:keys){
 			String key2methodName=key;
-			logger.fine("key="+key);
+			logger.debug("key="+key);
 			if(prefixo!=null){
 				//verifica se inicia com o prefixo
 				if(!key.startsWith(prefixo)){
@@ -48,7 +51,7 @@ public class RequestUtil {
 				key2methodName = key.substring(prefixo.length());
 			}
 			key2methodName = "set" + Character.toUpperCase(key2methodName.charAt(0))+key2methodName.substring(1);
-			logger.fine("key2methodName = " +key2methodName);			
+			logger.debug("key2methodName = " +key2methodName);			
 			for (int i = 0; i < metodos.length; i++) {
 				try {
 					if(metodos[i].getName().equals(key2methodName)){

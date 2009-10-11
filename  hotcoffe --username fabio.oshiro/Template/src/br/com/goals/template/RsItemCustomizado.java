@@ -1,5 +1,8 @@
 package br.com.goals.template;
 
+/**
+ * Interface para criar um html de um item 
+ */
 public interface RsItemCustomizado {
 	/**
 	 * Customiza o render de um obj

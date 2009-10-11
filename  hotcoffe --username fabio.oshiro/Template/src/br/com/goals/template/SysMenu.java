@@ -5,11 +5,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.logging.Logger;
 
-
+import org.apache.log4j.Logger;
+/**
+ * Faz um menu de acordo com o pacote 
+ */
 public class SysMenu {
-	private static Logger logger = Logger.getLogger(Template.class.getName());
+	private static Logger logger = Logger.getLogger(Template.class);
 	private static Comparator<Class> comparator = new Comparator<Class>(){
 		public int compare(Class o1, Class o2) {
 			return o1.getName().compareTo(o2.getName());

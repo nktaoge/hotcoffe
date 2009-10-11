@@ -1,5 +1,8 @@
 package br.com.goals.template;
 
+/**
+ * Classe auxiliar para gerar links 
+ */
 public class Link {
 	private String label;
 	private String href;

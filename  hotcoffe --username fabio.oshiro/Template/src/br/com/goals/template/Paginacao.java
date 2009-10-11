@@ -4,6 +4,9 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe para gerar paginacao
+ */
 public class Paginacao {
 	int resultadosPorPagina = 5;
 

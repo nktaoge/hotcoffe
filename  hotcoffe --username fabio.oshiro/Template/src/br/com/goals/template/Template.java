@@ -7,14 +7,13 @@ import java.sql.ResultSet;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 
 /**
  * Ações comuns ao template<br>
@@ -24,7 +23,7 @@ import org.apache.commons.io.FileUtils;
  *
  */
 public class Template extends BaseTemplate{
-	private static Logger logger = Logger.getLogger(Template.class.getName());
+	private static Logger logger = Logger.getLogger(Template.class);
 	private static Pattern patRs = Pattern.compile("<!-- ini rs -->(.*?)<!-- fim rs -->", Pattern.DOTALL);
 	private static Pattern patRsItens = Pattern.compile("<!-- ini rs\\((.*?)\\) -->(.*?)<!-- fim rs\\(\\1\\) -->", Pattern.DOTALL);
 	private static Pattern patRsImagens = Pattern.compile("<!-- ini rs imagem\\((.*?)\\) -->(.*?)<!-- fim rs imagem\\(\\1\\) -->", Pattern.DOTALL);
@@ -56,7 +55,7 @@ public class Template extends BaseTemplate{
 			String str = SysMenu.package2ul(strPackage, strPackage);
 			setArea("menu", str);
 		}catch (Exception e) {
-			logger.warning("Nao foi possivel criar o menu.\nErro: '" + e.getMessage() + "'");
+			logger.warn("Nao foi possivel criar o menu.\nErro: '" + e.getMessage() + "'");
 		}
 	}
 	
@@ -365,7 +364,7 @@ public class Template extends BaseTemplate{
 				template = mat.replaceAll(StringUtils.tratarCaracteresEspeciaisRegex(sb.toString()));
 			}
 		} catch (Exception e) {
-			logger.log(Level.SEVERE, "Erro", e);
+			logger.error("Erro", e);
 		}
 	}
 	public void encaixaResultSet(ResultSet rs) {
@@ -463,13 +462,13 @@ public class Template extends BaseTemplate{
 							Object retobj = meth.invoke(obj);
 							item = atribuirRsString(item,retobj==null?"":retobj.toString(),chave,baseName+"_"+id+"."+meth.getName());
 						} catch(NoSuchMethodException e){
-							logger.warning("o metodo nao existe "+e.getMessage());
+							logger.warn("o metodo nao existe "+e.getMessage());
 							try{
 								Method meth = cls.getMethod("get" + Character.toUpperCase(chave.charAt(0)) + chave.substring(1));
 								Object retobj = meth.invoke(obj);
 								item = atribuirRsString(item,retobj==null?"":retobj.toString(),chave,baseName+"_"+id+"."+chave);
 							} catch(NoSuchMethodException e2){
-								logger.warning("também nao existe "+e2.getMessage());
+								logger.warn("também nao existe "+e2.getMessage());
 							}	
 						}
 					}
@@ -482,7 +481,7 @@ public class Template extends BaseTemplate{
 							logger.info("imagem " + retobj.toString());
 							item = matCol.replaceAll(substituiSrcImagem(matCol.group(2), retobj.toString()));
 						} catch(NoSuchMethodException e){
-							logger.warning("o metodo nao existe "+e.getMessage());
+							logger.warn("o metodo nao existe "+e.getMessage());
 						}
 					}
 					if(rsItemCustomizado!=null){
@@ -493,7 +492,7 @@ public class Template extends BaseTemplate{
 				template = mat.replaceAll(StringUtils.tratarCaracteresEspeciaisRegex(sb.toString()));
 			}
 		} catch (Exception e) {
-			logger.log(Level.SEVERE,"Erro ",e);
+			logger.error("Erro ",e);
 		}
 		
 	}
@@ -831,7 +830,7 @@ public class Template extends BaseTemplate{
 			String menuHtml = FileUtils.readFileToString(new File(getTemplatePath(),"menu.html"), "ISO-8859-1");
 			this.setArea("menu", menuHtml);
 		}catch(Exception e){
-			logger.warning("ini menu nao atribuido com o conteudo de template/menu.html");
+			logger.warn("ini menu nao atribuido com o conteudo de template/menu.html");
 		}
 	}
 	
