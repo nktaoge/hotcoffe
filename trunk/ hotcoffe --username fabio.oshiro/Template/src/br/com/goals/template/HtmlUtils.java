@@ -17,14 +17,11 @@ public class HtmlUtils {
 		return retorno;
 	}
 	public static String getConteudoTexto(String conteudo){
-		//System.out.println("getConteudoCego("+conteudo+")");
-		
 		Pattern patTag = Pattern.compile("<.*?>",Pattern.DOTALL);
 		Matcher matTag = patTag.matcher(conteudo);
 		if(matTag.find()){			
 			conteudo = matTag.replaceAll(" ");
 		}	
-		
 		patTag = Pattern.compile("\\s\\s\\s*",Pattern.DOTALL);
 		matTag = patTag.matcher(conteudo);
 		
