@@ -9,6 +9,10 @@ import org.datanucleus.jpa.annotations.Extension;
 
 import com.google.appengine.api.datastore.Blob;
 
+/**
+ * Opcao de uma alternativa 
+ *
+ */
 @Entity
 public class Opcao {
 	/*

@@ -37,4 +37,11 @@
 		<nature>com.google.gwt.eclipse.core.gwtNature</nature>
 		<nature>com.google.gdt.eclipse.core.webAppNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>template</name>
+			<type>2</type>
+			<location>D:/workspaceE/Template/src</location>
+		</link>
+	</linkedResources>
 </projectDescription>

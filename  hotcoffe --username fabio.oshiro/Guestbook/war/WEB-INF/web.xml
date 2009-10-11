@@ -15,12 +15,20 @@
         <url-pattern>/guestbook</url-pattern>
     </servlet-mapping>
     <servlet>
+    	<servlet-name>pergunta-list</servlet-name>
+    	<servlet-class>br.com.goals.quiz.servlet.PerguntaList</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>pergunta-list</servlet-name>
+        <url-pattern>/PerguntaList</url-pattern>
+    </servlet-mapping>
+    <servlet>
     	<servlet-name>pergunta-add</servlet-name>
     	<servlet-class>br.com.goals.quiz.servlet.PerguntaAdd</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>pergunta-add</servlet-name>
-        <url-pattern>/perguntaAdd</url-pattern>
+        <url-pattern>/PerguntaAdd</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>sign</servlet-name>
@@ -31,6 +39,7 @@
         <url-pattern>/sign</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
+    	<welcome-file>index.jsp</welcome-file>
         <welcome-file>guestbook.jsp</welcome-file>
     </welcome-file-list>
 </web-app>

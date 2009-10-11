@@ -12,8 +12,10 @@ import br.com.goals.quiz.vo.Quiz;
 import br.com.goals.quiz.vo.QuizTag;
 import br.com.goals.tag.TagFacade;
 
+/**
+ * Facade do Quiz
+ */
 public class QuizFacade {
-
 	/**
 	 * Inicia o quiz
 	 */
@@ -77,5 +79,10 @@ public class QuizFacade {
 	public Pergunta findPergunta(String parameter) {
 		EntityManager em = EMF.createEntityManager();
 		return em.find(Pergunta.class, Long.valueOf(parameter));
+	}
+
+	public List<Pergunta> listarPerguntas() {
+		EntityManager em = EMF.createEntityManager();
+		return em.createQuery("Select p From Pergunta p").getResultList();
 	}
 }
