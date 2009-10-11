@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.com.goals.etrilhas.modelo.Camada;
 import br.com.goals.etrilhas.servlet.BaseServlet;
+import br.com.goals.template.RequestUtil;
 import br.com.goals.template.Template;
-import br.com.goals.utils.RequestUtil;
 
 public class CamadaCriar extends BaseServlet {
 	private static final long serialVersionUID = 1L;

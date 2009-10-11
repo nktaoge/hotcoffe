@@ -18,8 +18,8 @@ import br.com.goals.etrilhas.modelo.Galeria;
 import br.com.goals.etrilhas.modelo.Mapa;
 import br.com.goals.etrilhas.modelo.MapaItem;
 import br.com.goals.template.AreaNaoEncontradaException;
+import br.com.goals.template.RequestUtil;
 import br.com.goals.template.Template;
-import br.com.goals.utils.RequestUtil;
 
 /**
  * Servlet implementation class MapaItemDefinirServlet
