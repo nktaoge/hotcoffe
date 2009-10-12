@@ -29,6 +29,7 @@ public class PerguntaAdd extends BaseServletQuiz {
 			}
 			template.setForm("pergunta", pergunta);
 			response.setContentType("text/html");
+			response.setCharacterEncoding("UTF-8");
 			response.getWriter().write(template.toString());
 		}catch(Exception e){
 			e.printStackTrace();

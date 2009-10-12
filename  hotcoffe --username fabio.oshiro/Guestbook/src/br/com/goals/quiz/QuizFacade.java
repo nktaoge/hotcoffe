@@ -18,6 +18,8 @@ import br.com.goals.tag.TagFacade;
 public class QuizFacade {
 	/**
 	 * Inicia o quiz
+	 * @param tagName
+	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	public Quiz iniciar(String tagName){
@@ -45,11 +47,7 @@ public class QuizFacade {
 	public void finalizar(){
 		
 	}
-	public static void main(String[] args) {
-		QuizFacade qf = new QuizFacade();
-		qf.iniciar("matemática");
-	}
-
+	
 	public void salvar(Pergunta pergunta) {
 		EntityManager em = EMF.createEntityManager();
 		em.getTransaction().begin();
@@ -84,5 +82,13 @@ public class QuizFacade {
 	public List<Pergunta> listarPerguntas() {
 		EntityManager em = EMF.createEntityManager();
 		return em.createQuery("Select p From Pergunta p").getResultList();
+	}
+
+	public void apagarPergunta(String parameter) {
+		EntityManager em = EMF.createEntityManager();
+		em.getTransaction().begin();
+		Pergunta p = em.find(Pergunta.class, Long.valueOf(parameter));
+		em.remove(p);
+		em.getTransaction().commit();
 	}
 }

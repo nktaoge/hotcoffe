@@ -17,9 +17,16 @@ public class PerguntaList extends BaseServletQuiz{
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Template template = getTemplate(request);
-		List<Pergunta> list = quizFacade.listarPerguntas();
-		template.encaixaResultSet(list);
-		response.setContentType("text/html");
-		response.getWriter().write(template.toString());
+		if(request.getParameter("delId")!=null){
+			quizFacade.apagarPergunta(request.getParameter("delId"));
+		}
+		if(request.getParameter("updId")!=null){
+			response.sendRedirect("PerguntaAdd?id=" + request.getParameter("updId"));
+		}else{
+			List<Pergunta> list = quizFacade.listarPerguntas();
+			template.encaixaResultSet(list);
+			response.setContentType("text/html");
+			response.getWriter().write(template.toString());
+		}
 	}
 }
