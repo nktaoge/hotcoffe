@@ -6,7 +6,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.goals.quiz.vo.Opcao;
 import br.com.goals.quiz.vo.Pergunta;
 import br.com.goals.template.RequestUtil;
 import br.com.goals.template.Template;
@@ -21,13 +20,12 @@ public class PerguntaAdd extends BaseServletQuiz {
 			Template template = getTemplate(request);
 			if(request.getParameter("id")!=null){
 				pergunta = quizFacade.findPergunta(request.getParameter("id"));
-				for(Opcao op:pergunta.getOpcoes()){
-					System.out.println(op.getTexto());
-				}
+				System.out.println("opcoes.size = " + pergunta.getOpcoes().size());
 			}else{
 				pergunta = new Pergunta();
 			}
 			template.setForm("pergunta", pergunta);
+			template.setForm("opcoes", pergunta.getOpcoes());
 			response.setContentType("text/html");
 			response.setCharacterEncoding("UTF-8");
 			response.getWriter().write(template.toString());
@@ -38,22 +36,21 @@ public class PerguntaAdd extends BaseServletQuiz {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Pergunta pergunta = new Pergunta();
 		try {
+			Pergunta pergunta = new Pergunta();
+			if(request.getParameter("Pergunta.id")!=null){
+				pergunta = quizFacade.findPergunta(request.getParameter("Pergunta.id"));
+				System.out.println("atualizando pergunta id " + pergunta.getId());
+				System.out.println("opcoes = " + pergunta.getOpcoes().size());
+			}
 			RequestUtil.setParseLong(true);
 			RequestUtil.request(request, pergunta);
+			RequestUtil.request(request, pergunta.getOpcoes());
 			quizFacade.salvar(pergunta);
-			
-			Opcao opcao = new Opcao();
-			opcao.setCorreta(false);
-			opcao.setTexto("Minha opcao");
-			opcao.setPergunta(pergunta);
-			//pergunta.getOpcoes().add(opcao);
-			quizFacade.salvar(opcao);
-			
-			System.out.println("texto = " + pergunta.getTxtTexto());
 			Template template = getTemplate(request);
 			template.setForm("pergunta", pergunta);
+			template.setForm("opcoes", pergunta.getOpcoes());
+			response.setCharacterEncoding("UTF-8");
 			response.setContentType("text/html");
 			response.getWriter().write(template.toString());
 		} catch (Exception e) {
