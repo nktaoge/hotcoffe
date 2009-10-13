@@ -428,10 +428,14 @@ public class Template extends BaseTemplate{
 			template = mat.replaceAll("");
 		}
 	}
+
 	/**
-	 * Coloca a lista de resultados no template
-	 * @param resultado lista de objetos do resultado
-	 * @param max numero maximo na pagina
+	 * Coloca a lista de resultados no template<br>
+	 * procura por href=\"#linkDel\" e substitui por  href=\"?delId="+id+"\"
+	 * procura por href=\"#linkUpd\" e substitui por  href=\"?updId="+id+"\"
+	 * @param resultado
+	 * @param ini
+	 * @param max
 	 */
 	@SuppressWarnings("unchecked")
 	public void encaixaResultSet(List resultado,int ini, int max) {
@@ -448,12 +452,17 @@ public class Template extends BaseTemplate{
 					Class cls = obj.getClass();
 					String baseName = cls.getSimpleName();
 					String id = i+"";
+					item = templateRs;
 					try{
 						id = cls.getMethod("getId").invoke(obj).toString();
+						//se houver cria o link para apagar
+						item = item.replace(" href=\"#linkDel\""," href=\"?delId="+id+"\"");
+						//se houver cria o link para editar
+						item = item.replace(" href=\"#linkUpd\""," href=\"?updId="+id+"\"");
 					}catch(Exception e){
 						
 					}
-					item = templateRs;
+					
 					Matcher matCol = patRsItens.matcher(templateRs);
 					while (matCol.find()) {
 						String chave = matCol.group(1);
@@ -468,7 +477,7 @@ public class Template extends BaseTemplate{
 								Object retobj = meth.invoke(obj);
 								item = atribuirRsString(item,retobj==null?"":retobj.toString(),chave,baseName+"_"+id+"."+chave);
 							} catch(NoSuchMethodException e2){
-								logger.warn("também nao existe "+e2.getMessage());
+								logger.warn("tambem nao existe "+e2.getMessage());
 							}	
 						}
 					}
@@ -795,7 +804,8 @@ public class Template extends BaseTemplate{
 	 * Le o arquivo de template na pasta template<br>
 	 * O encoding padrao sera ISO-8859-1<br>
 	 * Subistutui os atributos href=img.gif para href=template/img.gif<br>
-	 * Coloca o menu.html entre o &lt;!-- ini menu --&gt;
+	 * Coloca o menu.html entre o &lt;!-- ini menu --&gt;<br>
+	 * Coloca dentro do default.html, se existir<br>
 	 * @param string
 	 * @throws IOException
 	 */
@@ -823,7 +833,19 @@ public class Template extends BaseTemplate{
 		}
 		//copiar o fim
 		retorno += template.substring(last);
-		setTemplate(retorno);
+		
+		//ler o template default
+		try{
+			String defaultHtml = FileUtils.readFileToString(new File(getTemplatePath(),"default.html"), "ISO-8859-1");
+			if(defaultHtml!=null && !defaultHtml.equals("")){
+				setTemplate(defaultHtml);
+				setArea("body", retorno);
+			}else{
+				setTemplate(retorno);
+			}
+		}catch(Exception e){
+			logger.warn("Trabalhando sem default.html");
+		}
 		
 		//ler o menu
 		try{
@@ -832,6 +854,7 @@ public class Template extends BaseTemplate{
 		}catch(Exception e){
 			logger.warn("ini menu nao atribuido com o conteudo de template/menu.html");
 		}
+		
 	}
 	
 	@Override
@@ -893,8 +916,8 @@ public class Template extends BaseTemplate{
 	 * &lt;form action="acao.do"><br>
 	 * &lt;-- ini area --><br>
 	 * Esta area sera substituida por campos criados automaticamente<br>
-	 * Por enquanto nao coloque os campos que vc quer!
-	 * por reflection<br>
+	 * Por enquanto n&atilde;o coloque os campos que vc quer!<br>
+	 * Obs.: usa reflection<br>
 	 * &lt;-- fim area --><br>
 	 * &lt;/form>
 	 * @param area
@@ -911,9 +934,37 @@ public class Template extends BaseTemplate{
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * &lt;form action="acao.do"><br>
+	 * &lt;-- ini area --><br>
+	 * Esta area sera substituida por campos criados automaticamente<br>
+	 * Por enquanto n&atilde;o coloque os campos que vc quer!<br>
+	 * Obs.: usa reflection<br>
+	 * &lt;-- fim area --><br>
+	 * &lt;/form>
+	 * @param area
+	 * @param list
+	 * @throws AreaNaoEncontradaException 
+	 */
+	public void setForm(String area, List list){
+		try{
+			if(list!=null){
+				String campos = "";
+				for(int i=0;i<list.size();i++){
+					Object obj = list.get(i);
+					campos+=criarCampos(obj.getClass().getSimpleName()+"["+i+"].",obj);
+				}
+				setArea(area, campos);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Cria a area com opcoes de radio,
-	 * Padrão:
+	 * Padr&atilde;o:
 	 * label = nome<br>
 	 * value = id<br>
 	 * @param string

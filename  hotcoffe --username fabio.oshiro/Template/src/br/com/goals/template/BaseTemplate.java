@@ -9,6 +9,11 @@ import org.apache.log4j.Logger;
 
 public class BaseTemplate{
 	private static Logger logger = Logger.getLogger(BaseTemplate.class);
+	/**
+	 * Utilizado para criar o atributo id dos campos de formul&aacute;rio
+	 */
+	private long idField = 1;
+	
 	public static String getLabel(String obj){
 		try{
 			return Messages.getString("Template."+obj); //$NON-NLS-1$
@@ -50,6 +55,7 @@ public class BaseTemplate{
 			return retorno;
 		}
 	}
+	
 	/**
 	 * 
 	 * @param nome
@@ -67,6 +73,22 @@ public class BaseTemplate{
 		}
 		return retorno;
 	}
+	
+	/**
+	 * Cria campos de formul&aacute;rio<br>
+	 * Se o metodo come&ccedil;ar com:
+	 * <ul>
+	 * 	<li><b>setHtml</b> criar&aacute; um campo de textarea com a o atributo class="mceEditor"</li> 
+	 *  <li><b>setTxt</b>  criar&aacute; um campo de textarea somente</li>
+	 * </ul>
+	 * 
+	 * @param prefixo qualquer coisa para colocar antes do nome do campo
+	 * @param obj Qualquer objeto com set e get
+	 * @return String com HTML
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 */
 	@SuppressWarnings("unchecked")
 	protected String criarCampos(String prefixo,Object obj) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException{
 		if(obj==null) return "";
@@ -75,6 +97,8 @@ public class BaseTemplate{
 		Method[] metodos = obj.getClass().getMethods();
 		for (int i = 0; i < metodos.length; i++) {
 			String nome = metodos[i].getName();
+			String tipo = null;
+			Method getMethod = null;
 			logger.debug("metodo = " + nome);
 			Class cls[] = metodos[i].getParameterTypes();
 			if(cls.length!=1) continue;
@@ -85,10 +109,17 @@ public class BaseTemplate{
 			//Obter o valor
 			String inputValue = "";
 			try{
-				Object object = obj.getClass().getMethod("get"+inputName).invoke(obj,new Object[]{});
+				getMethod = obj.getClass().getMethod("get"+inputName);
+				Object object = getMethod.invoke(obj,new Object[]{});
 				if(object!=null){
 					inputValue = object.toString();
 				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			//obter o tipo
+			try{
+				tipo = getMethod.getReturnType().getCanonicalName();
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -100,7 +131,7 @@ public class BaseTemplate{
 			if(nome.equals("getId")){
 				Object val = metodos[i].invoke(obj);
 				if(val!=null)
-					retorno+="<input type=\"hidden\" id=\"idField"+i+"\" name=\""+prefixo+"id\" value=\""+val.toString()+"\" />";
+					retorno+="<input type=\"hidden\" id=\"idField"+idField+"\" name=\""+prefixo+"id\" value=\""+val.toString()+"\" />";
 			}else if(nome.equals("setId")){
 				Object val=null;
 				try {
@@ -111,16 +142,28 @@ public class BaseTemplate{
 					e.printStackTrace();
 				}
 				if(val!=null)
-					retorno+="<input type=\"hidden\" id=\"idField"+i+"\" name=\""+prefixo+"id\" value=\""+val.toString()+"\" />";
+					retorno+="<input type=\"hidden\" id=\"idField"+idField+"\" name=\""+prefixo+"id\" value=\""+val.toString()+"\" />";
 			}else if(nome.startsWith("setHtml")){
-				retorno+="<div><label for=\"idField"+i+"\">" + getLabel(obj,nome) + ": </label><textarea id=\"idField"+i+"\" name=\""+inputName+"\" class=\"mceEditor\" cols=\"40\" rows=\"10\">"+inputValue.replace("<", "&lt;")+"</textarea></div>";
+				retorno+="<div><label for=\"idField"+idField+"\">" + getLabel(obj,nome) + ": </label><textarea id=\"idField"+idField+"\" name=\""+inputName+"\" class=\"mceEditor\" cols=\"40\" rows=\"10\">"+inputValue.replace("<", "&lt;")+"</textarea></div>";
 			}else if(nome.startsWith("setTxt")){
-				retorno+="<div><label for=\"idField"+i+"\">" + getLabel(obj,nome) + ": </label><textarea id=\"idField"+i+"\" name=\""+inputName+"\" cols=\"40\" rows=\"10\">"+inputValue.replace("<", "&lt;")+"</textarea></div>";
+				retorno+="<div><label for=\"idField"+idField+"\">" + getLabel(obj,nome) + ": </label><textarea id=\"idField"+idField+"\" name=\""+inputName+"\" cols=\"40\" rows=\"10\">"+inputValue.replace("<", "&lt;")+"</textarea></div>";
 			}else if(nome.startsWith("setList")){
-				retorno+="<div><label for=\"idField"+i+"\">" + getLabel(obj,nome) + ": </label><select id=\"idField"+i+"\" name=\""+inputName+"\" /><option>Selecione</option></select></div>";
+				retorno+="<div><label for=\"idField"+idField+"\">" + getLabel(obj,nome) + ": </label><select id=\"idField"+idField+"\" name=\""+inputName+"\" /><option>Selecione</option></select></div>";
 			}else if(nome.startsWith("set")){
-				retorno+="<div><label for=\"idField"+i+"\">" + getLabel(obj,nome) + ": </label><input id=\"idField"+i+"\" name=\""+inputName+"\" value=\""+inputValue.replace("\"", "&quot;")+"\" /></div>";
+				//verificar se o retorno eh um boolean
+				if("java.lang.Boolean".equals(tipo)){
+					retorno+="<div><label for=\"idField"+idField+"\">" + getLabel(obj,nome) + ": </label>";
+					if("true".equals(inputValue)){
+						retorno+="<select id=\"idField"+idField+"\" name=\""+inputName+"\"><option value=\"on\" selected=\"selected\">Sim</option><option value=\"\">N&atilde;o</option></select></div>";
+					}else{
+						retorno+="<select id=\"idField"+idField+"\" name=\""+inputName+"\"><option value=\"on\">Sim</option><option value=\"\" selected=\"selected\">N&atilde;o</option></select></div>";
+					}
+				}else{
+					logger.debug("tipo = '" +tipo+ "'");
+					retorno+="<div><label for=\"idField"+idField+"\">" + getLabel(obj,nome) + ": </label><input id=\"idField"+idField+"\" name=\""+inputName+"\" value=\""+inputValue.replace("\"", "&quot;")+"\" /></div>";
+				}
 			}
+			idField++;
 		}
 		return retorno;
 	}

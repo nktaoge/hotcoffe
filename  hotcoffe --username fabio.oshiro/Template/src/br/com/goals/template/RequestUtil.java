@@ -3,6 +3,7 @@ package br.com.goals.template;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,10 @@ public class RequestUtil {
 	private static Logger logger = Logger.getLogger(RequestUtil.class);
 	private static boolean parseLong = false;
 	
+	/**
+	 * Isso &eacute; um absurdo
+	 * @param parseLong
+	 */
 	public static void setParseLong(boolean parseLong) {
 		RequestUtil.parseLong = parseLong;
 	}
@@ -33,6 +38,14 @@ public class RequestUtil {
 	public static void request(HttpServletRequest request, Object obj) throws Exception{
 		requestByPrefix(obj.getClass().getSimpleName()+".",request,obj);
 	}
+	
+	public static void request(HttpServletRequest request, List list) throws Exception{
+		for(int i=0;i<list.size();i++){
+			Object obj = list.get(i);
+			requestByPrefix(obj.getClass().getSimpleName()+"["+i+"].",request,obj);
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	public static void requestByPrefix(String prefixo,HttpServletRequest request, Object obj)throws Exception{
 		Set<String> keys = request.getParameterMap().keySet();
@@ -71,6 +84,14 @@ public class RequestUtil {
 								}
 							}else if(parametros[j].getSimpleName().equals("String")){
 								metodos[i].invoke(obj, new Object[]{request.getParameter(key)});
+							}else if(parametros[j].getSimpleName().equals("Boolean")){
+								String val = request.getParameter(key);
+								logger.debug(key + " = " + val);
+								if(val!=null && val.equals("on")){
+									metodos[i].invoke(obj, true);
+								}else{
+									metodos[i].invoke(obj, false);
+								}
 							}else if(parseLong && parametros[j].getSimpleName().equals("Long")){
 								try{
 									metodos[i].invoke(obj, new Object[]{Long.valueOf(keyVal)});
