@@ -10,14 +10,14 @@ import org.datanucleus.jpa.annotations.Extension;
 import com.google.appengine.api.datastore.Blob;
 
 /**
- * Opcao de uma alternativa 
- *
+ * Opcao de uma pergunta
+ * @see Pergunta
  */
 @Entity
 public class Opcao {
 	/*
 	 * Foi necessario colocar o 
-	 * @ Extension
+	 * @ Extension 
 	 */
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
