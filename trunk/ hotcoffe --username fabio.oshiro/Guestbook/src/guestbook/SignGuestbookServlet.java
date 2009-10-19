@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 import javax.jdo.PersistenceManager;
 import javax.servlet.http.*;
 
-import br.com.goals.persistencia.PMF;
+import br.com.goals.jpa4google.PMF;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;

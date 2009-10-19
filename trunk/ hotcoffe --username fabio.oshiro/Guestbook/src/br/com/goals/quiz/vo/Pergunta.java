@@ -3,6 +3,7 @@ package br.com.goals.quiz.vo;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,7 +25,7 @@ public class Pergunta {
 	 * Many To Many dont work
 	 */
 	//@ ManyToMany(targetEntity=Opcao.class)
-	@OneToMany(mappedBy="pergunta")
+	@OneToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE})
 	private List<Opcao> opcoes = new ArrayList<Opcao>();
 
 	/**

@@ -6,8 +6,7 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import br.com.goals.persistencia.EMF;
-import br.com.goals.persistencia.PMF;
+import br.com.goals.jpa4google.EMF;
 import br.com.goals.tag.vo.Tag;
 
 /**
