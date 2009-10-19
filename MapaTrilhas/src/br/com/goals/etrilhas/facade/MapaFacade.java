@@ -2,11 +2,13 @@ package br.com.goals.etrilhas.facade;
 
 import java.util.List;
 
-import br.com.goals.etrilhas.dao.BaseDao;
+import org.apache.log4j.Logger;
+
 import br.com.goals.etrilhas.dao.MapaDao;
 import br.com.goals.etrilhas.modelo.Mapa;
 
 public class MapaFacade extends BaseFacade<Mapa>{
+	private static Logger logger = Logger.getLogger(MapaFacade.class);
 	private MapaDao mapaDao = new MapaDao();
 	private static MapaFacade instance = new MapaFacade();
 	private MapaFacade(){}
@@ -56,9 +58,11 @@ public class MapaFacade extends BaseFacade<Mapa>{
 		try{
 			return mapaDao.selecionar(id);
 		}catch(Exception e){
+			logger.error("mapa com id "+id+" nao encontrado. Criando...",e);
 			Mapa mapa = new Mapa();
 			mapa.setId(id);
 			try {
+				//Cria o mapa
 				mapaDao.atualizar(mapa);
 			} catch (Exception e1) {
 				e1.printStackTrace();

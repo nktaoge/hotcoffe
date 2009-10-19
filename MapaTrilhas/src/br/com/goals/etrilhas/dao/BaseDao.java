@@ -2,29 +2,46 @@ package br.com.goals.etrilhas.dao;
 
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.jdo.PersistenceManager;
+import javax.persistence.EntityManager;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import br.com.goals.etrilhas.modelo.Base;
+import br.com.goals.jpa4google.EMF;
+import br.com.goals.jpa4google.PMF;
+
+import com.google.appengine.api.datastore.Text;
 
 public class BaseDao<T extends Base> {
 	private static String basePath = null;
 	private static Logger logger = Logger.getLogger(BaseDao.class);
 	private static Long lastIdGenerated = null; 
 	private static File lastIds;
+	protected static boolean google = true;
 	public BaseDao() {
 		
 	}
 	
-	@SuppressWarnings("unchecked")
 	public static long getNextId(){
+		if(google){
+			return getNextIdGoogle();
+		}else{
+			return getNextIdArquivo();
+		}
+	}
+	private static long getNextIdArquivo(){
 		if(lastIdGenerated==null){
 			lastIdGenerated = 3L;
 			try {
@@ -48,7 +65,48 @@ public class BaseDao<T extends Base> {
 		}
 		//entao eh not null, e por isso incrementamos
 		lastIdGenerated++;
-		return lastIdGenerated;
+		return lastIdGenerated;	
+	}
+	private static long getNextIdGoogle(){
+		EntityManager em = EMF.createEntityManager();
+		try{
+			Long id = 1L;
+			JdoLastId jdoLastId = null;
+			if(lastIdGenerated==null){
+				logger.info("Iniciando lastId...");
+				try{
+					jdoLastId = em.find(JdoLastId.class,id);
+					lastIdGenerated = jdoLastId.getLastId();
+					logger.info("recuperado o lastIdGenerated = " + lastIdGenerated + " do JDO");
+				}catch(Exception e){
+					logger.warn("Last Id not found...",e);
+				}
+				if(jdoLastId==null){
+					jdoLastId = new JdoLastId();
+					jdoLastId.setId(id);
+					lastIdGenerated = 3L;
+					jdoLastId.setLastId(lastIdGenerated);
+					logger.info("criando last id " + lastIdGenerated);
+					em.persist(jdoLastId);
+				}
+			}else{
+				//atualizar
+				try{
+					jdoLastId = em.find(JdoLastId.class,id);
+					jdoLastId.setLastId(lastIdGenerated);
+					em.merge(jdoLastId);
+				}catch(Exception e){
+					logger.error("Erro ao atualizar o lastId",e);
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			em.close();
+		}
+		//entao eh not null, e por isso incrementamos
+		lastIdGenerated++;
+		return lastIdGenerated;	
 	}
 	/**
 	 * 
@@ -59,8 +117,10 @@ public class BaseDao<T extends Base> {
 			String path = this.getClass().getClassLoader().getResource("Configuracao.properties").getPath();
 			File file = new File(path);
 			File data = new File(file.getParentFile().getParentFile().getParentFile(),"data");
-			if(!data.exists()){
-				data.mkdirs();
+			if(!google){
+				if(!data.exists()){
+					data.mkdirs();
+				}
 			}
 			basePath = data.getAbsolutePath();
 			if(!basePath.endsWith(File.separator)){
@@ -80,8 +140,55 @@ public class BaseDao<T extends Base> {
 		BaseDao.basePath = basePath;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public T selecionar(long id) throws Exception{
+		if(google){
+			T t = selecionarGoogle(id);
+			if(t==null){
+				throw new Exception("Not found id " + id);
+			}
+			return t;
+		}else{
+			return selecionarArquivo(id);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected T selecionarGoogle(PersistenceManager pm,Long id){
+		logger.info("Carregando id " + id);
+		JdoXml jdoXml = pm.getObjectById(JdoXml.class, id);
+		if(jdoXml!=null){
+			if(jdoXml.getTxtXml()==null){
+				throw new NullPointerException("jdoXml.getTxtXml()==null");
+			}
+			String value = jdoXml.getTxtXml().getValue();
+			logger.debug("INI XML:\n" + value);
+			InputStream is = new ByteArrayInputStream(value.getBytes());
+			XMLDecoder xdec = new XMLDecoder(is);
+			T t = (T)xdec.readObject();
+			if(t==null){
+				throw new NullPointerException("Nao foi possivel transformar o xml em objeto.");
+			}
+			return t;
+		}else{
+			logger.info(id + " = Null");
+			return null;
+		}
+	}
+	
+	protected T selecionarGoogle(Long id){
+		PersistenceManager pm = PMF.getPersistenceManager();
+		try{
+			return selecionarGoogle(pm,id);
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}finally{
+			pm.close();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private T selecionarArquivo(long id) throws Exception{
 		File dir = new File(getBasePath());
 		File arqs[] = dir.listFiles();
 		for (int i = 0; i < arqs.length; i++) {
@@ -95,13 +202,57 @@ public class BaseDao<T extends Base> {
 		}
 		throw new Exception("Id " + id + " not found!");
 	}
+	
 	public void criar(T obj) throws Exception {
-		//Cria o ID
-		obj.setId(getNextId());
-		String path = getBasePath()+obj.getClass().getSimpleName()+ "-" + obj.getId() + ".xml";
-		logger.debug("criando " + path);	
-		gravar(obj, path);
+		if(google){
+			logger.debug("criando " + obj.getClass() + " id "+ obj.getId());
+			gravarGoogle(obj,null);
+		}else{
+			//Cria o ID
+			obj.setId(getNextId());
+			String path = getBasePath()+obj.getClass().getSimpleName()+ "-" + obj.getId() + ".xml";
+			logger.debug("criando " + path);
+			gravar(obj, path);
+		}
 	}
+	
+	protected synchronized void gravarGoogle(T obj, Long id){
+		// Create output stream.
+		OutputStream outputStream = new ByteArrayOutputStream();
+		// Create XML encoder.
+		XMLEncoder xenc = new XMLEncoder(outputStream);
+		// Write object.
+		xenc.writeObject(obj);
+		xenc.close();
+		
+		JdoXml jdoXml = new JdoXml();
+		if(id!=null){
+			jdoXml.setId(id);
+		}
+		jdoXml.setTxtXml(new Text(outputStream.toString()));
+		
+		PersistenceManager pm = PMF.getPersistenceManager();
+		if(id!=null){
+			pm.makePersistent(jdoXml);
+		}else{
+			pm.makePersistent(jdoXml);
+		}
+		pm.close();
+		
+		logger.debug("gravarGoogle(Classe = " + obj.getClass()+",id = "+id+")");
+		logger.debug("INI XML:\n" + outputStream.toString());
+		logger.debug("jdoXml.getId() = " + jdoXml.getId());
+		//testar
+		pm = PMF.getPersistenceManager();
+		jdoXml = pm.getObjectById(JdoXml.class,jdoXml.getId());
+		if(jdoXml!=null){
+			if(jdoXml.getTxtXml()==null){
+				throw new NullPointerException("jdoXml.getTxtXml()==null");
+			}
+		}
+		pm.close();
+	}
+	
 	/**
 	 * Somente um grava...
 	 * @param obj
@@ -109,19 +260,26 @@ public class BaseDao<T extends Base> {
 	 * @throws Exception
 	 */
 	protected synchronized void gravar(T obj, String path)throws Exception{
+		/*
 		// Create output stream.
-		FileOutputStream fos = new FileOutputStream(path);
+		OutputStream outputStream = new FileOutputStream(path);
 		// Create XML encoder.
-		XMLEncoder xenc = new XMLEncoder(fos);
+		XMLEncoder xenc = new XMLEncoder(outputStream);
 		// Write object.
 		xenc.writeObject(obj);
 		xenc.close();
+		*/
 	}
+
 	public void atualizar(T obj) throws Exception{
 		String path = getBasePath()+obj.getClass().getSimpleName()+ "-" + obj.getId() + ".xml";
 		//logger.warn("atualizado " + path, new Exception());
-		logger.debug("atualizado " + path);		
-		gravar(obj, path);	
+		logger.debug("atualizado " + path);
+		if(google){
+			gravarGoogle(obj,obj.getId());
+		}else{
+			gravar(obj, path);
+		}
 	}
 	@SuppressWarnings("unchecked")
 	public List<T> listar() throws Exception{

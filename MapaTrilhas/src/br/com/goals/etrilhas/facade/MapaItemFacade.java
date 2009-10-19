@@ -68,15 +68,27 @@ public class MapaItemFacade{
 		}
 	}
 
+	/**
+	 * Tem que definir uma camada para o mapaItem
+	 * @param mapaItem
+	 * @param mapa
+	 * @throws FacadeException
+	 */
 	public void criar(MapaItem mapaItem, Mapa mapa) throws FacadeException{
 		try {
+			boolean ok=false;
 			mapaItem.setId(BaseDao.getNextId());
 			for(Camada camada:mapa.getCamadas()){
 				if(camada.getId().equals(mapaItem.getCamada().getId())){
 					camada.getItems().add(mapaItem);
+					ok = true;
 				}
 			}
-			mapaDao.atualizar(mapa);
+			if(!ok){
+				throw new FacadeException("Defina a camada do mapaItem.");
+			}else{
+				mapaDao.atualizar(mapa);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new FacadeException(e.getMessage());

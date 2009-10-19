@@ -46,7 +46,7 @@ public class MapaServlet extends BaseServlet {
 				if(mapaItem.getIcone()==null){
 					mapaItem.setIcone("default.png");
 				}
-				retorno+="<mapaItem icone=\""+mapaItem.getIcone()+"\" tipo=\""+mapaItem.getTipo()+"\" pid=\""+mapaItem.getId()+"\" x=\""+mapaItem.getX()+"\" y=\"" + mapaItem.getY() + "\" />";
+				retorno+="<mapaItem nome=\""+mapaItem.getNome()+"\" icone=\""+mapaItem.getIcone()+"\" tipo=\""+mapaItem.getTipo()+"\" pid=\""+mapaItem.getId()+"\" x=\""+mapaItem.getX()+"\" y=\"" + mapaItem.getY() + "\" />";
 			}
 			retorno +="</camada>";
 		}

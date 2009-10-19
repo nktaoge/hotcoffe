@@ -18,6 +18,9 @@ public class CamadaFacade {
 	}
 	
 	public void criar(Camada camada, Mapa mapa) throws FacadeException{
+		if(mapa==null){
+			throw new FacadeException("mapa is null!");
+		}
 		camada.setId(BaseDao.getNextId());
 		mapa.getCamadas().add(camada);
 		try{

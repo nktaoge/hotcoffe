@@ -8,8 +8,8 @@ import java.io.Serializable;
  */
 public class MapaItem extends Base implements Serializable{
 	private static final long serialVersionUID = 6673407019262629113L;
-	private Integer x;
-	private Integer y;
+	private Double x;
+	private Double y;
 	private String icone;
 	private String nome;
 	private Camada camada;
@@ -59,16 +59,16 @@ public class MapaItem extends Base implements Serializable{
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public Integer getX() {
+	public Double getX() {
 		return x;
 	}
-	public void setX(Integer x) {
+	public void setX(Double x) {
 		this.x = x;
 	}
-	public Integer getY() {
+	public Double getY() {
 		return y;
 	}
-	public void setY(Integer y) {
+	public void setY(Double y) {
 		this.y = y;
 	}
 	public String getIcone() {

@@ -46,6 +46,7 @@ public class CamadaListar extends BaseServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//Montar resposta para o usuario
 		Template template = getTemplate(request);
+		response.setCharacterEncoding(CHARACTER_ENCODING);
 		try{
 			Mapa mapa = getMapa(request);
 			template.encaixaResultSet(mapa.getCamadas());
@@ -59,6 +60,7 @@ public class CamadaListar extends BaseServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//Montar resposta para o usuario
 		Template template = getTemplate(request);
+		response.setCharacterEncoding(CHARACTER_ENCODING);
 		try{
 			Mapa mapa = getMapa(request);
 			for(Camada camada: mapa.getCamadas()){

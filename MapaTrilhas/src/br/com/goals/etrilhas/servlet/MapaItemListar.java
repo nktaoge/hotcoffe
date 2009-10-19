@@ -49,6 +49,7 @@ public class MapaItemListar extends BaseServlet {
 			template.setInput("camada.id", camadaId);
 			Mapa mapa = getMapa(request);
 			List<MapaItem> listItem = mapaItemFacade.listar(mapa,camadaId);
+			template.setHtmlEncodeRs(true);
 			template.encaixaResultSet(listItem);
 			template.setMensagem("");
 		}catch(Exception e){

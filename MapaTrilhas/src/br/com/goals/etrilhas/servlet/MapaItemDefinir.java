@@ -34,13 +34,19 @@ public class MapaItemDefinir extends BaseServlet {
         super();
     }
 
-    private void carregarTemplate(Template template,MapaItem mapaItem,Mapa mapa) throws AreaNaoEncontradaException{
+    protected void carregarTemplate(Template template,MapaItem mapaItem,Mapa mapa) throws AreaNaoEncontradaException{
     	template.setInput("nome",mapaItem.getNome());
+    	template.setInput("x",mapaItem.getX());
+    	template.setInput("y",mapaItem.getY());
     	File dirIcones = new File(template.getTemplatePath().getParent(),"media/icones");
 		template.setSelect("icone",mapaItem.getIcone(),dirIcones.list());
 		template.setSelect("tipo", mapaItem.getTipo());
 		template.setForm("campos do tipo",mapaItem.getValor());
-		template.setRadio("camadas",mapa.getCamadas(),mapaItem.getCamada().getId());
+		if(mapaItem.getCamada()==null){
+			template.setRadio("camadas",mapa.getCamadas(),null);
+		}else{
+			template.setRadio("camadas",mapa.getCamadas(),mapaItem.getCamada().getId().toString());
+		}
 		String linkEdicao = null;
 		if(mapaItem.getValor() !=null && mapaItem.getValor() instanceof Galeria){
 			Galeria galeria =(Galeria) mapaItem.getValor();
@@ -81,15 +87,36 @@ public class MapaItemDefinir extends BaseServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Template template = null;
+		Mapa mapa = null;
+		MapaItem mapaItem = null;
 		try{
 			String tipo = request.getParameter("tipo");
-			Long id = Long.parseLong(request.getParameter("id"));
-			Mapa mapa = getMapa(request);
+			Long id=null;
+			try{
+				id = Long.parseLong(request.getParameter("id"));
+			}catch(NumberFormatException e){
+				//ok
+			}
+			mapa = getMapa(request);
 			MapaItemDao mapaItemDao = new MapaItemDao();
-			MapaItem mapaItem = mapaItemDao.selecionar(mapa, id);
+			if(id==null){
+				mapaItem = new MapaItem();
+			}else{
+				mapaItem = mapaItemDao.selecionar(mapa, id);
+			}
 			mapaItem.setNome(request.getParameter("nome"));
 			mapaItem.setIcone(request.getParameter("icone"));
-			
+			try{
+				mapaItem.setX(Double.parseDouble(request.getParameter("x")));
+			}catch(Exception e){
+				throw new Exception("Nao foi possivel atribuir a latitude.");
+			}
+			try{
+				mapaItem.setY(Double.parseDouble(request.getParameter("y")));
+			}catch(Exception e){
+				throw new Exception("Nao foi possivel atribuir a longitude.");
+			}
 			//Criar um item do tipo
 			Object obj = null;
 			if(!tipo.equals(mapaItem.getTipo())){
@@ -112,7 +139,19 @@ public class MapaItemDefinir extends BaseServlet {
 			
 			//Verificar se colocou em outra camada
 			Long camadaId = Long.parseLong(request.getParameter("Camada.id"));
-			if(!camadaId.equals(mapaItem.getCamada().getId())){
+			if(mapaItem.getCamada()==null){
+				//o item nao tem camada
+				Camada camada = camadaFacade.selecionar(mapa,camadaId);
+				mapaItem.setCamada(camada);
+				if(camada.getItems()==null){
+					camada.setItems(new ArrayList<MapaItem>());
+				}
+				//camada.getItems().add(mapaItem);
+				if(id==null){
+					//o item nao esta salvo
+					mapaItemFacade.criar(mapaItem,getMapa(request));
+				}
+			}else if(!camadaId.equals(mapaItem.getCamada().getId())){
 				//trocar de camada
 				Camada camada = camadaFacade.selecionar(mapa,camadaId);
 				//retira da camada antiga
@@ -126,13 +165,17 @@ public class MapaItemDefinir extends BaseServlet {
 			MapaFacade.getInstance().atualizar(mapa);
 			
 			//Montar resposta para o usuario
-			Template template = getTemplate(request);
+			template = getTemplate(request);
 			template.set("id",id);
 			carregarTemplate(template, mapaItem, mapa);
 			
 			template.setMensagem("Alterado com sucesso");
 			response.getWriter().write(template.toString());
 		}catch(Exception e){
+			if(template==null){
+				template = getTemplate(request);
+			}
+			template.setMensagem(e.getMessage());
 			e.printStackTrace();
 		}
 			

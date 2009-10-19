@@ -20,6 +20,7 @@ import br.com.goals.template.Template;
 
 public abstract class BaseServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	public static final String CHARACTER_ENCODING = "utf-8";
 	private static final Logger logger = Logger.getLogger(BaseServlet.class);
 	protected static MapaFacade mapaFacade = MapaFacade.getInstance();
 	protected static CamadaFacade camadaFacade = CamadaFacade.getInstance();
@@ -49,6 +50,7 @@ public abstract class BaseServlet extends HttpServlet {
     	if(mapa==null){
     		try {
 				mapa = mapaFacade.selecionar(1L);
+				setMapa(request,mapa);
 			} catch (FacadeException e) {
 				e.printStackTrace();
 			}

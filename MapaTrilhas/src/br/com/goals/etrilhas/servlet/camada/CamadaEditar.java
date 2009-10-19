@@ -21,6 +21,7 @@ public class CamadaEditar extends BaseServlet {
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Template template = getTemplate(request);
+		response.setCharacterEncoding(CHARACTER_ENCODING);
 		try{
 			Long id = Long.parseLong(request.getParameter("id"));
 			Camada camada = camadaFacade.selecionar(getMapa(request),id);
@@ -36,6 +37,7 @@ public class CamadaEditar extends BaseServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Template template = getTemplate(request);
+		response.setCharacterEncoding(CHARACTER_ENCODING);
 		try{
 			Mapa mapa = getMapa(request);
 			Long id = Long.parseLong(request.getParameter("Camada.id"));
