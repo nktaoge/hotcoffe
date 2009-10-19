@@ -8,6 +8,10 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 import com.google.appengine.api.users.User;
 
+/**
+ * Exemplo do google
+ *
+ */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Greeting {
     @PrimaryKey

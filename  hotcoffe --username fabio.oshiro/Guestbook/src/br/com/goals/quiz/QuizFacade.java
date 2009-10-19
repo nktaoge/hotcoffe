@@ -6,7 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
-import br.com.goals.persistencia.EMF;
+import br.com.goals.jpa4google.EMF;
 import br.com.goals.quiz.vo.Opcao;
 import br.com.goals.quiz.vo.Pergunta;
 import br.com.goals.quiz.vo.Quiz;
@@ -67,6 +67,7 @@ public class QuizFacade {
 					opcao.setCorreta(false);
 					opcao.setTexto("Digite a opção");
 					opcao.setPergunta(pergunta);
+					
 					pergunta.getOpcoes().add(opcao);
 					em.persist(opcao);
 				}
