@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+	<title>MapaItem <!-- ini id -->numero<!-- fim id --></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="estilo.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="tiny_mce/tiny_mce.js"></script>
+	<script type="text/javascript">
+	tinyMCE.init({
+		// General options
+		mode : "specific_textareas",
+		editor_selector : "mceEditor",
+	
+		theme : "advanced",
+		plugins : "safari,spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,imagemanager,filemanager",
+	
+		// Theme options
+		theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,|,link,unlink,anchor,|,outdent,indent,blockquote,|,code",
+		theme_advanced_buttons2 : "",
+		theme_advanced_buttons3 : "",
+		theme_advanced_buttons4 : "",
+		//theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
+		//theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen",
+		//theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,spellchecker,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,blockquote,pagebreak,|,insertfile,insertimage",
+		theme_advanced_toolbar_location : "top",
+		theme_advanced_toolbar_align : "left",
+		theme_advanced_statusbar_location : "bottom",
+		theme_advanced_resizing : true,
+	
+		// Example content CSS (should be your site CSS)
+		content_css : "css/example.css",
+	
+		// Drop lists for link/image/media/template dialogs
+		template_external_list_url : "js/template_list.js",
+		external_link_list_url : "js/link_list.js",
+		external_image_list_url : "js/image_list.js",
+		media_external_list_url : "js/media_list.js",
+	
+		// Replace values for the template plugin
+		template_replace_values : {
+			username : "Some User",
+			staffid : "991234"
+		}
+	});
+	</script>
+
+</head>
+<body>
+	<!-- ini menu -->
+	<!-- fim menu -->
+	<h1>Definindo o Ponto cod: <!-- ini id -->numero<!-- fim id --></h1>
+	<!-- ini box mensagem -->
+		<div class="mensagem">
+			<!-- ini mensagem -->
+			Feito com sucesso!
+			<!-- fim mensagem -->
+		</div>
+	<!-- fim box mensagem -->
+	<form action="definirMapaItem" method="post" class="default">
+		<table>
+			<tr>
+				<td valign="top">
+					<div class="tit" title="Defina a camada que este ponto pertence">Camada:</div>
+					<div>
+						<!-- ini camadas -->
+						<!-- fim camadas -->
+					</div>
+					<a href="CamadaListar">Gerenciar Camadas</a>
+				</td>
+				<td>
+					<div>
+						
+						<input type="hidden" name="id" value="" />
+						<label for="tipo">Tipo:</label>
+						<select name="tipo" id="tipo">
+							<option value="Galeria">Galeria de Imagens</option>
+							<option value="Foto360">Foto 360</option>
+							<option value="Video">V&iacute;deo</option>
+							<option value="MapaLinkMapa">Link para outro Mapa</option>
+						</select>
+					</div>
+					<div>
+						<label for="nome">Nome:</label>
+						<input type="text" name="nome" id="nome" value="" />
+					</div>
+					<div>
+						<label for="lat">Latitude:</label>
+						<input type="text" name="x" id="lat" value="" />
+					</div>
+					<div>
+						<label for="lng">Longitude:</label>
+						<input type="text" name="y" id="lng" value="" />
+					</div>
+					<div>
+						<label for="icone">Icone:</label>
+						<select name="icone" id="icone">
+						
+						</select>
+					</div>
+					<!-- ini campos do tipo -->
+					<!-- fim campos do tipo -->
+					<!-- ini link(linkEdicao) -->
+						<a href="#">Editar</a>
+					<!-- fim link(linkEdicao) -->
+				</td>
+			</tr>
+		</table>
+		<div>
+			<input type="submit" value="Enviar" />
+		</div>
+	</form>
+</body>
+</html>

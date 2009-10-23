@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+	<title>Lista de Camadas</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="estilo.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<!-- ini menu -->
+	<!-- fim menu -->
+	<h1>Lista de Camadas</h1>
+	<div>
+		<a href="camadaCriar">Criar Camada</a>
+	</div>
+	<!-- ini box mensagem -->
+		<div class="mensagem">
+			<!-- ini mensagem -->
+			Feito com sucesso!
+			<!-- fim mensagem -->
+		</div>
+	<!-- fim box mensagem -->
+	<form action="CamadaListar" method="post" class="default">
+		<table>
+			<tr>
+				<th>
+					Nome
+				</th>
+				<th>
+					Ordem
+				</th>
+				<th>
+					Editar
+				</th>
+			</tr>
+			<!-- ini rs -->
+				<tr>
+					<td>
+						<!-- ini rs(nome) -->
+							Nome da Camada
+						<!-- fim rs(nome) -->
+					</td>
+					<td>
+						<!-- ini rs(ordem) -->
+							<input type="text" name="ordem" value="0" />
+						<!-- fim rs(ordem) -->
+					</td>
+					<td>
+						<!-- ini link(editar) -->
+							<a href="#">Editar</a>
+						<!-- fim link(editar) -->
+						<!-- ini link(apagar) -->
+							<a href="#" onclick="return confirm('Deseja mesmo apagar?')">Apagar</a>
+						<!-- fim link(apagar) -->
+						<!-- ini link(pontos) -->
+							<a href="#">Pontos</a>
+						<!-- fim link(pontos) -->
+					</td>
+				</tr>	
+			<!-- fim rs -->
+		</table>
+		<div>
+			<input type="submit" value="Enviar" />
+		</div>
+	</form>
+</body>
+</html>

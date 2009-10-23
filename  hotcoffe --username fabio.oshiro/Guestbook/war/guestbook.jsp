@@ -5,7 +5,7 @@
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
 <%@ page import="guestbook.Greeting" %>
-<%@ page import="br.com.goals.persistencia.PMF" %>
+<%@ page import="br.com.goals.jpa4google.PMF" %>
 
 <html>
   <body>
