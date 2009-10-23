@@ -21,7 +21,7 @@ public class CamadaCriar extends BaseServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Template template = getTemplate(request);
-		response.setCharacterEncoding(CHARACTER_ENCODING);
+		//response.setCharacterEncoding(CHARACTER_ENCODING);
 		try{
 			Camada camada = new Camada();
 			template.setForm("camada",camada);
@@ -34,7 +34,6 @@ public class CamadaCriar extends BaseServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setCharacterEncoding(CHARACTER_ENCODING);
 		Template template = getTemplate(request);
 		try{
 			Camada camada = new Camada();

@@ -29,7 +29,7 @@ public class CamadaListar extends BaseServlet {
 					temp.setTemplate(item);
 					try {
 						temp.setLink("editar", "camadaEditar?id=" + camada.getId());
-						temp.setLink("apagar", "camadaApagar?id=" + camada.getId());
+						temp.setLink("apagar", "CamadaApagar?id=" + camada.getId());
 						temp.setLink("pontos", "MapaItemListar?camada.id=" + camada.getId());
 					} catch (AreaNaoEncontradaException e) {
 						e.printStackTrace();

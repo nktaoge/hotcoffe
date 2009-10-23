@@ -1,6 +1,7 @@
 package br.com.goals.etrilhas.servlet.camada;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +22,6 @@ public class CamadaEditar extends BaseServlet {
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Template template = getTemplate(request);
-		response.setCharacterEncoding(CHARACTER_ENCODING);
 		try{
 			Long id = Long.parseLong(request.getParameter("id"));
 			Camada camada = camadaFacade.selecionar(getMapa(request),id);
@@ -37,14 +37,25 @@ public class CamadaEditar extends BaseServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Template template = getTemplate(request);
-		response.setCharacterEncoding(CHARACTER_ENCODING);
+		Camada camada = null;
 		try{
 			Mapa mapa = getMapa(request);
 			Long id = Long.parseLong(request.getParameter("Camada.id"));
-			Camada camada = camadaFacade.selecionar(mapa,id);
+			camada = camadaFacade.selecionar(mapa,id);
 			RequestUtil.request(request, camada);
-			template.setForm("camada",camada);
 			
+			response.getWriter().write(
+					//*
+					"UTF-8 = " + 
+					URLEncoder.encode(camada.getNome(),"UTF-8") +
+					"\n<br>ISO = " +
+					URLEncoder.encode(camada.getNome(),"iso-8859-1")
+					//*/
+					);
+			System.out.println(" camada.getNome() = " + camada.getNome());
+			
+			template.setForm("camada",camada);
+			System.out.println("camada.nome = " + camada.getNome());
 			mapaFacade.atualizar(mapa);
 			
 			template.setMensagem("Camada atualizada com sucesso.");

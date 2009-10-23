@@ -18,6 +18,9 @@ import br.com.goals.etrilhas.facade.MapaItemFacade;
 import br.com.goals.etrilhas.modelo.Mapa;
 import br.com.goals.template.Template;
 
+/**
+ * Base 
+ */
 public abstract class BaseServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public static final String CHARACTER_ENCODING = "utf-8";
@@ -46,7 +49,7 @@ public abstract class BaseServlet extends HttpServlet {
     	request.getSession().setAttribute("mapa",mapa);
 	}
     public Mapa getMapa(HttpServletRequest request){
-    	Mapa mapa = (Mapa)request.getSession().getAttribute("mapa");
+    	Mapa mapa = null;//(Mapa)request.getSession().getAttribute("mapa");
     	if(mapa==null){
     		try {
 				mapa = mapaFacade.selecionar(1L);

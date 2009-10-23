@@ -20,7 +20,7 @@ public class CamadaApagar extends BaseServlet{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		request.getRequestDispatcher("camadaListar")
+		request.getRequestDispatcher("CamadaListar")
 			.forward(request, response);
 	}
 }

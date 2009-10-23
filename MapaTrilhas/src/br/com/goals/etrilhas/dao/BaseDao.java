@@ -9,6 +9,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,16 +24,18 @@ import org.apache.log4j.Logger;
 
 import br.com.goals.etrilhas.modelo.Base;
 import br.com.goals.jpa4google.EMF;
+import br.com.goals.jpa4google.Jpa4GoogleEntityManager;
 import br.com.goals.jpa4google.PMF;
 
 import com.google.appengine.api.datastore.Text;
 
-public class BaseDao<T extends Base> {
+public class BaseDao<T extends Base> extends Jpa4GoogleEntityManager {
 	private static String basePath = null;
 	private static Logger logger = Logger.getLogger(BaseDao.class);
 	private static Long lastIdGenerated = null; 
 	private static File lastIds;
 	protected static boolean google = true;
+	private static String CHARSET_DEC = "iso-8859-1";
 	public BaseDao() {
 		
 	}
@@ -153,7 +159,7 @@ public class BaseDao<T extends Base> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected T selecionarGoogle(PersistenceManager pm,Long id){
+	protected T selecionarGoogle(PersistenceManager pm,Long id) throws Exception{
 		logger.info("Carregando id " + id);
 		JdoXml jdoXml = pm.getObjectById(JdoXml.class, id);
 		if(jdoXml!=null){
@@ -161,10 +167,12 @@ public class BaseDao<T extends Base> {
 				throw new NullPointerException("jdoXml.getTxtXml()==null");
 			}
 			String value = jdoXml.getTxtXml().getValue();
-			logger.debug("INI XML:\n" + value);
+			logger.warn("DEC XML:\n" + value);
 			InputStream is = new ByteArrayInputStream(value.getBytes());
 			XMLDecoder xdec = new XMLDecoder(is);
 			T t = (T)xdec.readObject();
+			urlEncodeAllObjectString(t, null,false);
+			
 			if(t==null){
 				throw new NullPointerException("Nao foi possivel transformar o xml em objeto.");
 			}
@@ -216,41 +224,47 @@ public class BaseDao<T extends Base> {
 		}
 	}
 	
-	protected synchronized void gravarGoogle(T obj, Long id){
-		// Create output stream.
-		OutputStream outputStream = new ByteArrayOutputStream();
-		// Create XML encoder.
-		XMLEncoder xenc = new XMLEncoder(outputStream);
-		// Write object.
-		xenc.writeObject(obj);
-		xenc.close();
-		
-		JdoXml jdoXml = new JdoXml();
-		if(id!=null){
-			jdoXml.setId(id);
-		}
-		jdoXml.setTxtXml(new Text(outputStream.toString()));
-		
-		PersistenceManager pm = PMF.getPersistenceManager();
-		if(id!=null){
-			pm.makePersistent(jdoXml);
-		}else{
-			pm.makePersistent(jdoXml);
-		}
-		pm.close();
-		
-		logger.debug("gravarGoogle(Classe = " + obj.getClass()+",id = "+id+")");
-		logger.debug("INI XML:\n" + outputStream.toString());
-		logger.debug("jdoXml.getId() = " + jdoXml.getId());
-		//testar
-		pm = PMF.getPersistenceManager();
-		jdoXml = pm.getObjectById(JdoXml.class,jdoXml.getId());
-		if(jdoXml!=null){
-			if(jdoXml.getTxtXml()==null){
-				throw new NullPointerException("jdoXml.getTxtXml()==null");
+	protected synchronized void gravarGoogle(T obj, Long id) throws Exception{
+		urlEncodeAllObjectString(obj, null,true);
+		try{
+			// Create output stream.
+			OutputStream outputStream = new ByteArrayOutputStream();	
+			// Create XML encoder.
+			XMLEncoder xenc = new XMLEncoder(outputStream);
+			// Write object.		
+			xenc.writeObject(obj);
+			xenc.close();
+			
+			JdoXml jdoXml = new JdoXml();
+			if(id!=null){
+				jdoXml.setId(id);
 			}
+			
+			jdoXml.setTxtXml(new Text(outputStream.toString()));
+			
+			PersistenceManager pm = PMF.getPersistenceManager();
+			if(id!=null){
+				pm.makePersistent(jdoXml);
+			}else{
+				pm.makePersistent(jdoXml);
+			}
+			pm.close();
+			
+			logger.debug("gravarGoogle(Classe = " + obj.getClass()+",id = "+id+")");
+			logger.debug("INI XML:\n" + outputStream.toString());
+			logger.debug("jdoXml.getId() = " + jdoXml.getId());
+			//testar
+			pm = PMF.getPersistenceManager();
+			jdoXml = pm.getObjectById(JdoXml.class,jdoXml.getId());
+			if(jdoXml!=null){
+				if(jdoXml.getTxtXml()==null){
+					throw new NullPointerException("jdoXml.getTxtXml()==null");
+				}
+			}
+			pm.close();
+		}finally{
+			urlEncodeAllObjectString(obj, null,false);
 		}
-		pm.close();
 	}
 	
 	/**
