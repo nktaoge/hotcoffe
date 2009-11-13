@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 import br.com.goals.etrilhas.modelo.Camada;
 import br.com.goals.etrilhas.modelo.Mapa;
 import br.com.goals.etrilhas.servlet.BaseServlet;
-import br.com.goals.template.AreaNaoEncontradaException;
-import br.com.goals.template.RsItemCustomizado;
-import br.com.goals.template.Template;
+import br.com.goals.cafeina.view.tmp.AreaNaoEncontradaException;
+import br.com.goals.cafeina.view.tmp.RsItemCustomizado;
+import br.com.goals.cafeina.view.tmp.Template;
 
 public class CamadaListar extends BaseServlet {
 	private static final long serialVersionUID = 1L;

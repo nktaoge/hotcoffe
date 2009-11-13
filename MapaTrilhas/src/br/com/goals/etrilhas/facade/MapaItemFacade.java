@@ -1,6 +1,5 @@
 package br.com.goals.etrilhas.facade;
 
-import java.util.Date;
 import java.util.List;
 
 import br.com.goals.etrilhas.dao.BaseDao;

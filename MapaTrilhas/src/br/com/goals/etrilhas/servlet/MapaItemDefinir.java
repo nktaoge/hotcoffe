@@ -1,6 +1,7 @@
 package br.com.goals.etrilhas.servlet;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -8,6 +9,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
 
 import br.com.goals.etrilhas.dao.MapaItemDao;
 import br.com.goals.etrilhas.facade.GaleriaFacade;
@@ -17,16 +20,22 @@ import br.com.goals.etrilhas.modelo.Camada;
 import br.com.goals.etrilhas.modelo.Galeria;
 import br.com.goals.etrilhas.modelo.Mapa;
 import br.com.goals.etrilhas.modelo.MapaItem;
-import br.com.goals.template.AreaNaoEncontradaException;
-import br.com.goals.template.RequestUtil;
-import br.com.goals.template.Template;
+import br.com.goals.cafeina.view.tmp.AreaNaoEncontradaException;
+import br.com.goals.cafeina.view.tmp.RequestUtil;
+import br.com.goals.cafeina.view.tmp.Template;
 
 /**
  * Servlet implementation class MapaItemDefinirServlet
  */
 public class MapaItemDefinir extends BaseServlet {
 	private static final long serialVersionUID = 1L;
-       
+    private static Logger logger = Logger.getLogger(MapaItemDefinir.class);
+    private FilenameFilter fileNameFilter = new FilenameFilter(){
+		public boolean accept(File dir, String name) {
+			if(name.equals(".svn"))	return false;
+			return true;
+		}
+    };
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -39,11 +48,17 @@ public class MapaItemDefinir extends BaseServlet {
     	template.setInput("x",mapaItem.getX());
     	template.setInput("y",mapaItem.getY());
     	File dirIcones = new File(template.getTemplatePath().getParent(),"media/icones");
-		template.setSelect("icone",mapaItem.getIcone(),dirIcones.list());
+		template.setSelect("icone",mapaItem.getIcone(),dirIcones.list(fileNameFilter));
 		template.setSelect("tipo", mapaItem.getTipo());
 		template.setForm("campos do tipo",mapaItem.getValor());
 		if(mapaItem.getCamada()==null){
-			template.setRadio("camadas",mapa.getCamadas(),null);
+			//selecionar a primeira
+			if(mapa.getCamadas().size()>0){
+				Camada selecionada = mapa.getCamadas().get(0);
+				template.setRadio("camadas",mapa.getCamadas(),selecionada.getId().toString());
+			}else{
+				template.setRadio("camadas",mapa.getCamadas(),null);
+			}
 		}else{
 			template.setRadio("camadas",mapa.getCamadas(),mapaItem.getCamada().getId().toString());
 		}
@@ -97,6 +112,7 @@ public class MapaItemDefinir extends BaseServlet {
 				id = Long.parseLong(request.getParameter("id"));
 			}catch(NumberFormatException e){
 				//ok
+				logger.info("Criando mapaItem...");
 			}
 			mapa = getMapa(request);
 			MapaItemDao mapaItemDao = new MapaItemDao();
@@ -124,6 +140,7 @@ public class MapaItemDefinir extends BaseServlet {
 				obj = Class.forName("br.com.goals.etrilhas.modelo."+tipo).newInstance();
 				mapaItem.setTipo(tipo);
 				mapaItem.setValor(obj);
+				logger.debug("mapaItem.getTipo() = " + mapaItem.getTipo() + " " + mapaItem.getValor().getClass().getCanonicalName());
 			}else{
 				//O tipo permanesce o mesmo
 				if(mapaItem.getValor()!=null && mapaItem.getValor() instanceof Galeria){
@@ -135,7 +152,6 @@ public class MapaItemDefinir extends BaseServlet {
 				}
 				RequestUtil.request(request, mapaItem.getValor());
 			}
-			MapaItemFacade.getInstance().criarHtml(mapaItem);
 			
 			//Verificar se colocou em outra camada
 			Long camadaId = Long.parseLong(request.getParameter("Camada.id"));
@@ -149,7 +165,9 @@ public class MapaItemDefinir extends BaseServlet {
 				//camada.getItems().add(mapaItem);
 				if(id==null){
 					//o item nao esta salvo
-					mapaItemFacade.criar(mapaItem,getMapa(request));
+					logger.debug("mapaItemFacade.criar()");
+					mapaItemFacade.criar(mapaItem,mapa);
+					id = mapaItem.getId();
 				}
 			}else if(!camadaId.equals(mapaItem.getCamada().getId())){
 				//trocar de camada
@@ -163,7 +181,7 @@ public class MapaItemDefinir extends BaseServlet {
 				camada.getItems().add(mapaItem);
 			}
 			MapaFacade.getInstance().atualizar(mapa);
-			
+			MapaItemFacade.getInstance().criarHtml(mapaItem);
 			//Montar resposta para o usuario
 			template = getTemplate(request);
 			template.set("id",id);
@@ -175,7 +193,7 @@ public class MapaItemDefinir extends BaseServlet {
 			if(template==null){
 				template = getTemplate(request);
 			}
-			template.setMensagem(e.getMessage());
+			template.setMensagem("Erro: " + e.getMessage());
 			e.printStackTrace();
 		}
 			

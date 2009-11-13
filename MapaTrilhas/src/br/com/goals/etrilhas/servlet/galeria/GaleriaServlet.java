@@ -9,10 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import br.com.goals.etrilhas.facade.GaleriaFacade;
+import br.com.goals.etrilhas.modelo.Foto;
 import br.com.goals.etrilhas.modelo.Galeria;
 import br.com.goals.etrilhas.servlet.BaseServlet;
-import br.com.goals.template.AreaNaoEncontradaException;
-import br.com.goals.template.Template;
+import br.com.goals.cafeina.view.tmp.AreaNaoEncontradaException;
+import br.com.goals.cafeina.view.tmp.RsItemCustomizado;
+import br.com.goals.cafeina.view.tmp.Template;
 
 /**
  * Servlet implementation class GaleriaServlet
@@ -45,15 +47,30 @@ public class GaleriaServlet extends BaseServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Template template = getTemplate(request);
 		try{
-			Long galeriaId = Long.parseLong(request.getParameter("galeriaId"));
+			final Long galeriaId = Long.parseLong(request.getParameter("galeriaId"));
 			template.setInput("galeriaId", galeriaId);
 			Galeria galeria = galeriaFacade.selecionar(galeriaId);
 			logger.debug("galeria.getFotos().size() = " + galeria.getFotos().size());
+			if(request.getParameter("delId")!=null){
+				galeriaFacade.apagarFoto(galeria,request.getParameter("delId"));
+				template.setMensagem("Foto apagada");
+			}else{
+				template.setMensagem("");
+			}
+			template.setRsItemCustomizado(new RsItemCustomizado(){
+				@Override
+				public String tratar(Object obj, String item) {
+					if(obj instanceof Foto){
+						Foto foto=(Foto)obj;
+						item = item.replace("href=\"#del\"","href=\"?galeriaId="+galeriaId+"&delId="+foto.getId()+"\"");
+					}
+					return item;
+				}				
+			});
 			template.encaixaResultSet(galeria.getFotos());
-			template.setMensagem("");
 		}catch(Exception e){
 			logger.error("Erro inesperado ",e);
-			template.setMensagem(e.getMessage());
+			template.setMensagem("Erro: " + e.getMessage());
 		}
 		response.getWriter().write(template.toString());
 	}

@@ -13,7 +13,7 @@ import br.com.goals.etrilhas.facade.FacadeException;
 import br.com.goals.etrilhas.facade.MapaItemFacade;
 import br.com.goals.etrilhas.modelo.Camada;
 import br.com.goals.etrilhas.modelo.MapaItem;
-import br.com.goals.template.RequestUtil;
+import br.com.goals.cafeina.view.tmp.RequestUtil;
 
 /**
  * Servlet implementation class MapaItemServlet

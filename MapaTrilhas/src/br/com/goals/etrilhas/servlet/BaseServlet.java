@@ -7,6 +7,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
@@ -16,7 +17,7 @@ import br.com.goals.etrilhas.facade.FacadeException;
 import br.com.goals.etrilhas.facade.MapaFacade;
 import br.com.goals.etrilhas.facade.MapaItemFacade;
 import br.com.goals.etrilhas.modelo.Mapa;
-import br.com.goals.template.Template;
+import br.com.goals.cafeina.view.tmp.Template;
 
 /**
  * Base 
@@ -88,4 +89,9 @@ public abstract class BaseServlet extends HttpServlet {
     	}
     	return template;
     }
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
+    
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
 }

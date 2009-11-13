@@ -26,6 +26,15 @@ public class Mapa extends Base implements Serializable{
 		return txtCoordenadasLatLng;
 	}
 	
+	/**
+	 * Padr&atilde;o:
+	 * <pre>
+	 * latitude longitude altitude
+	 * 22.22222 33.333333 4.444444
+	 * 22.22222 33.333333 4.444444
+	 * </pre>
+	 * @param txtCoordenadasLatLng String
+	 */
 	public void setTxtCoordenadasLatLng(String txtCoordenadasLatLng) {
 		this.txtCoordenadasLatLng = txtCoordenadasLatLng;
 	}

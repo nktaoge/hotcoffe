@@ -214,7 +214,7 @@ public class BaseDao<T extends Base> extends Jpa4GoogleEntityManager {
 	public void criar(T obj) throws Exception {
 		if(google){
 			logger.debug("criando " + obj.getClass() + " id "+ obj.getId());
-			gravarGoogle(obj,null);
+			gravarGoogle(obj,obj.getId());
 		}else{
 			//Cria o ID
 			obj.setId(getNextId());

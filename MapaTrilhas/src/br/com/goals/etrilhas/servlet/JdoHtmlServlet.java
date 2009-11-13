@@ -33,9 +33,9 @@ public class JdoHtmlServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String fName = request.getRequestURI();
 		response.setCharacterEncoding(BaseServlet.CHARACTER_ENCODING);
 		response.setContentType("text/html");
+		String fName = request.getRequestURI();
 		int l = fName.lastIndexOf('/');
 		fName = fName.substring(l+1);
 		//System.out.println("Find " + fName);

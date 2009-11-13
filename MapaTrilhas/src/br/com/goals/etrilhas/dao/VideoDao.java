@@ -13,7 +13,7 @@ import com.google.appengine.api.datastore.Text;
 
 import br.com.goals.etrilhas.modelo.Video;
 import br.com.goals.jpa4google.PMF;
-import br.com.goals.template.Template;
+import br.com.goals.cafeina.view.tmp.Template;
 
 public class VideoDao extends BaseDao<Video> {
 	@Override

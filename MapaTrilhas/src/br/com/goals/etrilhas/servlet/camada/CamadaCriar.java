@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import br.com.goals.etrilhas.modelo.Camada;
 import br.com.goals.etrilhas.modelo.Mapa;
 import br.com.goals.etrilhas.servlet.BaseServlet;
-import br.com.goals.template.RequestUtil;
-import br.com.goals.template.Template;
+import br.com.goals.cafeina.view.tmp.RequestUtil;
+import br.com.goals.cafeina.view.tmp.Template;
 
 public class CamadaCriar extends BaseServlet {
 	private static final long serialVersionUID = 1L;

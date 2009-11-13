@@ -50,6 +50,19 @@ public class MapaServlet extends BaseServlet {
 			}
 			retorno +="</camada>";
 		}
+		/*
+		 * Montar a trilha
+		 */
+		retorno+="<trilha>";
+		String txtCoordenadas = mapa.getTxtCoordenadasLatLng();
+		if(txtCoordenadas!=null){
+			String[] linhas = txtCoordenadas.split("\n");
+			for(String linha:linhas){
+				String args[] = linha.split("\\s+");
+				retorno+="<point lat=\""+args[0]+"\" lng=\""+args[1]+"\" />";
+			}
+		}
+		retorno+="</trilha>";
 		retorno+="<msg>"+msg+"</msg>";
 		retorno+="</mapa>";
 		System.out.println(retorno);

@@ -6,6 +6,16 @@ public class Foto extends Base{
 	
 	private Integer ordem;
 
+	@Override
+	public Long getId() {
+		return super.getId();
+	}
+	
+	@Override
+	public void setId(Long id) {
+		super.setId(id);
+	}
+	
 	public Integer getOrdem() {
 		return ordem;
 	}

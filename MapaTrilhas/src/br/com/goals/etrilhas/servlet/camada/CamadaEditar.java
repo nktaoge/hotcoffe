@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import br.com.goals.etrilhas.modelo.Camada;
 import br.com.goals.etrilhas.modelo.Mapa;
 import br.com.goals.etrilhas.servlet.BaseServlet;
-import br.com.goals.template.RequestUtil;
-import br.com.goals.template.Template;
+import br.com.goals.cafeina.view.tmp.RequestUtil;
+import br.com.goals.cafeina.view.tmp.Template;
 
 public class CamadaEditar extends BaseServlet {
 	private static final long serialVersionUID = 1L;
@@ -43,15 +43,16 @@ public class CamadaEditar extends BaseServlet {
 			Long id = Long.parseLong(request.getParameter("Camada.id"));
 			camada = camadaFacade.selecionar(mapa,id);
 			RequestUtil.request(request, camada);
-			
+			/*
 			response.getWriter().write(
-					//*
+					
 					"UTF-8 = " + 
 					URLEncoder.encode(camada.getNome(),"UTF-8") +
 					"\n<br>ISO = " +
 					URLEncoder.encode(camada.getNome(),"iso-8859-1")
-					//*/
+					
 					);
+			//*/
 			System.out.println(" camada.getNome() = " + camada.getNome());
 			
 			template.setForm("camada",camada);
