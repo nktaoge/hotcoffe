@@ -56,7 +56,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>MapaServlet</servlet-name>
-    <url-pattern>/teste/Mapa.xml</url-pattern>
+    <url-pattern>/map/Mapa.xml</url-pattern>
   </servlet-mapping>
   <servlet>
     <description></description>
@@ -67,6 +67,16 @@
   <servlet-mapping>
     <servlet-name>ResourcesServlet</servlet-name>
     <url-pattern>/resources.xml</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description>TrilhaEditar</description>
+    <display-name>TrilhaEditar</display-name>
+    <servlet-name>TrilhaEditar</servlet-name>
+    <servlet-class>br.com.goals.etrilhas.servlet.TrilhaEditar</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TrilhaEditar</servlet-name>
+    <url-pattern>/TrilhaEditar</url-pattern>
   </servlet-mapping>
   <servlet>
     <description></description>
@@ -86,7 +96,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>JdoHtmlServlet</servlet-name>
-    <url-pattern>/teste/data/*</url-pattern>
+    <url-pattern>/map/data/*</url-pattern>
   </servlet-mapping>
   
   <servlet>
@@ -206,7 +216,20 @@
     <servlet-name>InserirFoto</servlet-name>
     <url-pattern>/InserirFoto</url-pattern>
   </servlet-mapping>
-    
+    <servlet>
+    <description></description>
+    <display-name>VerFoto</display-name>
+    <servlet-name>VerFoto</servlet-name>
+    <servlet-class>br.com.goals.etrilhas.servlet.galeria.VerFoto</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>VerFoto</servlet-name>
+    <url-pattern>/media/fotos/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>VerFoto</servlet-name>
+    <url-pattern>/map/media/fotos/*</url-pattern>
+  </servlet-mapping>
     
     <!-- fim Mapa trilhas -->
     <welcome-file-list>
