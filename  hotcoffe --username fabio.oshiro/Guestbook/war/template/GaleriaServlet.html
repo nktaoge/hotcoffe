@@ -48,34 +48,37 @@
 <body>
 	<!-- ini menu -->
 	<!-- fim menu -->
-	<h1>Editando a Galeria cod: <!-- ini id -->numero<!-- fim id --></h1>
-	<!-- ini box mensagem -->
-		<div class="mensagem">
-			<!-- ini mensagem -->
-			Feito com sucesso!
-			<!-- fim mensagem -->
-		</div>
-	<!-- fim box mensagem -->
-	<div>
-		<!-- ini rs -->
-			<div style="float:left; width:200px; height:200px; border: 1px solid #888; overflow:auto;">
-				<!-- ini rs imagem(getUrlRelativaJpg) -->
-					<img src="#" height="100" alt="Imagem"/>
-				<!-- fim rs imagem(getUrlRelativaJpg) -->
-				<!-- ini rs(getTxtDescricao) -->
-				<!-- fim rs(getTxtDescricao) -->
+	<div id="conteudo">
+		<h1>Editando a Galeria cod: <!-- ini id -->numero<!-- fim id --></h1>
+		<!-- ini box mensagem -->
+			<div class="mensagem">
+				<!-- ini mensagem -->
+				Feito com sucesso!
+				<!-- fim mensagem -->
 			</div>
-		<!-- fim rs -->
+		<!-- fim box mensagem -->
+		<form action="InserirFoto" method="post" enctype="multipart/form-data">
+			<div>
+				<input type="hidden" name="galeriaId" value="" />
+				<input type="file" name="arquivo" />
+				<textarea name="descricao" rows="10" cols="10" class="mceEditor"></textarea>
+			</div>
+			<div>
+				<input type="submit" value="Enviar" />
+			</div>
+		</form>
+		<div>
+			<!-- ini rs -->
+				<div style="float:left; width:200px; height:200px; border: 1px solid #888; overflow:auto;">
+					<a href="#del">Apagar</a><br />
+					<!-- ini rs imagem(getUrlRelativaJpg) -->
+						<img src="#" height="100" alt="Imagem"/>
+					<!-- fim rs imagem(getUrlRelativaJpg) -->
+					<!-- ini rs(getTxtDescricao) -->
+					<!-- fim rs(getTxtDescricao) -->
+				</div>
+			<!-- fim rs -->
+		</div>
 	</div>
-	<form action="InserirFoto" method="post" enctype="multipart/form-data">
-		<div>
-			<input type="hidden" name="galeriaId" value="" />
-			<input type="file" name="arquivo" />
-			<textarea name="descricao" rows="10" cols="10" class="mceEditor"></textarea>
-		</div>
-		<div>
-			<input type="submit" value="Enviar" />
-		</div>
-	</form>
 </body>
 </html>
