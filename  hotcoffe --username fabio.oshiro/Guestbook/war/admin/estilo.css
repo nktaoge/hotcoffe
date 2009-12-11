@@ -1,0 +1,17 @@
+@IMPORT url("base.css");
+div#menu{
+	float: left;
+	padding: 3px;
+	border: 1px solid #eee;
+}
+div#menu ul{
+	margin:0px;
+	padding:0px;
+	padding-left: 10px;
+	list-style: none;
+}
+div#conteudo{
+	float: left;
+	padding: 3px;
+	border: 1px solid #eee;
+}
