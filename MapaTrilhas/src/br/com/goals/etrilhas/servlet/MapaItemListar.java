@@ -19,7 +19,7 @@ import br.com.goals.cafeina.view.tmp.Template;
 public class MapaItemListar extends BaseServlet {
 	private static final long serialVersionUID = 1L;
        
-	public Template getTemplate(HttpServletRequest request) throws IOException{
+	public Template getTemplate(final HttpServletRequest request) throws IOException{
     	Template template = super.getTemplate(request);
 		template.setRsItemCustomizado(new RsItemCustomizado(){
 			public String tratar(Object o, String item) {
@@ -29,7 +29,7 @@ public class MapaItemListar extends BaseServlet {
 					temp.setTemplate(item);
 					try {
 						temp.setLink("editar", "definirMapaItem?id=" + mapaItem.getId());
-						temp.setLink("apagar", "MapaItemApagar?id=" + mapaItem.getId());
+						temp.setLink("apagar", "MapaItemApagar?id=" + mapaItem.getId()+"&camada.id="+request.getParameter("camada.id"));
 					} catch (AreaNaoEncontradaException e) {
 						e.printStackTrace();
 					}

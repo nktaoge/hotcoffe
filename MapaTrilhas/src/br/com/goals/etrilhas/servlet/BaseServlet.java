@@ -16,6 +16,7 @@ import br.com.goals.etrilhas.facade.CamadaFacade;
 import br.com.goals.etrilhas.facade.FacadeException;
 import br.com.goals.etrilhas.facade.MapaFacade;
 import br.com.goals.etrilhas.facade.MapaItemFacade;
+import br.com.goals.etrilhas.facade.VideoFacade;
 import br.com.goals.etrilhas.modelo.Mapa;
 import br.com.goals.cafeina.view.tmp.Template;
 
@@ -29,6 +30,7 @@ public abstract class BaseServlet extends HttpServlet {
 	protected static MapaFacade mapaFacade = MapaFacade.getInstance();
 	protected static CamadaFacade camadaFacade = CamadaFacade.getInstance();
 	protected static MapaItemFacade mapaItemFacade = MapaItemFacade.getInstance();
+	protected static VideoFacade videoFacade = VideoFacade.getInstance();
     public BaseServlet() {
         super();
     }
@@ -64,7 +66,7 @@ public abstract class BaseServlet extends HttpServlet {
     protected void setCurrentMapaItemId(HttpServletRequest request,Long id){
     	request.getSession().setAttribute("CurrentMapaItemId", id);
     }
-    private Long getCurrentMapaItemId(HttpServletRequest request){
+    protected Long getCurrentMapaItemId(HttpServletRequest request){
     	Object obj = request.getSession().getAttribute("CurrentMapaItemId");
     	if(obj!=null){
     		return Long.parseLong(obj.toString());
@@ -90,7 +92,9 @@ public abstract class BaseServlet extends HttpServlet {
     	return template;
     }
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	
+    }
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}

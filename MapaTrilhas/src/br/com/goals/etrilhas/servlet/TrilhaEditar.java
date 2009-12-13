@@ -16,6 +16,7 @@ public class TrilhaEditar extends BaseServlet{
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Template template = getTemplate(request);
 		Mapa mapa = getMapa(request);
+		template.setInput("nome",mapa.getNome());
 		template.setTextArea("txtCoordenadasLatLng",mapa.getTxtCoordenadasLatLng());
 		template.setMensagem("");
 		response.getWriter().write(template.toString());
@@ -25,8 +26,10 @@ public class TrilhaEditar extends BaseServlet{
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Mapa mapa = getMapa(request);
+		mapa.setNome(request.getParameter("nome"));
 		mapa.setTxtCoordenadasLatLng(request.getParameter("txtCoordenadasLatLng"));
 		Template template = getTemplate(request);
+		template.setInput("nome",mapa.getNome());
 		template.setTextArea("txtCoordenadasLatLng",mapa.getTxtCoordenadasLatLng());
 		try{
 			mapaFacade.atualizar(mapa);

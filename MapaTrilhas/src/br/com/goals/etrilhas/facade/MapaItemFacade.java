@@ -114,4 +114,16 @@ public class MapaItemFacade{
 			}
 		}		
 	}
+
+	public MapaItem selecionar(Mapa mapa, Long id) {
+		for(Camada camada:mapa.getCamadas()){
+			//atualizar o antigo
+			for(MapaItem mItem:camada.getItems()){
+				if(mItem.getId().equals(id)){
+					return mItem;
+				}
+			}
+		}
+		return null;
+	}
 }

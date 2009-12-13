@@ -3,6 +3,8 @@ package br.com.goals.etrilhas.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.goals.cafeina.view.tmp.CafeinaHtmlField;
+
 public class Galeria extends Base{
 	private static final long serialVersionUID = 7789601976418515286L;
 	private String txtDescricao;
@@ -16,6 +18,7 @@ public class Galeria extends Base{
 	/**
 	 * @param txtDescricao the txtDescricao to set
 	 */
+	@CafeinaHtmlField
 	public void setTxtDescricao(String txtDescricao) {
 		this.txtDescricao = txtDescricao;
 	}

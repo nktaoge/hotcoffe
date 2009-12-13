@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.goals.etrilhas.modelo.Camada;
+import br.com.goals.etrilhas.modelo.Galeria;
 import br.com.goals.etrilhas.modelo.Mapa;
 import br.com.goals.etrilhas.modelo.MapaItem;
 
@@ -46,20 +47,28 @@ public class MapaServlet extends BaseServlet {
 				if(mapaItem.getIcone()==null){
 					mapaItem.setIcone("default.png");
 				}
-				retorno+="<mapaItem nome=\""+mapaItem.getNome()+"\" icone=\""+mapaItem.getIcone()+"\" tipo=\""+mapaItem.getTipo()+"\" pid=\""+mapaItem.getId()+"\" x=\""+mapaItem.getX()+"\" y=\"" + mapaItem.getY() + "\" />";
+				long pid;
+				if(mapaItem.getValor() instanceof Galeria){
+					pid=((Galeria)mapaItem.getValor()).getId();
+				}else{
+					pid=mapaItem.getId();
+				}
+				retorno+="<mapaItem nome=\""+mapaItem.getNome()+"\" icone=\""+mapaItem.getIcone()+"\" tipo=\""+mapaItem.getTipo()+"\" pid=\""+pid+"\" x=\""+mapaItem.getX()+"\" y=\"" + mapaItem.getY() + "\" />";
 			}
 			retorno +="</camada>";
 		}
 		/*
 		 * Montar a trilha
 		 */
-		retorno+="<trilha>";
+		retorno+="<trilha titulo=\""+mapa.getNome()+"\">";
 		String txtCoordenadas = mapa.getTxtCoordenadasLatLng();
 		if(txtCoordenadas!=null){
 			String[] linhas = txtCoordenadas.split("\n");
 			for(String linha:linhas){
 				String args[] = linha.split("\\s+");
-				retorno+="<point lat=\""+args[0]+"\" lng=\""+args[1]+"\" />";
+				if(args.length>1){
+					retorno+="<point lat=\""+args[0]+"\" lng=\""+args[1]+"\" />";
+				}
 			}
 		}
 		retorno+="</trilha>";

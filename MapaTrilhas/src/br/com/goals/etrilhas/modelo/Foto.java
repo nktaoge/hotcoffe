@@ -1,5 +1,7 @@
 package br.com.goals.etrilhas.modelo;
 
+import br.com.goals.cafeina.view.tmp.CafeinaHtmlField;
+
 public class Foto extends Base{
 
 	private static final long serialVersionUID = 1208424388838652916L;
@@ -23,6 +25,7 @@ public class Foto extends Base{
 		this.ordem = ordem;
 	}
 	private String txtDescricao;
+	
 	/**
 	 * @return the txtDescricao
 	 */

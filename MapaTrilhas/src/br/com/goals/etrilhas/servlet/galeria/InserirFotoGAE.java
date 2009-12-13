@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
@@ -21,6 +21,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 
+import br.com.goals.cafeina.view.tmp.StringUtils;
 import br.com.goals.etrilhas.dao.BaseDao;
 import br.com.goals.etrilhas.dao.JdoFile;
 import br.com.goals.etrilhas.facade.GaleriaFacade;
@@ -69,9 +70,9 @@ public class InserirFotoGAE extends BaseServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void doWork(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		try {
+			
 			Long galeriaId = null;
 			String descricao = "";
 			String urlRelativa = "";
@@ -92,7 +93,7 @@ public class InserirFotoGAE extends BaseServlet {
 					String fieldName = item.getFieldName();
 					String value;
 					value = baos.toString();
-					logger.debug(fieldName + " = " + value);
+					//logger.debug(fieldName + " = " + value);
 					if (fieldName.equals("descricao")) {
 						descricao = value;
 					} else if (fieldName.equals("galeriaId")) {
@@ -100,19 +101,30 @@ public class InserirFotoGAE extends BaseServlet {
 					}
 				} else {
 					// Salvando
+					String fName = StringUtils.removePontuacao(item.getName()).replace(' ', '-');
 					JdoFile jdoFile = new JdoFile();
-					jdoFile.setFileName(item.getName());
+					jdoFile.setFileName(fName);
 					jdoFile.setBytes(new Blob(baos.toByteArray()));
 					PersistenceManager pm = PMF.getPersistenceManager();
 					try {
+						//remover antigos?
+						Query q = pm.newQuery("SELECT FROM " + JdoFile.class.getName() + " WHERE fileName == fname PARAMETERS String fname");
+						List<JdoFile> results = (List) q.execute(fName);
+						int apagados=0;
+						for(JdoFile i:results){
+							pm.deletePersistent(i);
+							apagados++;
+						}
+						//System.out.println(apagados + " apagados...");
+						
 						pm.makePersistent(jdoFile);
 					} finally {
 						pm.close();
 					}
-					urlRelativa = "media/fotos/" + item.getName();
+					urlRelativa = "media/fotos/" + fName;
 				}
 			}
-
+			//System.out.println("in " + urlRelativa);
 			Galeria galeria = galeriaFacade.selecionar(galeriaId);
 			Foto foto = new Foto();
 			foto.setTxtDescricao(descricao);

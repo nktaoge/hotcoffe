@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
+import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import br.com.goals.etrilhas.dao.JdoFile;
 import br.com.goals.etrilhas.dao.MapaItemDao;
 import br.com.goals.etrilhas.facade.GaleriaFacade;
 import br.com.goals.etrilhas.facade.MapaFacade;
@@ -20,8 +24,10 @@ import br.com.goals.etrilhas.modelo.Camada;
 import br.com.goals.etrilhas.modelo.Galeria;
 import br.com.goals.etrilhas.modelo.Mapa;
 import br.com.goals.etrilhas.modelo.MapaItem;
+import br.com.goals.jpa4google.PMF;
 import br.com.goals.cafeina.view.tmp.AreaNaoEncontradaException;
 import br.com.goals.cafeina.view.tmp.RequestUtil;
+import br.com.goals.cafeina.view.tmp.RsItemCustomizado;
 import br.com.goals.cafeina.view.tmp.Template;
 
 /**
@@ -47,8 +53,12 @@ public class MapaItemDefinir extends BaseServlet {
     	template.setInput("nome",mapaItem.getNome());
     	template.setInput("x",mapaItem.getX());
     	template.setInput("y",mapaItem.getY());
-    	File dirIcones = new File(template.getTemplatePath().getParent(),"media/icones");
-		template.setSelect("icone",mapaItem.getIcone(),dirIcones.list(fileNameFilter));
+    	
+    	//File dirIcones = new File(template.getTemplatePath().getParent(),"media/icones");
+		//template.setSelect("icone",mapaItem.getIcone(),dirIcones.list(fileNameFilter));
+    	
+    	template.setSelect("icone",mapaItem.getIcone(),listarImagensIcone());
+    	
 		template.setSelect("tipo", mapaItem.getTipo());
 		template.setForm("campos do tipo",mapaItem.getValor());
 		if(mapaItem.getCamada()==null){
@@ -69,6 +79,18 @@ public class MapaItemDefinir extends BaseServlet {
 		}
 		template.setLink("linkEdicao", linkEdicao);
     }
+	private String[] listarImagensIcone() {
+		PersistenceManager pm = PMF.getPersistenceManager();
+		Query q = pm.newQuery("SELECT FROM " + JdoFile.class.getName() + " where fileName.startsWith(\"media/\")");
+		List<JdoFile> files = (List<JdoFile>)q.execute();
+		String retorno[] = new String[files.size()];
+		int i=0;
+		for(JdoFile f:files){
+			retorno[i++]=f.getFileName();
+		}
+		return retorno;
+	}
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */

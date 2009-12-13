@@ -12,6 +12,7 @@ public class Mapa extends Base implements Serializable{
 	private String imagemSatelite;
 	private String txtCoordenadasLatLng;
 	private List<Camada> camadas = new ArrayList<Camada>();
+	private String nome;
 	private static Comparator<Camada> comparador = new Comparator<Camada>(){
 		public int compare(Camada o1, Camada o2) {
 			try{
@@ -22,6 +23,12 @@ public class Mapa extends Base implements Serializable{
 		}		
 	};
 	
+	public String getNome() {
+		return nome;
+	}
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 	public String getTxtCoordenadasLatLng() {
 		return txtCoordenadasLatLng;
 	}

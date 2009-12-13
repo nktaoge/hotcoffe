@@ -100,7 +100,7 @@ public class BaseDao<T extends Base> extends Jpa4GoogleEntityManager {
 				try{
 					jdoLastId = em.find(JdoLastId.class,id);
 					jdoLastId.setLastId(lastIdGenerated);
-					em.merge(jdoLastId);
+					em.flush();
 				}catch(Exception e){
 					logger.error("Erro ao atualizar o lastId",e);
 				}
