@@ -2,6 +2,8 @@ package br.com.goals.etrilhas.modelo;
 
 import java.io.Serializable;
 
+import br.com.goals.cafeina.view.tmp.CafeinaHiddenField;
+
 /**
  * Item que esta no mapa, um ponto.
  * @author Fabio Issamu Oshiro
@@ -16,6 +18,9 @@ public class MapaItem extends Base implements Serializable{
 	private String tipo;
 	private Integer ordem;
 	private Object valor;
+	//TODO colocar os valores independentes
+	private Long galeriaId = null;
+	
 	public MapaItem(){
 		super();
 	}
@@ -76,5 +81,14 @@ public class MapaItem extends Base implements Serializable{
 	}
 	public void setIcone(String icone) {
 		this.icone = icone;
+	}
+	
+	public Long getGaleriaId() {
+		return galeriaId;
+	}
+	
+	@CafeinaHiddenField
+	public void setGaleriaId(Long galeriaId) {
+		this.galeriaId = galeriaId;
 	}
 }

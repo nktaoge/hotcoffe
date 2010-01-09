@@ -31,4 +31,14 @@ public class Galeria extends Base{
 	public void setFotos(List<Foto> fotos) {
 		this.fotos = fotos;
 	}
+	
+	@Override
+	public Long getId() {
+		return super.getId();
+	}
+	
+	@Override
+	public void setId(Long id) {
+		super.setId(id);
+	}
 }

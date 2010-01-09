@@ -11,7 +11,7 @@ import br.com.goals.etrilhas.modelo.Galeria;
 public class GaleriaFacade extends BaseFacade<Galeria>{
 	private static Logger logger = Logger.getLogger(GaleriaFacade.class);
 	private GaleriaDao galeriaDao = new GaleriaDao();
-	private static GaleriaFacade instance = new GaleriaFacade();
+	private static GaleriaFacade instance;
 
 	private GaleriaFacade(){
 		
@@ -29,8 +29,11 @@ public class GaleriaFacade extends BaseFacade<Galeria>{
 
 	@Override
 	public void criar(Galeria obj) throws FacadeException {
-		// TODO Auto-generated method stub
-		
+		try{
+			galeriaDao.criar(obj);
+		}catch(Exception e){
+			throw new FacadeException(e.getMessage());
+		}
 	}
 
 	@Override
@@ -42,7 +45,7 @@ public class GaleriaFacade extends BaseFacade<Galeria>{
 	@Override
 	public Galeria selecionar(long id) throws FacadeException {
 		try{
-			Galeria galeria =galeriaDao.selecionar(id); 
+			Galeria galeria = galeriaDao.selecionar(id); 
 			return galeria;
 		}catch(Exception e){
 			throw new FacadeException(e.getMessage());
@@ -50,6 +53,9 @@ public class GaleriaFacade extends BaseFacade<Galeria>{
 	}
 
 	public static GaleriaFacade getInstance() {
+		if(instance==null){
+			instance = new GaleriaFacade();
+		}
 		return instance ;
 	}
 

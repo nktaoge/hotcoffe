@@ -63,7 +63,7 @@ public class MapaFacade extends BaseFacade<Mapa>{
 			mapa.setId(id);
 			try {
 				//Cria o mapa
-				mapaDao.atualizar(mapa);
+				mapaDao.criar(mapa);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 				throw new FacadeException(e1.getMessage());

@@ -11,6 +11,7 @@ import br.com.goals.etrilhas.modelo.Camada;
 import br.com.goals.etrilhas.modelo.Galeria;
 import br.com.goals.etrilhas.modelo.Mapa;
 import br.com.goals.etrilhas.modelo.MapaItem;
+import br.com.goals.etrilhas.modelo.MapaLinkMapa;
 
 /**
  * Servlet implementation class MapaServlet
@@ -53,7 +54,12 @@ public class MapaServlet extends BaseServlet {
 				}else{
 					pid=mapaItem.getId();
 				}
-				retorno+="<mapaItem nome=\""+mapaItem.getNome()+"\" icone=\""+mapaItem.getIcone()+"\" tipo=\""+mapaItem.getTipo()+"\" pid=\""+pid+"\" x=\""+mapaItem.getX()+"\" y=\"" + mapaItem.getY() + "\" />";
+				if(mapaItem.getValor() instanceof MapaLinkMapa){
+					MapaLinkMapa link = (MapaLinkMapa)mapaItem.getValor();
+					retorno+="<mapaItem nome=\""+mapaItem.getNome()+"\" url=\""+link.getUrl()+"\" icone=\""+mapaItem.getIcone()+"\" tipo=\""+mapaItem.getTipo()+"\" pid=\""+pid+"\" x=\""+mapaItem.getX()+"\" y=\"" + mapaItem.getY() + "\" />";
+				}else{
+					retorno+="<mapaItem nome=\""+mapaItem.getNome()+"\" url=\"\" icone=\""+mapaItem.getIcone()+"\" tipo=\""+mapaItem.getTipo()+"\" pid=\""+pid+"\" x=\""+mapaItem.getX()+"\" y=\"" + mapaItem.getY() + "\" />";
+				}
 			}
 			retorno +="</camada>";
 		}

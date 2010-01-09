@@ -60,12 +60,11 @@ public class Camada extends Base implements Serializable{
 		this.mapa = mapa;
 	}
 	
-
-	
 	public List<MapaItem> getItems() {
 		Collections.sort(items,comparador );
 		return items;
 	}
+	
 	public void setItems(List<MapaItem> items){
 		this.items = items;
 	}

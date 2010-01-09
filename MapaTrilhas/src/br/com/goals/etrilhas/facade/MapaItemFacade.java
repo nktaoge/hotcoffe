@@ -2,6 +2,9 @@ package br.com.goals.etrilhas.facade;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
+
 import br.com.goals.etrilhas.dao.BaseDao;
 import br.com.goals.etrilhas.dao.VideoDao;
 import br.com.goals.etrilhas.modelo.Camada;
@@ -13,7 +16,7 @@ import br.com.goals.etrilhas.modelo.Video;
 public class MapaItemFacade{
 	private BaseDao<Mapa> mapaDao = new BaseDao<Mapa>();
 	private static MapaItemFacade instance = new MapaItemFacade();
-	
+	private static Logger logger = Logger.getLogger(MapaItemFacade.class);
 	private MapaItemFacade(){	
 	}
 	
@@ -35,7 +38,12 @@ public class MapaItemFacade{
 					VideoDao videoDao = new VideoDao();
 					videoDao.criar(video);
 				}else if(mapaItem.getTipo().equals("Galeria")){
-					GaleriaFacade.getInstance().criarHtml((Galeria)mapaItem.getValor(),mapaItem.getId());
+					if(GaleriaFacade.getInstance()==null) throw new NullPointerException("Erro: GaleriaFacade==null");
+					if(mapaItem==null) throw new NullPointerException("Erro: MapaItem==null");
+					if(mapaItem.getGaleriaId()==null) throw new NullPointerException("Erro: MapaItem.getGaleriaId()==null");
+					
+					Galeria galeria = GaleriaFacade.getInstance().selecionar(mapaItem.getGaleriaId());
+					GaleriaFacade.getInstance().criarHtml(galeria,mapaItem.getId());
 				}
 			}
 		}catch(Exception e){
@@ -76,7 +84,9 @@ public class MapaItemFacade{
 	public void criar(MapaItem mapaItem, Mapa mapa) throws FacadeException{
 		try {
 			boolean ok=false;
-			mapaItem.setId(BaseDao.getNextId());
+			Long novoid = BaseDao.getNextId();
+			logger.debug("MapaItemFacade.criar() novoid="+novoid);
+			mapaItem.setId(novoid);
 			for(Camada camada:mapa.getCamadas()){
 				if(camada.getId().equals(mapaItem.getCamada().getId())){
 					camada.getItems().add(mapaItem);

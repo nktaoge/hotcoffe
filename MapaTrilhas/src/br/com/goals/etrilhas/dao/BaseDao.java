@@ -40,7 +40,7 @@ public class BaseDao<T extends Base> extends Jpa4GoogleEntityManager {
 		
 	}
 	
-	public static long getNextId(){
+	public static long getNextId() throws Exception{
 		if(google){
 			return getNextIdGoogle();
 		}else{
@@ -73,15 +73,16 @@ public class BaseDao<T extends Base> extends Jpa4GoogleEntityManager {
 		lastIdGenerated++;
 		return lastIdGenerated;	
 	}
-	private static long getNextIdGoogle(){
-		EntityManager em = EMF.createEntityManager();
+	private static long getNextIdGoogle() throws Exception{
+		
+		PersistenceManager pm = PMF.getPersistenceManager();
 		try{
 			Long id = 1L;
 			JdoLastId jdoLastId = null;
 			if(lastIdGenerated==null){
 				logger.info("Iniciando lastId...");
 				try{
-					jdoLastId = em.find(JdoLastId.class,id);
+					jdoLastId = pm.getObjectById(JdoLastId.class,id);
 					lastIdGenerated = jdoLastId.getLastId();
 					logger.info("recuperado o lastIdGenerated = " + lastIdGenerated + " do JDO");
 				}catch(Exception e){
@@ -93,22 +94,23 @@ public class BaseDao<T extends Base> extends Jpa4GoogleEntityManager {
 					lastIdGenerated = 3L;
 					jdoLastId.setLastId(lastIdGenerated);
 					logger.info("criando last id " + lastIdGenerated);
-					em.persist(jdoLastId);
+					pm.makePersistent(jdoLastId);
 				}
 			}else{
 				//atualizar
 				try{
-					jdoLastId = em.find(JdoLastId.class,id);
+					jdoLastId = pm.getObjectById(JdoLastId.class,id);
 					jdoLastId.setLastId(lastIdGenerated);
-					em.flush();
+					pm.flush();
 				}catch(Exception e){
 					logger.error("Erro ao atualizar o lastId",e);
+					throw e;
 				}
 			}
 		}catch(Exception e){
-			e.printStackTrace();
+			throw e;
 		}finally{
-			em.close();
+			pm.close();
 		}
 		//entao eh not null, e por isso incrementamos
 		lastIdGenerated++;
@@ -160,14 +162,14 @@ public class BaseDao<T extends Base> extends Jpa4GoogleEntityManager {
 	
 	@SuppressWarnings("unchecked")
 	protected T selecionarGoogle(PersistenceManager pm,Long id) throws Exception{
-		logger.info("Carregando id " + id);
+		logger.info("selecionarGoogle() Carregando id " + id);
 		JdoXml jdoXml = pm.getObjectById(JdoXml.class, id);
 		if(jdoXml!=null){
 			if(jdoXml.getTxtXml()==null){
 				throw new NullPointerException("jdoXml.getTxtXml()==null");
 			}
 			String value = jdoXml.getTxtXml().getValue();
-			logger.warn("DEC XML:\n" + value);
+			//logger.warn("DEC XML:\n" + value);
 			InputStream is = new ByteArrayInputStream(value.getBytes());
 			XMLDecoder xdec = new XMLDecoder(is);
 			T t = (T)xdec.readObject();
@@ -214,6 +216,10 @@ public class BaseDao<T extends Base> extends Jpa4GoogleEntityManager {
 	public void criar(T obj) throws Exception {
 		if(google){
 			logger.debug("criando " + obj.getClass() + " id "+ obj.getId());
+			if(obj.getId()==null){
+				//nao tem id, gerar um
+				obj.setId(getNextId());
+			}
 			gravarGoogle(obj,obj.getId());
 		}else{
 			//Cria o ID
@@ -225,6 +231,15 @@ public class BaseDao<T extends Base> extends Jpa4GoogleEntityManager {
 	}
 	
 	protected synchronized void gravarGoogle(T obj, Long id) throws Exception{
+		
+		//verificar a versao do objeto
+		//T objPersistido = selecionarGoogle(id);
+		//if(objPersistido.getVersao()!=null && !objPersistido.getVersao().equals(obj.getVersao())){
+			//Exception e = new Exception("Alguém salvou uma versão mais recente e a sua está desatualizada.");
+			//logger.error("Erro de sincronismo. " + objPersistido.getVersao() + "!=" + obj.getVersao(),e);
+		//}
+		//logger.debug(objPersistido.getVersao() + "==" + obj.getVersao());
+		obj.setVersao(System.currentTimeMillis());
 		urlEncodeAllObjectString(obj, null,true);
 		try{
 			// Create output stream.
@@ -251,7 +266,7 @@ public class BaseDao<T extends Base> extends Jpa4GoogleEntityManager {
 			pm.close();
 			
 			logger.debug("gravarGoogle(Classe = " + obj.getClass()+",id = "+id+")");
-			logger.debug("INI XML:\n" + outputStream.toString());
+			//logger.debug("INI XML:\n" + outputStream.toString());
 			logger.debug("jdoXml.getId() = " + jdoXml.getId());
 			//testar
 			pm = PMF.getPersistenceManager();
@@ -286,9 +301,11 @@ public class BaseDao<T extends Base> extends Jpa4GoogleEntityManager {
 	}
 
 	public void atualizar(T obj) throws Exception{
+		//verificar a versao
+		
 		String path = getBasePath()+obj.getClass().getSimpleName()+ "-" + obj.getId() + ".xml";
-		//logger.warn("atualizado " + path, new Exception());
-		logger.debug("atualizado " + path);
+		logger.debug("atualizando... " + path);
+		
 		if(google){
 			gravarGoogle(obj,obj.getId());
 		}else{

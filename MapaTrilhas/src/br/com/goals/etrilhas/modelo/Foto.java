@@ -1,6 +1,5 @@
 package br.com.goals.etrilhas.modelo;
 
-import br.com.goals.cafeina.view.tmp.CafeinaHtmlField;
 
 public class Foto extends Base{
 

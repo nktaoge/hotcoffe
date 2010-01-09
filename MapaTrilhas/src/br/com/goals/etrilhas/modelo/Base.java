@@ -6,6 +6,8 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 
+import br.com.goals.cafeina.view.tmp.CafeinaHiddenField;
+
 public abstract class Base implements Serializable{
 	private static final long serialVersionUID = -4031640023366960605L;
 	private Long id;
@@ -71,5 +73,14 @@ public abstract class Base implements Serializable{
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+	private Long versao;
+	public Long getVersao(){
+		return versao;
+	}
+	
+	@CafeinaHiddenField
+	public void setVersao(Long l){
+		versao = l;
 	}
 }

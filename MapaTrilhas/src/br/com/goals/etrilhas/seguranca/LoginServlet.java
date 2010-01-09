@@ -51,7 +51,6 @@ public class LoginServlet extends HttpServlet{
 		if(login.equals("admin") 
 				&& senha.equals("girafa")){
 			//chave mestre
-			req.getSession().setAttribute(LoginInterceptor.LOGIN_KEY, "true");
 			ok=true;
 		}else{
 			//procurar no banco
@@ -66,6 +65,7 @@ public class LoginServlet extends HttpServlet{
 		}
 		
 		if(ok){
+			req.getSession().setAttribute(LoginInterceptor.LOGIN_KEY, "true");
 			resp.sendRedirect("admin/TrilhaEditar");
 		}else{
 			resp.sendRedirect("/login?erro=2");

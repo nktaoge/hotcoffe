@@ -21,12 +21,12 @@ public class CamadaFacade {
 		if(mapa==null){
 			throw new FacadeException("mapa is null!");
 		}
-		camada.setId(BaseDao.getNextId());
-		mapa.getCamadas().add(camada);
+		
 		try{
+			camada.setId(BaseDao.getNextId());
+			mapa.getCamadas().add(camada);
 			mapaDao.atualizar(mapa);
 		}catch(Exception e){
-			e.printStackTrace();
 			throw new FacadeException(e.getMessage());
 		}
 	}

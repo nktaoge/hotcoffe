@@ -21,6 +21,9 @@ public class JdoXml {
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Long id;
 	
+	@Persistent
+	private Long versao;
+	
 	@Persistent(defaultFetchGroup="true") 
 	private Text txtXml;
 
@@ -56,5 +59,12 @@ public class JdoXml {
 	 */
 	public void setTxtXml(Text txtXml) {
 		this.txtXml = txtXml;
+	}
+	
+	public Long getVersao() {
+		return versao;
+	}
+	public void setVersao(Long versao) {
+		this.versao = versao;
 	}
 }
